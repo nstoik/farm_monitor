@@ -1,0 +1,3 @@
+[console_scripts]
+fm_server = fm_server.manage:cli
+

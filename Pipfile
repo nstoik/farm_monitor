@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+pylint = "*"
+"e1839a8" = {path = ".", editable = true}
+
+[packages]
+pika = "*"
+click = "*"
+sqlalchemy = "*"
+psutil = "*"
+netifaces = "*"
+
+[requires]
+python_version = "3.6"
