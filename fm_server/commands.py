@@ -25,13 +25,13 @@ def first_setup():
         system = SystemSetup()
         session.add(system)
 
-    if system.first_setup:
+    if system.first_setup_complete:
         click.echo("Setup has already been run")
         if not click.confirm('Do you want to run first time setup again?'):
             session.close()
             return
 
-    system.first_setup = True
+    system.first_setup_complete = True
     system.first_setup_time = datetime.now()
 
     session.commit()

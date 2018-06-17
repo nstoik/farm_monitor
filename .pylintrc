@@ -133,7 +133,8 @@ disable=print-statement,
         xreadlines-attribute,
         deprecated-sys-function,
         exception-escape,
-        comprehension-escape
+        comprehension-escape,
+        unused-argument
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -462,7 +463,7 @@ spelling-store-unknown-words=no
 max-args=5
 
 # Maximum number of attributes for a class (see R0902).
-max-attributes=7
+max-attributes=14
 
 # Maximum number of boolean expressions in a if statement
 max-bool-expr=5

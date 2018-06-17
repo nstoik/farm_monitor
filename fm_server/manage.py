@@ -2,6 +2,7 @@
 
 import click
 
+from fm_server.device.commands import send_create
 from .commands import first_setup
 
 @click.group()
@@ -16,3 +17,5 @@ def run():
     main()
 
 cli.add_command(first_setup)
+
+cli.add_command(send_create)

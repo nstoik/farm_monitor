@@ -1,6 +1,7 @@
 """ system info module """
 
 import subprocess
+import socket
 import datetime
 import os
 import logging
@@ -26,7 +27,7 @@ def get_ip_of_interface(interface, broadcast=False):
 def get_uptime():
     """ get uptime of device """
     logger.debug("getting uptime")
-    uptime = subprocess.check_output(["uptime", "-p"])
+    uptime = subprocess.check_output(["uptime", "-p"], universal_newlines=True)
     return uptime[3:]
 
 
@@ -34,7 +35,7 @@ def get_CPU_temperature():
     """ get CPU temperature """
     logger.debug("getting CPU temperature")
     filepath = "/sys/class/thermal/thermal_zone0/temp"
-    res = subprocess.check_output(["cat", filepath])
+    res = subprocess.check_output(["cat", filepath], universal_newlines=True)
     return float(int(res) / 1000)
 
 
@@ -47,11 +48,7 @@ def get_service_status():
 def get_device_name():
     """ get device name """
     logger.debug("getting device name")
-    command = ['cat', '/etc/hostname']
-    device_name = subprocess.check_output(command)
-
-    device_name = device_name.split('\n', 1)[0]
-
+    device_name = socket.gethostname()
     return device_name
 
 

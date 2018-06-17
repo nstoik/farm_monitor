@@ -1,10 +1,15 @@
+""" main starting point for fm_server """
 import logging
+from multiprocessing import Process
 
 from .settings import get_config
-from .controller.manager import pika_test
+from .presence import presence_service
 from .tools.mp_logging import MultiProcessingLog, MultiProcessingLogStandardOutput
+from .device.service import run_device
+
 
 def configure_logging(config):
+    """ configure logging for the entire app """
 
     logger = logging.getLogger('fm')
     logfile_path = config.LOG_FILE
@@ -25,10 +30,30 @@ def configure_logging(config):
     return logger
 
 def main():
+    """ main starting point for program """
 
     config = get_config()
     logger = configure_logging(config)
-    pika_test()
+    # pika_test()
+
+    presence_controller = Process(target=presence_service)
+    presence_controller.start()
+
+    device_controller = Process(target=run_device)
+    device_controller.start()
+
+    try:
+        presence_controller.join()
+        device_controller.join()
+    except KeyboardInterrupt:
+        logger.warning('Keyboard interrupt in main')
+
+        presence_controller.terminate()
+        device_controller.terminate()
+
+        presence_controller.join()
+        device_controller.join()
+    return
 
 
 if __name__ == '__main__':

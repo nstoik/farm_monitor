@@ -36,7 +36,7 @@ def set_service_state(control):
     logger = logging.getLogger('fm.system.control')
     logger.info("Setting service state: %s", control)
     command = ["sudo", "systemctl", control, "farm-monitor.service"]
-    subprocess.check_output(command)
+    subprocess.check_output(command, universal_newlines=True)
 
     return
 

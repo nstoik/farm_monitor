@@ -15,6 +15,18 @@ class Config(object):
 
     UPDATER_PATH = "/home/pi/farm_monitor/farm_update/update.sh"
 
+    RABBITMQ_HOST = 'localhost'
+    RABBITMQ_PORT = 5672
+    RABBITMQ_USER = 'fm'
+    RABBITMQ_PASSWORD = 'farm_monitor'
+    RABBITMQ_VHOST = 'farm_monitor'
+
+    RABBITMQ_HEARTBEAT_EXCHANGE_NAME = 'heartbeat_events'
+    RABBITMQ_HEARTBEAT_EXCHANGE_TYPE = 'direct'
+    RABBITMQ_HEARTBEAT_ROUTING_KEY = 'heartbeat'
+
+    RABBITMQ_MESSAGES_EXCHANGE_NAME = 'device_messages'
+    RABBITMQ_MESSAGES_EXCHANGE_TYPE = 'topic'
 
 class DevConfig(Config):
     """Development configuration."""
