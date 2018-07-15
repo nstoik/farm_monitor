@@ -1,6 +1,21 @@
 import os
 import logging
 
+class CeleryConfig(object):
+    """ Celery configuration """
+
+    ## Broker settings.
+    broker_url = 'pyamqp://fm:farm_monitor@localhost/farm_monitor'
+
+    # List of modules to import when the Celery worker starts.
+    imports = ('fm_server.device.tasks',)
+
+    ## Using the database to store task state and results.
+    result_backend = 'rpc://'
+
+    task_soft_time_limit = 60
+
+
 class Config(object):
     """Base configuration."""
 
@@ -27,6 +42,7 @@ class Config(object):
 
     RABBITMQ_MESSAGES_EXCHANGE_NAME = 'device_messages'
     RABBITMQ_MESSAGES_EXCHANGE_TYPE = 'topic'
+
 
 class DevConfig(Config):
     """Development configuration."""

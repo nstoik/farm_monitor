@@ -1,7 +1,12 @@
 """ main celery module """
-from celery import Celery
+from celery import Celery, signals
 
-app = Celery('fm_server_celery',
-             broker='amqp://fm:farm_monitor@localhost/farm_monitor',
-             backend='rpc://',
-             include=['fm_server.device.tasks'])
+
+app = Celery()
+
+app.config_from_object('fm_server.settings:CeleryConfig')
+
+# @signals.setup_logging.connect
+def setup_celery_logging(sender, **kwargs):
+    for key in kwargs:
+        print("keyword arg: %s: %s" % (key, kwargs[key]))

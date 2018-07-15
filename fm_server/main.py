@@ -1,10 +1,12 @@
 """ main starting point for fm_server """
 import logging
+from logging.handlers import RotatingFileHandler
 from multiprocessing import Process
+
+from multiprocessing_logging import install_mp_handler
 
 from .settings import get_config
 from .presence import presence_service
-from .tools.mp_logging import MultiProcessingLog, MultiProcessingLogStandardOutput
 from .device.service import run_device
 
 
@@ -14,18 +16,22 @@ def configure_logging(config):
     logger = logging.getLogger('fm')
     logfile_path = config.LOG_FILE
     log_level = config.LOG_LEVEL
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
-    handler = MultiProcessingLog(logfile_path, mode='a', maxsize=1024 * 1024, rotate=10)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
     logger.setLevel(log_level)
     logger.propagate = False
 
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+    file_handler = RotatingFileHandler(logfile_path, mode='a', maxBytes=1024 * 1024, backupCount=10)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
     if log_level == logging.DEBUG:
-        debug_handler = MultiProcessingLogStandardOutput()
-        debug_handler.setFormatter(formatter)
-        logger.addHandler(debug_handler)
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
+
+    install_mp_handler(logger=logger)
 
     return logger
 

@@ -14,6 +14,8 @@ sqlalchemy = "*"
 psutil = "*"
 netifaces = "*"
 celery = "*"
+multiprocessing-logging = "*"
+flower = "*"
 
 [requires]
 python_version = "3.6"
