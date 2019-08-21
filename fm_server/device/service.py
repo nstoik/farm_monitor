@@ -51,8 +51,7 @@ class DeviceReceiver():
                                            virtual_host=self._virtual_host, credentials=creds)
 
         return pika.SelectConnection(parameters=params,
-                                     on_open_callback=self.on_connection_open,
-                                     stop_ioloop_on_close=False)
+                                     on_open_callback=self.on_connection_open)
 
     def on_connection_open(self, unused_connection):
         """This method is called by pika once the connection to RabbitMQ has
@@ -90,7 +89,7 @@ class DeviceReceiver():
         else:
             self.LOGGER.warning('Connection closed, reopening in 5 seconds: (%s) %s',
                                 reply_code, reply_text)
-            self._connection.add_timeout(5, self.reconnect)
+            self._connection.ioloop.call_later(5, self.reconnect)
 
     def reconnect(self):
         """Will be invoked by the IOLoop timer if the connection is
@@ -140,7 +139,7 @@ class DeviceReceiver():
         self.LOGGER.info('Adding channel close callback')
         self._channel.add_on_close_callback(self.on_channel_closed)
 
-    def on_channel_closed(self, channel, reply_code, reply_text):
+    def on_channel_closed(self, channel, reason):
         """Invoked by pika when RabbitMQ unexpectedly closes the channel.
         Channels are usually closed if you attempt to do something that
         violates the protocol, such as re-declare an exchange or queue with
@@ -148,12 +147,10 @@ class DeviceReceiver():
         to shutdown the object.
 
         :param pika.channel.Channel: The closed channel
-        :param int reply_code: The numeric reason the channel was closed
-        :param str reply_text: The text reason the channel was closed
+        :param Exception reason: why the channel was closed
 
         """
-        self.LOGGER.warning('Channel %i was closed: (%s) %s',
-                            channel, reply_code, reply_text)
+        self.LOGGER.warning('Channel %i was closed: %s', channel, reason)
         self._connection.close()
 
     def close_channel(self):
@@ -261,7 +258,8 @@ class HeartbeatReceiver():
 
         """
         self.LOGGER.debug('Declaring queue')
-        self._channel.queue_declare(callback=self.on_queue_declareok,
+        self._channel.queue_declare(queue="",
+                                    callback=self.on_queue_declareok,
                                     auto_delete=True,
                                     exclusive=True)
 
@@ -306,7 +304,7 @@ class HeartbeatReceiver():
         """
         self.LOGGER.debug('Issuing consumer related RPC commands')
         self.add_on_cancel_callback()
-        self._consumer_tag = self._channel.basic_consume(consumer_callback=self.on_message,
+        self._consumer_tag = self._channel.basic_consume(on_message_callback=self.on_message,
                                                          queue=self.queue_name)
         self.schedule_device_check()
 
@@ -338,8 +336,8 @@ class HeartbeatReceiver():
         """
         if self._stopping:
             return
-        self._connection.add_timeout(self.DEVICE_CONNECTION_INTERVAL,
-                                     self.device_check)
+        self._connection.ioloop.call_later(self.DEVICE_CONNECTION_INTERVAL,
+                                           self.device_check)
 
     def device_check(self):
         """Check if a device is 'dead' or not"""
@@ -378,7 +376,7 @@ class HeartbeatReceiver():
 
         """
         self.LOGGER.debug('Received message # %s from %s',
-                     basic_deliver.delivery_tag, properties.app_id)
+                    basic_deliver.delivery_tag, properties.app_id)
 
         payload = json.loads(body)
 
@@ -517,7 +515,8 @@ class DeviceMessages():
 
         """
         self.LOGGER.debug('Declaring queue')
-        self._channel.queue_declare(callback=self.on_queue_declareok,
+        self._channel.queue_declare(queue="",
+                                    callback=self.on_queue_declareok,
                                     auto_delete=True,
                                     exclusive=True)
 
@@ -562,7 +561,7 @@ class DeviceMessages():
         """
         self.LOGGER.debug('Issuing consumer related RPC commands')
         self.add_on_cancel_callback()
-        self._consumer_tag = self._channel.basic_consume(consumer_callback=self.on_message,
+        self._consumer_tag = self._channel.basic_consume(on_message_callback=self.on_message,
                                                          queue=self.queue_name)
 
     def add_on_cancel_callback(self):

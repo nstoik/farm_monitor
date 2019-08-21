@@ -23,8 +23,10 @@ class Config(object):
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
 
     PRESENCE_PORT = 5554
+
     LOG_LEVEL = logging.INFO
     LOG_FILE = "/home/pi/farm_monitor/fl/farm_monitor.log"
+    CELERY_LOG_FILE = "/home/pi/farm_monitor/fl/fm_celery.log"
 
     RRDTOOL_LOCATION = "/home/pi/farm_monitor/fd/rrd/"
 
