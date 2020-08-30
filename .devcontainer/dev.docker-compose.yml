@@ -1,0 +1,32 @@
+version: '3'
+
+services: 
+  fm_server:
+    image: nstoik/fm_server:dev
+    container_name: fm_server
+    build:
+      context: .
+      dockerfile: .devcontainer/dev.Dockerfile
+    ports: 
+      - 5000:5000/tcp
+      - 2992:2992/tcp
+    networks:
+      - farm_monitor
+    depends_on:
+      - "db"
+
+    volumes:
+      # this is for vs code file editing inside the container
+      - .:/workspaces/fm_server:cached
+      # this is for bash command history. https://code.visualstudio.com/docs/remote/containers-advanced#_persist-bash-history-between-runs
+      - fm_server-bashhistory:/commandhistory
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
+  
+volumes:
+  dbdata:
+  fm_server-bashhistory:
+
+networks:
+  farm_monitor:
