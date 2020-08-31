@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services: 
   fm_server:
@@ -8,8 +8,7 @@ services:
       context: .
       dockerfile: .devcontainer/dev.Dockerfile
     ports: 
-      - 5000:5000/tcp
-      - 2992:2992/tcp
+      - 5554:5554/tcp
     networks:
       - farm_monitor
     depends_on:
@@ -30,3 +29,4 @@ volumes:
 
 networks:
   farm_monitor:
+    name: farm_monitor

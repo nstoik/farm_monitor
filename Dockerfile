@@ -19,7 +19,10 @@ RUN pip install -U pip && pip install pipenv && \
     # chmod 0440 /etc/sudoers.d/$USERNAME && \
     # make working directory and change owner
     mkdir -p /workspaces/fm_server/ && \
-    chown $USER_UID:$USER_GID /workspaces/fm_server/
+    chown $USER_UID:$USER_GID /workspaces/fm_server/ && \
+    # create directory for logs and change owner
+    mkdir /logs/ && \
+    chown $USER_UID:$USER_GID /logs/
 
 # Change to the newly created user
 USER $USER_UID:$USER_GID

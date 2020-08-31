@@ -34,7 +34,19 @@ RUN pip install -U pip && pip install pipenv && \
     # chmod 0440 /etc/sudoers.d/$USERNAME && \
     # make working directory and change owner
     mkdir -p /workspaces/fm_server/ && \
-    chown $USER_UID:$USER_GID /workspaces/fm_server/
+    chown $USER_UID:$USER_GID /workspaces/fm_server/ && \
+    # create directory for logs and change owner
+    mkdir /logs/ && \
+    chown $USER_UID:$USER_GID /logs/
+
+# add bash history. https://code.visualstudio.com/docs/remote/containers-advanced#_persist-bash-history-between-runs
+RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+    && echo $SNIPPET >> "/root/.bashrc" \
+    # [Optional] If you have a non-root user
+    && mkdir /commandhistory \
+    && touch /commandhistory/.bash_history \
+    && chown -R $USERNAME /commandhistory \
+    && echo $SNIPPET >> "/home/$USERNAME/.bashrc"
 
 # Change to the newly created user
 USER $USER_UID:$USER_GID

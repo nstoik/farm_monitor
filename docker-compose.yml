@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services: 
   fm_server:
@@ -23,11 +23,14 @@ services:
       POSTGRES_DB: farm_monitor.db
     volumes:
       - "dbdata:/var/lib/postgresql/data"
+      - "logs:/logs"
     networks:
       - farm_monitor
   
 volumes:
   dbdata:
+  logs:
 
 networks:
   farm_monitor:
+    name: farm_monitor
