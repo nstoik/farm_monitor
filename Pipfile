@@ -16,6 +16,7 @@ netifaces = "~=0.10.9"
 celery = "~=4.4.7"
 multiprocessing-logging = "~=0.3.1"
 flower = "~=0.9.3"
+fm_database = {git = "https://github.com/nstoik/fm_database",editable = true}
 
 [requires]
 python_version = "3.8"
