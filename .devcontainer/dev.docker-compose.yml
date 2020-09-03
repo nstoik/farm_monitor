@@ -11,8 +11,6 @@ services:
       - 5554:5554/tcp
     networks:
       - farm_monitor
-    depends_on:
-      - "db"
 
     volumes:
       # this is for vs code file editing inside the container
