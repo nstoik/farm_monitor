@@ -3,9 +3,10 @@ import logging
 import json
 import pika
 
-from fm_server.settings import get_config
 from fm_database.base import get_session
 from fm_database.models.device import Device
+
+from fm_server.settings import get_config
 
 LOGGER = logging.getLogger('fm.device.service')
 

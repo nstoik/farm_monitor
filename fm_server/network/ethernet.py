@@ -29,6 +29,9 @@ def get_interfaces(only_wlan=False, only_eth=False):
     if 'lo' in interfaces:
         interfaces.remove('lo')
 
+    if 'sit0' in interfaces:
+        interfaces.remove('sit0')
+
     if only_wlan:
         for x in interfaces:
             if not x.startswith('wlan'):

@@ -81,7 +81,7 @@ def get_interface_details(interface):
         creds['password'] = click.prompt("Enter the access point password", default="raspberry")
         info['creds'] = creds
     elif info['state'] == 'dhcp':
-        if click.confirm("Do you want to preopulate wifi credentials", default=True):
+        if click.confirm("Do you want to prepopulate wifi credentials", default=True):
             creds = {}
             creds['ssid'] = click.prompt("Enter the wifi SSID", default='FarmMonitor')
             creds['password'] = click.prompt("Enter the wifi password", default="raspberry")

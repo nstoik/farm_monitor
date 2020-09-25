@@ -32,7 +32,7 @@ class Config(object):
 
     UPDATER_PATH = "/home/pi/farm_monitor/farm_update/update.sh"
 
-    RABBITMQ_HOST = 'localhost'
+    RABBITMQ_HOST = 'rabbitmq'
     RABBITMQ_PORT = 5672
     RABBITMQ_USER = 'fm'
     RABBITMQ_PASSWORD = 'farm_monitor'
