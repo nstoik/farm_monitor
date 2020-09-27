@@ -14,12 +14,13 @@ services:
     volumes:
       - "logs:/logs"
   
-  rabbitmq:
+  fm_rabbitmq:
     image: rabbitmq:3.8-management
-    container_name: rabbitmq
-#    volumes:
+    container_name: fm_rabbitmq
+    hostname: fm_rabbitmq
+    volumes:
 #        - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
-#        - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+      - rabbitmq_data:/var/lib/rabbitmq/
 #        - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
     environment:
         RABBITMQ_DEFAULT_USER: 'fm'
@@ -33,6 +34,7 @@ services:
   
 volumes:
   logs:
+  rabbitmq_data:
 
 networks:
   farm_monitor:
