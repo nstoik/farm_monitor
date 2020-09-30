@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports: 
-      - 5554:5554/tcp
+      - 5554:5554/udp # presence service port   
     networks:
       - farm_monitor
     volumes:
@@ -27,8 +27,8 @@ services:
         RABBITMQ_DEFAULT_PASS: 'farm_monitor'
         RABBITMQ_DEFAULT_VHOST: 'farm_monitor'
     ports:
-        - 5672:5672
-        - 15672:15672
+        - 5672:5672   # RabbitMQ port
+        - 15672:15672 # Management interface
     networks:
       - farm_monitor
   
