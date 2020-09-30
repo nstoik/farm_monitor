@@ -4,6 +4,7 @@ import click
 
 from fm_server.device.commands import send_create
 from .commands import first_setup
+from .main import main
 
 @click.group()
 def cli():
@@ -13,7 +14,6 @@ def cli():
 def run():
     """Run the server."""
     click.echo("Starting server")
-    from .main import main
     main()
 
 cli.add_command(first_setup)
