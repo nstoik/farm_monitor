@@ -1,4 +1,5 @@
 """ main starting point for fm_server """
+import time
 import logging
 from logging.handlers import RotatingFileHandler
 from multiprocessing import Process
@@ -53,6 +54,8 @@ def main():
         device_controller.join()
     except KeyboardInterrupt:
         logger.warning('Keyboard interrupt in main')
+
+        time.sleep(1)
 
         presence_controller.terminate()
         device_controller.terminate()
