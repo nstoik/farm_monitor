@@ -32,7 +32,7 @@ def after_celery_logging(logger, *args, **kwargs):
     logger.addHandler(file_handler)    
 
 # disabled because logging is handled by the systemd file
-# signals.after_setup_task_logger.connect
+# @signals.after_setup_task_logger.connect
 def after_celery_task_logging(logger, *args, **kwargs):
     config = get_config()
 

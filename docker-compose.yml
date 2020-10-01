@@ -31,6 +31,17 @@ services:
         - 15672:15672 # Management interface
     networks:
       - farm_monitor
+
+  fm_flower:  
+    image: mher/flower:latest
+    container_name: fm_flower
+    environment:
+      - celery_broker_url=pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
+      - CELERY_BROKER_URL=pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
+    ports:  
+      - 5555:5555 # flower web interface
+    networks:
+      - farm_monitor
   
 volumes:
   logs:
