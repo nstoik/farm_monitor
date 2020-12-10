@@ -19,9 +19,9 @@ services:
     container_name: fm_rabbitmq
     hostname: fm_rabbitmq
     volumes:
-#        - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+#     - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
       - rabbitmq_data:/var/lib/rabbitmq/
-#        - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+#     - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
     environment:
         RABBITMQ_DEFAULT_USER: 'fm'
         RABBITMQ_DEFAULT_PASS: 'farm_monitor'
