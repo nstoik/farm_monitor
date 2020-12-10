@@ -5,7 +5,7 @@ class CeleryConfig(object):
     """ Celery configuration """
 
     ## Broker settings.
-    broker_url = 'pyamqp://fm:farm_monitor@localhost/farm_monitor'
+    broker_url = 'pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor'
 
     # List of modules to import when the Celery worker starts.
     imports = ('fm_server.device.tasks',)
@@ -25,14 +25,14 @@ class Config(object):
     PRESENCE_PORT = 5554
 
     LOG_LEVEL = logging.INFO
-    LOG_FILE = "/home/pi/farm_monitor/fl/farm_monitor.log"
-    CELERY_LOG_FILE = "/home/pi/farm_monitor/fl/fm_celery.log"
+    LOG_FILE = "/logs/farm_monitor.log"
+    CELERY_LOG_FILE = "/logs/fm_celery.log"
 
     RRDTOOL_LOCATION = "/home/pi/farm_monitor/fd/rrd/"
 
     UPDATER_PATH = "/home/pi/farm_monitor/farm_update/update.sh"
 
-    RABBITMQ_HOST = 'localhost'
+    RABBITMQ_HOST = 'fm_rabbitmq'
     RABBITMQ_PORT = 5672
     RABBITMQ_USER = 'fm'
     RABBITMQ_PASSWORD = 'farm_monitor'

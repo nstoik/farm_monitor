@@ -3,9 +3,10 @@ import logging
 import json
 import pika
 
-from fm_server.settings import get_config
 from fm_database.base import get_session
 from fm_database.models.device import Device
+
+from fm_server.settings import get_config
 
 LOGGER = logging.getLogger('fm.device.service')
 
@@ -73,22 +74,21 @@ class DeviceReceiver():
         self.LOGGER.debug('Adding connection close callback')
         self._connection.add_on_close_callback(self.on_connection_closed)
 
-    def on_connection_closed(self, connection, reply_code, reply_text):
+    def on_connection_closed(self, channel, exception_reason):
         """This method is invoked by pika when the connection to RabbitMQ is
         closed unexpectedly. Since it is unexpected, we will reconnect to
         RabbitMQ if it disconnects.
 
-        :param pika.connection.Connection connection: The closed connection obj
-        :param int reply_code: The server provided reply_code if given
-        :param str reply_text: The server provided reply_text if given
+        :param pika.channel that was closed
+        :param str exception_reason: The server provided exception reason if given
 
         """
+        self.LOGGER.info(f'Connection closed. Exception reason given is: {exception_reason}')
         self._channel = None
         if self._closing:
             self._connection.ioloop.stop()
         else:
-            self.LOGGER.warning('Connection closed, reopening in 5 seconds: (%s) %s',
-                                reply_code, reply_text)
+            self.LOGGER.warning(f'Connection closed, reopening in 5 seconds: Exception reason given is: {exception_reason}')
             self._connection.ioloop.call_later(5, self.reconnect)
 
     def reconnect(self):
@@ -185,12 +185,12 @@ class DeviceReceiver():
         the IOLoop will be buffered but not processed.
 
         """
-        self.LOGGER.info('Stopping')
+        self.LOGGER.info('DeviceReceiver is stopping')
         self._closing = True
         self.HEARTBEAT_RECEIVER.set_stopping(True)
         self.DEVICE_MESSAGES.set_stopping(True)
         self.HEARTBEAT_RECEIVER.stop_consuming()
-        self.DEVICE_MESSAGES.start_consuming()
+        self.DEVICE_MESSAGES.stop_consuming()
         self.close_channel()
         self._connection.ioloop.start()
         self.LOGGER.info('Stopped')
@@ -375,8 +375,7 @@ class HeartbeatReceiver():
         :param str|unicode body: The message body
 
         """
-        self.LOGGER.debug('Received message # %s from %s',
-                    basic_deliver.delivery_tag, properties.app_id)
+       #self.LOGGER.debug(f'Received message # {basic_deliver.delivery_tag} from {properties.app_id}')
 
         payload = json.loads(body)
 
@@ -402,7 +401,7 @@ class HeartbeatReceiver():
         :param int delivery_tag: The delivery tag from the Basic.Deliver frame
 
         """
-        self.LOGGER.debug('Acknowledging message %s', delivery_tag)
+        #self.LOGGER.debug(f'Acknowledging message {delivery_tag}')
         self._channel.basic_ack(delivery_tag)
 
     def on_new_device(self, device_id):
@@ -443,7 +442,7 @@ class HeartbeatReceiver():
 
         if self._channel:
             self.LOGGER.debug('Sending a Basic.Cancel RPC command to RabbitMQ')
-            self._channel.basic_cancel(self.on_cancelok, self._consumer_tag)
+            self._channel.basic_cancel(callback=self.on_cancelok, consumer_tag=self._consumer_tag)
 
     def on_cancelok(self, unused_frame):
         """This method is invoked by pika when RabbitMQ acknowledges the
@@ -642,7 +641,7 @@ class DeviceMessages():
         """
         if self._channel:
             self.LOGGER.debug('Sending a Basic.Cancel RPC command to RabbitMQ')
-            self._channel.basic_cancel(self.on_cancelok, self._consumer_tag)
+            self._channel.basic_cancel(callback=self.on_cancelok, consumer_tag=self._consumer_tag)
 
     def on_cancelok(self, unused_frame):
         """This method is invoked by pika when RabbitMQ acknowledges the
