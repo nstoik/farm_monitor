@@ -1,4 +1,5 @@
-from setuptools import setup, find_packages
+"""fm_server setup module."""
+from setuptools import find_packages, setup
 
 __version__ = '0.1'
 
@@ -13,7 +14,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'fm_server = fm_server.manage:cli'
+            'fm_server = fm_server.cli.cli:entry_point'
         ]
     }
 )
