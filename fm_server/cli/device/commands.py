@@ -11,7 +11,7 @@ def device():
 
 @device.command()
 def send_create():
-    """send a 'create' message via RabbitMQ to all connected devices."""
+    """Send a 'create' message via RabbitMQ to all connected devices."""
 
     click.echo("sending create message to all devices")
     send_create_message()

@@ -13,11 +13,10 @@ def entry_point():
     """Entry point for CLI."""
 
 
-entry_point.add_command(testing_commands.test)
-entry_point.add_command(testing_commands.lint)
+entry_point.add_command(device_commands.device)
 
 entry_point.add_command(manage_commands.run)
-
 entry_point.add_command(setup_commands.first_setup)
 
-entry_point.add_command(device_commands.device)
+entry_point.add_command(testing_commands.test)
+entry_point.add_command(testing_commands.lint)
