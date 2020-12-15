@@ -2,10 +2,10 @@
 """Main command line interface entry point."""
 import click
 
-from .testing import commands as testing_commands
+from .device import commands as device_commands
 from .manage import commands as manage_commands
 from .manage import setup_commands
-from .device import commands as device_commands
+from .testing import commands as testing_commands
 
 
 @click.group()

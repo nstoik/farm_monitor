@@ -1,5 +1,6 @@
-import os
 import logging
+import os
+
 
 class CeleryConfig(object):
     """ Celery configuration """
@@ -67,9 +68,10 @@ class TestConfig(Config):
     TESTING = True
 
 
-def get_config():
+def get_config(override_default="dev"):
+    """Return the Config option based on environment variables."""
 
-    environment = os.environ.get("FM_SERVER_CONFIG", default='dev')
+    environment = os.environ.get("FM_SERVER_CONFIG", default=override_default)
 
     if environment == 'dev':
         return DevConfig

@@ -4,7 +4,6 @@ import pickle
 from datetime import timedelta
 
 from celery.utils.log import get_task_logger
-
 from fm_database.base import get_session
 from fm_database.models.message import Message
 

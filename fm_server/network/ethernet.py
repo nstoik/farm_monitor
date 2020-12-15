@@ -1,10 +1,9 @@
 import logging
 
-from netifaces import AF_INET
 import netifaces
-
 from fm_database.base import get_session
 from fm_database.models.system import Interface
+from netifaces import AF_INET
 
 logger = logging.getLogger('fm.network.ethernet')
 

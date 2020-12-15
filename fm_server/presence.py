@@ -1,12 +1,14 @@
 """ run a service that responds to pings with the address of the rabbitmq broker """
+import logging
 import socket
 import time
-import logging
 
 from fm_database.base import get_session
 from fm_database.models.system import Interface
-from fm_server.system.info import get_ip_of_interface
+
 from fm_server.settings import get_config
+from fm_server.system.info import get_ip_of_interface
+
 
 def presence_service():
     """ presence service that responds to pings """

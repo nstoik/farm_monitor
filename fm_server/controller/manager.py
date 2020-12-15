@@ -2,6 +2,7 @@ import time
 
 import pika
 
+
 def pika_test():
 
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))

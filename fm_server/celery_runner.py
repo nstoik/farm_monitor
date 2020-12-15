@@ -1,10 +1,10 @@
 """ main celery module """
 import logging
 from logging.handlers import RotatingFileHandler
+
 from celery import Celery, signals
 
 from .settings import get_config
-
 
 app = Celery()
 

@@ -1,11 +1,12 @@
 """ system control module """
 
-import subprocess
 import logging
-from sqlalchemy.orm.exc import NoResultFound
+import subprocess
 
 from fm_database.base import get_session
 from fm_database.models.system import Hardware, Software
+from sqlalchemy.orm.exc import NoResultFound
+
 from .info import get_device_name, get_serial
 
 

@@ -1,13 +1,13 @@
 """ system info module """
 
-import subprocess
-import socket
 import datetime
-import os
 import logging
+import os
+import socket
+import subprocess
 
-import psutil
 import netifaces
+import psutil
 
 logger = logging.getLogger('fm.system.info') # pylint: disable=invalid-name
 

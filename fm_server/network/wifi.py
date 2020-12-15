@@ -1,15 +1,25 @@
-import time
-import subprocess
 import logging
+import subprocess
+import time
 
 import netifaces
+from fm_database.base import get_session
+from fm_database.models.system import Interface, Wifi
 from sqlalchemy.orm.exc import NoResultFound
 
-from fm_database.base import get_session
-from fm_database.models.system import Wifi, Interface
-from fm_server.network.network_files import interface_file, dhcpcd_file, dnsmasq_file,\
-    hostapd_file, wpa_supplicant_file, iptables_file
-from fm_server.network.ethernet import get_interfaces, ethernet_connected, get_external_interface
+from fm_server.network.ethernet import (
+    ethernet_connected,
+    get_external_interface,
+    get_interfaces,
+)
+from fm_server.network.network_files import (
+    dhcpcd_file,
+    dnsmasq_file,
+    hostapd_file,
+    interface_file,
+    iptables_file,
+    wpa_supplicant_file,
+)
 from fm_server.settings import get_config
 
 logger = logging.getLogger('fd.network.wifi')

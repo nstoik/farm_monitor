@@ -1,14 +1,14 @@
 """ main starting point for fm_server """
-import time
 import logging
+import time
 from logging.handlers import RotatingFileHandler
 from multiprocessing import Process
 
 from multiprocessing_logging import install_mp_handler
 
-from .settings import get_config
-from .presence import presence_service
 from .device.service import run_device
+from .presence import presence_service
+from .settings import get_config
 
 
 def configure_logging(config):

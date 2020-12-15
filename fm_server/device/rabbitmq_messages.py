@@ -1,6 +1,6 @@
 """ device RabbitMQ messages module """
-import logging
 import json
+import logging
 import time
 
 import pika

@@ -1,8 +1,8 @@
 """ device service package """
-import logging
 import json
-import pika
+import logging
 
+import pika
 from fm_database.base import get_session
 from fm_database.models.device import Device
 
