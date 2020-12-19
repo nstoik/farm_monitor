@@ -1,4 +1,4 @@
-""" run a service that responds to pings with the address of the rabbitmq broker """
+"""Run a service that responds to pings with the address of the rabbitmq broker."""
 import logging
 import socket
 import time
@@ -11,9 +11,9 @@ from fm_server.system.info import get_ip_of_interface
 
 
 def presence_service():
-    """ presence service that responds to pings """
+    """Presence service that responds to pings."""
 
-    logger = logging.getLogger('fm.presence')
+    logger = logging.getLogger("fm.presence")
 
     session = get_session()
     interface = session.query(Interface.interface).filter_by(is_for_fm=True).scalar()
@@ -37,22 +37,22 @@ def presence_service():
     logger.info("Presence service is active")
     try:
         # send ping every 5 seconds for first 10 minutes
-        for _ in range(int(600/5)):
+        for _ in range(int(600 / 5)):
             # logger.debug("Sending ping via: %s:%s", broadcast_address, presence_port)
-            sock.sendto(b'!', 0, (broadcast_address, int(presence_port)))
+            sock.sendto(b"!", 0, (broadcast_address, int(presence_port)))
             time.sleep(5)
 
         # then send once every minute for 1 day
-        for _ in range(int(86400/60)):
+        for _ in range(int(86400 / 60)):
             # logger.debug("Sending ping via: %s:%s", broadcast_address, presence_port)
-            sock.sendto(b'!', 0, (broadcast_address, int(presence_port)))
+            sock.sendto(b"!", 0, (broadcast_address, int(presence_port)))
             time.sleep(60)
 
         # then send once every hour until stopped
         while True:
             # Broadcast our beacon
             # logger.debug("Sending ping via: %s:%s", broadcast_address, presence_port)
-            sock.sendto(b'!', 0, (broadcast_address, int(presence_port)))
+            sock.sendto(b"!", 0, (broadcast_address, int(presence_port)))
             time.sleep(3600)
     except KeyboardInterrupt:
         logger.info("Stopping presence service")
@@ -61,5 +61,5 @@ def presence_service():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     presence_service()
