@@ -1,18 +1,20 @@
+"""Application configuration."""
+
 import logging
 import os
 
 
 class CeleryConfig(object):
-    """ Celery configuration """
+    """Celery configuration."""
 
-    ## Broker settings.
-    broker_url = 'pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor'
+    # Broker settings.
+    broker_url = "pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor"
 
     # List of modules to import when the Celery worker starts.
-    imports = ('fm_server.device.tasks',)
+    imports = ("fm_server.device.tasks",)
 
-    ## Using the database to store task state and results.
-    result_backend = 'rpc://'
+    # Using the database to store task state and results.
+    result_backend = "rpc://"
 
     task_soft_time_limit = 60
 
@@ -33,18 +35,18 @@ class Config(object):
 
     UPDATER_PATH = "/home/pi/farm_monitor/farm_update/update.sh"
 
-    RABBITMQ_HOST = 'fm_rabbitmq'
+    RABBITMQ_HOST = "fm_rabbitmq"
     RABBITMQ_PORT = 5672
-    RABBITMQ_USER = 'fm'
-    RABBITMQ_PASSWORD = 'farm_monitor'
-    RABBITMQ_VHOST = 'farm_monitor'
+    RABBITMQ_USER = "fm"
+    RABBITMQ_PASSWORD = "farm_monitor"
+    RABBITMQ_VHOST = "farm_monitor"
 
-    RABBITMQ_HEARTBEAT_EXCHANGE_NAME = 'heartbeat_events'
-    RABBITMQ_HEARTBEAT_EXCHANGE_TYPE = 'direct'
-    RABBITMQ_HEARTBEAT_ROUTING_KEY = 'heartbeat'
+    RABBITMQ_HEARTBEAT_EXCHANGE_NAME = "heartbeat_events"
+    RABBITMQ_HEARTBEAT_EXCHANGE_TYPE = "direct"
+    RABBITMQ_HEARTBEAT_ROUTING_KEY = "heartbeat"
 
-    RABBITMQ_MESSAGES_EXCHANGE_NAME = 'device_messages'
-    RABBITMQ_MESSAGES_EXCHANGE_TYPE = 'topic'
+    RABBITMQ_MESSAGES_EXCHANGE_NAME = "device_messages"
+    RABBITMQ_MESSAGES_EXCHANGE_TYPE = "topic"
 
 
 class DevConfig(Config):
@@ -73,11 +75,11 @@ def get_config(override_default="dev"):
 
     environment = os.environ.get("FM_SERVER_CONFIG", default=override_default)
 
-    if environment == 'dev':
+    if environment == "dev":
         return DevConfig
-    elif environment == 'prod':
+    elif environment == "prod":
         return ProdConfig
-    elif environment == 'test':
+    elif environment == "test":
         return TestConfig
     else:
         return DevConfig
