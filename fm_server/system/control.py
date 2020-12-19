@@ -1,4 +1,4 @@
-""" system control module """
+"""System control module."""
 
 import logging
 import subprocess
@@ -11,30 +11,31 @@ from .info import get_device_name, get_serial
 
 
 def set_device_name(name):
-    """ set device name """
-    name = "hostname -b "+ name
+    """Set device name."""
+    name = "hostname -b " + name
     subprocess.call(name)
     return
 
 
 def shutdown():
-    """ shutdown device """
-    command = ['sudo', 'shutdown', 'now']
+    """Shutdown device."""
+    command = ["sudo", "shutdown", "now"]
     subprocess.check_call(command)
 
     return
 
+
 def restart():
-    """ restart device """
-    command = ['sudo', 'reboot']
+    """Restart device."""
+    command = ["sudo", "reboot"]
     subprocess.check_call(command)
 
     return
 
 
 def set_service_state(control):
-    """ set the state of the service """
-    logger = logging.getLogger('fm.system.control')
+    """Set the state of the service."""
+    logger = logging.getLogger("fm.system.control")
     logger.info("Setting service state: %s", control)
     command = ["sudo", "systemctl", control, "farm-monitor.service"]
     subprocess.check_output(command, universal_newlines=True)
@@ -43,8 +44,8 @@ def set_service_state(control):
 
 
 def set_hardware_info(hardware_version):
-    """ set hardware info """
-    logger = logging.getLogger('fm.system.control')
+    """Set hardware info."""
+    logger = logging.getLogger("fm.system.control")
     logger.debug("Setting hardware: %s", hardware_version)
     session = get_session()
 
@@ -71,11 +72,14 @@ def set_hardware_info(hardware_version):
 
 
 def set_software_info(software_version, device_service=None, grainbin_service=None):
-    """ set software info """
-    logger = logging.getLogger('fm.system.control')
-    logger.debug("Setting software: %s, device: %s, grainbin: %s", software_version,\
-                                                                   device_service,\
-                                                                   grainbin_service)
+    """Set software info."""
+    logger = logging.getLogger("fm.system.control")
+    logger.debug(
+        "Setting software: %s, device: %s, grainbin: %s",
+        software_version,
+        device_service,
+        grainbin_service,
+    )
     session = get_session()
 
     try:
