@@ -411,7 +411,7 @@ class HeartbeatReceiver:
 
         payload = json.loads(body)
 
-        self.LOGGER.debug(f'payload is: {payload}')
+        self.LOGGER.debug(f"payload is: {payload}")
 
         device_id = properties.app_id
         if device_id in CONNECTED_DEVICES:
