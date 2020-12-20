@@ -9,6 +9,7 @@ from fm_server.device.rabbitmq_messages import send_create_message
 def device():
     """Command group for device commands."""
 
+
 @device.command()
 def send_create():
     """Send a 'create' message via RabbitMQ to all connected devices."""

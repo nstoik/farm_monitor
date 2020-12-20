@@ -1,5 +1,6 @@
 """Represent a device to a worker."""
 
+
 class DeviceRep(object):
     """Helper class to represent a device to a worker."""
 

@@ -1,4 +1,4 @@
-""" main starting point for fm_server """
+"""Main starting point for fm_server."""
 import logging
 import time
 from logging.handlers import RotatingFileHandler
@@ -12,18 +12,22 @@ from .settings import get_config
 
 
 def configure_logging(config):
-    """ configure logging for the entire app """
+    """Configure logging for the entire app."""
 
-    logger = logging.getLogger('fm')
+    logger = logging.getLogger("fm")
     logfile_path = config.LOG_FILE
     log_level = config.LOG_LEVEL
 
     logger.setLevel(log_level)
     logger.propagate = False
 
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
 
-    file_handler = RotatingFileHandler(logfile_path, mode='a', maxBytes=1024 * 1024, backupCount=10)
+    file_handler = RotatingFileHandler(
+        logfile_path, mode="a", maxBytes=1024 * 1024, backupCount=10
+    )
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
@@ -36,8 +40,9 @@ def configure_logging(config):
 
     return logger
 
+
 def main():
-    """ main starting point for program """
+    """Main starting point for program."""
 
     config = get_config()
     logger = configure_logging(config)
@@ -53,7 +58,7 @@ def main():
         presence_controller.join()
         device_controller.join()
     except KeyboardInterrupt:
-        logger.warning('Keyboard interrupt in main')
+        logger.warning("Keyboard interrupt in main")
 
         time.sleep(1)
 
@@ -65,5 +70,5 @@ def main():
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
