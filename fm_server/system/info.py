@@ -14,6 +14,7 @@ logger = logging.getLogger("fm.system.info")  # pylint: disable=invalid-name
 
 def get_ip_of_interface(interface, broadcast=False):
     """Get the ip address of a given interface."""
+    # pylint: disable=invalid-name
 
     if not broadcast:
         ip = netifaces.ifaddresses(interface)[2][0]["addr"]

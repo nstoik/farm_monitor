@@ -1,10 +1,11 @@
 """Application configuration."""
+# pylint: disable=too-few-public-methods
 
 import logging
 import os
 
 
-class CeleryConfig(object):
+class CeleryConfig:
     """Celery configuration."""
 
     # Broker settings.
@@ -19,7 +20,7 @@ class CeleryConfig(object):
     task_soft_time_limit = 60
 
 
-class Config(object):
+class Config:
     """Base configuration."""
 
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
@@ -77,9 +78,9 @@ def get_config(override_default="dev"):
 
     if environment == "dev":
         return DevConfig
-    elif environment == "prod":
+    if environment == "prod":
         return ProdConfig
-    elif environment == "test":
+    if environment == "test":
         return TestConfig
-    else:
-        return DevConfig
+
+    return DevConfig

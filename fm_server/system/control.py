@@ -14,7 +14,6 @@ def set_device_name(name):
     """Set device name."""
     name = "hostname -b " + name
     subprocess.call(name)
-    return
 
 
 def shutdown():
@@ -22,15 +21,11 @@ def shutdown():
     command = ["sudo", "shutdown", "now"]
     subprocess.check_call(command)
 
-    return
-
 
 def restart():
     """Restart device."""
     command = ["sudo", "reboot"]
     subprocess.check_call(command)
-
-    return
 
 
 def set_service_state(control):
@@ -39,8 +34,6 @@ def set_service_state(control):
     logger.info("Setting service state: %s", control)
     command = ["sudo", "systemctl", control, "farm-monitor.service"]
     subprocess.check_output(command, universal_newlines=True)
-
-    return
 
 
 def set_hardware_info(hardware_version):
@@ -67,8 +60,6 @@ def set_hardware_info(hardware_version):
 
     session.commit()
     session.close()
-
-    return
 
 
 def set_software_info(software_version, device_service=None, grainbin_service=None):
@@ -101,5 +92,3 @@ def set_software_info(software_version, device_service=None, grainbin_service=No
 
     session.commit()
     session.close()
-
-    return

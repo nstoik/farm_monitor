@@ -14,6 +14,8 @@ from .settings import get_config
 def configure_logging(config):
     """Configure logging for the entire app."""
 
+    # pylint: disable=duplicate-code
+
     logger = logging.getLogger("fm")
     logfile_path = config.LOG_FILE
     log_level = config.LOG_LEVEL
@@ -24,10 +26,10 @@ def configure_logging(config):
     formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
-
     file_handler = RotatingFileHandler(
         logfile_path, mode="a", maxBytes=1024 * 1024, backupCount=10
     )
+
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
@@ -67,7 +69,6 @@ def main():
 
         presence_controller.join()
         device_controller.join()
-    return
 
 
 if __name__ == "__main__":

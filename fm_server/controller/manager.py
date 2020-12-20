@@ -15,5 +15,3 @@ def pika_test():
     print(" [x] Sent 'Hello World!'")
     time.sleep(15)
     connection.close()
-
-    return

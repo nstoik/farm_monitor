@@ -1,4 +1,5 @@
 """Main celery module."""
+# pylint: disable=unused-argument
 import logging
 from logging.handlers import RotatingFileHandler
 

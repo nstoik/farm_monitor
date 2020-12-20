@@ -58,8 +58,6 @@ def presence_service():
         logger.info("Stopping presence service")
         sock.close()
 
-    return
-
 
 if __name__ == "__main__":
     presence_service()

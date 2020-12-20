@@ -20,6 +20,8 @@ NEW_DEVICES: Dict[str, DeviceRep] = {}
 class DeviceReceiver:
     """Communicate with devices via RabbitMQ."""
 
+    # pylint: disable=too-many-instance-attributes
+
     def __init__(self, logger):
         """Instantiate the DeviceReceiver."""
 
@@ -97,7 +99,7 @@ class DeviceReceiver:
 
         """
         self.LOGGER.info(
-            f"Connection closed. Exception reason given is: {exception_reason}"
+            f"Connection {channel} closed. Exception reason given is: {exception_reason}"
         )
         self._channel = None
         if self._closing:
@@ -216,6 +218,8 @@ class DeviceReceiver:
 
 class HeartbeatReceiver:
     """Receive heartbeats."""
+
+    # pylint: disable=too-many-instance-attributes
 
     DEVICE_CONNECTION_INTERVAL = 10
 
@@ -455,20 +459,20 @@ class HeartbeatReceiver:
                 self.LOGGER.info(f"{device_id} connected. Has not been configured yet.")
                 NEW_DEVICES[device_id] = DeviceRep(device_id)
             return "new"
+
+        # device has been added to the db but was currently a NEW_DEVICE
+        if device_id in NEW_DEVICES:
+            self.LOGGER.info(f"{device_id} now connected.")
+            device_object = NEW_DEVICES.pop(device_id)
+            device_object.on_message_received()
+            CONNECTED_DEVICES[device_id] = device_object
+        # device has been added to the db but has not been seen yet
         else:
-            # device has been added to the db but was currently a NEW_DEVICE
-            if device_id in NEW_DEVICES:
-                self.LOGGER.info(f"{device_id} now connected.")
-                device_object = NEW_DEVICES.pop(device_id)
-                device_object.on_message_received()
-                CONNECTED_DEVICES[device_id] = device_object
-            # device has been added to the db but has not been seen yet
-            else:
-                self.LOGGER.info(f"{device_id} connected.")
-                CONNECTED_DEVICES[device_id] = DeviceRep(device_id)
-            device.connected = True
-            self._session.commit()
-            return "connected"
+            self.LOGGER.info(f"{device_id} connected.")
+            CONNECTED_DEVICES[device_id] = DeviceRep(device_id)
+        device.connected = True
+        self._session.commit()
+        return "connected"
 
     def stop_consuming(self):
         """Tell RabbitMQ that you would like to stop consuming by sending the Basic.Cancel RPC command."""

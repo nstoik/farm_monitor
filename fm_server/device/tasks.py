@@ -49,5 +49,3 @@ def device_create(info):
         LOGGER.error(
             f"create message received from device {device_id} which is not connected"
         )
-
-    return

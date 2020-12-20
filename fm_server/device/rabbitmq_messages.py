@@ -72,7 +72,7 @@ def get_device_status(device_id):
     exchange_type = config.RABBITMQ_MESSAGES_EXCHANGE_TYPE
 
     channel.exchange_declare(exchange=exchange_name, exchange_type=exchange_type)
-    method_frame = channel.queue_declare(exclusive=True, auto_delete=True)
+    method_frame = channel.queue_declare(queue="", exclusive=True, auto_delete=True)
     reply_queue = method_frame.method.queue
     properties = pika.BasicProperties(
         content_type="application/json", reply_to=reply_queue
@@ -91,16 +91,17 @@ def get_device_status(device_id):
 
     attempts = 0
     while attempts < 5:
-        method_frame, header_frame, body = channel.basic_get(reply_queue, no_ack=True)
+        # pylint: disable=unused-variable
+        method_frame, header_frame, body = channel.basic_get(reply_queue)
         if method_frame:
             connection.close()
             state = str(body, "utf-8")
             LOGGER.info(f"Returned status is {state}")
             return state
-        else:
-            LOGGER.debug("No return message received yet")
-            time.sleep(1)
-            attempts += 1
+
+        LOGGER.debug("No return message received yet")
+        time.sleep(1)
+        attempts += 1
 
     LOGGER.warning("No return message received for device status message request")
     connection.close()
