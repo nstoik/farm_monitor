@@ -1,4 +1,4 @@
-""" device RabbitMQ messages module """
+"""Device RabbitMQ messages module."""
 import json
 import logging
 import time
@@ -7,18 +7,19 @@ import pika
 
 from fm_server.settings import get_config
 
-LOGGER = logging.getLogger('fd.device.rabbitmq')
+LOGGER = logging.getLogger("fd.device.rabbitmq")
 
 
 def get_connection(config=None):
     """This method connects to RabbitMQ, returning the connection handle.
+
     When the connection is established, the on_connection_open method
     will be invoked by pika.
 
     :rtype: pika.SelectConnection
 
     """
-    LOGGER.info('Connecting to RabbitMQ')
+    LOGGER.info("Connecting to RabbitMQ")
     if not config:
         config = get_config()
 
@@ -29,12 +30,14 @@ def get_connection(config=None):
     port = config.RABBITMQ_PORT
 
     creds = pika.PlainCredentials(user, password)
-    params = pika.ConnectionParameters(host=host, port=port,
-                                       virtual_host=virtual_host, credentials=creds)
+    params = pika.ConnectionParameters(
+        host=host, port=port, virtual_host=virtual_host, credentials=creds
+    )
     return pika.BlockingConnection(parameters=params)
 
-def send_create_message(destination='all'):
-    """ send a create message to 'destination' devices """
+
+def send_create_message(destination="all"):
+    """Send a create message to 'destination' devices."""
 
     config = get_config()
 
@@ -46,17 +49,19 @@ def send_create_message(destination='all'):
 
     channel.exchange_declare(exchange=exchange_name, exchange_type=exchange_type)
 
-    routing_key = destination + '.create'
-    message = {'command': 'create'}
-    channel.basic_publish(exchange=exchange_name,
-                          routing_key=routing_key,
-                          body=json.dumps(message, ensure_ascii=True))
-    LOGGER.debug(f'Sent message with key:{routing_key} to {exchange_name} exchange')
+    routing_key = destination + ".create"
+    message = {"command": "create"}
+    channel.basic_publish(
+        exchange=exchange_name,
+        routing_key=routing_key,
+        body=json.dumps(message, ensure_ascii=True),
+    )
+    LOGGER.debug(f"Sent message with key:{routing_key} to {exchange_name} exchange")
     connection.close()
 
+
 def get_device_status(device_id):
-    """ get the device status from the heartbeat service
-    for a given device_id. """
+    """Get the device status from the heartbeat service for a given device_id."""
 
     config = get_config()
 
@@ -69,31 +74,34 @@ def get_device_status(device_id):
     channel.exchange_declare(exchange=exchange_name, exchange_type=exchange_type)
     method_frame = channel.queue_declare(exclusive=True, auto_delete=True)
     reply_queue = method_frame.method.queue
-    properties = pika.BasicProperties(content_type='application/json',
-                                      reply_to=reply_queue)
-    routing_key = '_internal'
-    message = {'command': 'device_status', 'id': device_id}
+    properties = pika.BasicProperties(
+        content_type="application/json", reply_to=reply_queue
+    )
+    routing_key = "_internal"
+    message = {"command": "device_status", "id": device_id}
 
-    channel.basic_publish(exchange=exchange_name,
-                          routing_key=routing_key,
-                          body=json.dumps(message, ensure_ascii=True),
-                          properties=properties)
+    channel.basic_publish(
+        exchange=exchange_name,
+        routing_key=routing_key,
+        body=json.dumps(message, ensure_ascii=True),
+        properties=properties,
+    )
 
-    LOGGER.info(f'Sent request for {device_id } status to {exchange_name} exchange')
+    LOGGER.info(f"Sent request for {device_id } status to {exchange_name} exchange")
 
     attempts = 0
     while attempts < 5:
         method_frame, header_frame, body = channel.basic_get(reply_queue, no_ack=True)
         if method_frame:
             connection.close()
-            state = str(body, 'utf-8')
-            LOGGER.info(f'Returned status is {state}')
+            state = str(body, "utf-8")
+            LOGGER.info(f"Returned status is {state}")
             return state
         else:
-            LOGGER.debug(f'No return message received yet')
+            LOGGER.debug("No return message received yet")
             time.sleep(1)
             attempts += 1
 
-    LOGGER.warning('No return message received for device status message request')
+    LOGGER.warning("No return message received for device status message request")
     connection.close()
-    return 'disconnected'
+    return "disconnected"
