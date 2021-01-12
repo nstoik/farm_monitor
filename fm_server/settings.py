@@ -71,10 +71,17 @@ class TestConfig(Config):
     TESTING = True
 
 
-def get_config(override_default="dev"):
-    """Return the Config option based on environment variables."""
+def get_config(override_default=None):
+    """Return the Config option based on environment variables.
 
-    environment = os.environ.get("FM_SERVER_CONFIG", default=override_default)
+    If override_default is passed, that configuration is used instead.
+    If there is no match or nothing set then the environment defaults to 'dev'.
+    """
+
+    if override_default is None:
+        environment = os.environ.get("FM_SERVER_CONFIG", default="dev")
+    else:
+        environment = override_default
 
     if environment == "dev":
         return DevConfig

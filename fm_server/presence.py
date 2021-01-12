@@ -21,6 +21,12 @@ def presence_service():
     config = get_config()
     presence_port = config.PRESENCE_PORT
 
+    if interface is None:
+        logger.warning(
+            "Interface from database is None. Has initial configuration been run? Setting interface to 'eth0'"
+        )
+        interface = "eth0"
+
     logger.debug("Interface and port are: %s %s", interface, presence_port)
     broadcast_address = get_ip_of_interface(interface, broadcast=True)
     logger.debug("Presence broadcast address is: %s", broadcast_address)
@@ -36,24 +42,18 @@ def presence_service():
 
     logger.info("Presence service is active")
     try:
-        # send ping every 5 seconds for first 10 minutes
-        for _ in range(int(600 / 5)):
+        # send ping every 5 seconds for first 1 day
+        for _ in range(int(86400 / 60)):
             # logger.debug("Sending ping via: %s:%s", broadcast_address, presence_port)
             sock.sendto(b"!", 0, (broadcast_address, int(presence_port)))
             time.sleep(5)
 
-        # then send once every minute for 1 day
-        for _ in range(int(86400 / 60)):
-            # logger.debug("Sending ping via: %s:%s", broadcast_address, presence_port)
-            sock.sendto(b"!", 0, (broadcast_address, int(presence_port)))
-            time.sleep(60)
-
-        # then send once every hour until stopped
+        # then send once every minute until stopped
         while True:
             # Broadcast our beacon
             # logger.debug("Sending ping via: %s:%s", broadcast_address, presence_port)
             sock.sendto(b"!", 0, (broadcast_address, int(presence_port)))
-            time.sleep(3600)
+            time.sleep(60)
     except KeyboardInterrupt:
         logger.info("Stopping presence service")
         sock.close()
