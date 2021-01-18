@@ -35,6 +35,8 @@ services:
   fm_flower:  
     image: mher/flower:latest
     container_name: fm_flower
+    volumes:
+      - "flower_data:/data"
     environment:
       - celery_broker_url=pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
       - CELERY_BROKER_URL=pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
@@ -46,6 +48,7 @@ services:
 volumes:
   logs:
   rabbitmq_data:
+  flower_data:
 
 networks:
   farm_monitor:
