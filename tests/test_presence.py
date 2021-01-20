@@ -5,5 +5,9 @@ class TestPresenceService:
     """Presence service tests."""
 
     @staticmethod
-    def test_database_env():
-        pass
+    def test_presence_start():
+        """TBD."""
+
+    @staticmethod
+    def test_presence_stop():
+        """TBD."""

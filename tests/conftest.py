@@ -1,23 +1,14 @@
 """Define fixtures available to all tests."""
-
+# pylint: disable=redefined-outer-name
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
-from fm_database.base import get_base
+from fm_database.base import create_all_tables, drop_all_tables, get_session
 from fm_database.models.system import SystemSetup
 from fm_database.models.user import User
-from fm_database.settings import get_config as get_database_config
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-
-# this is the same configuration of database testing as is done
-# in the fm_database module conftest.py file.
-config = get_database_config(override_default="test")
-engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
-session = sessionmaker(bind=engine)
-db_session = scoped_session(session)
 
 
 @pytest.fixture(scope="session")
+# pylint: disable=unused-argument
 def monkeysession(request):
     """Create a MonkeyPatch object that can be scoped to a session.
 
@@ -29,6 +20,7 @@ def monkeysession(request):
 
 
 @pytest.fixture(scope="session", autouse=True)
+# pylint: disable=unused-argument
 def set_testing_env(monkeysession, database_env):
     """Set the environment variable for testing.
 
@@ -53,21 +45,19 @@ def database_env(monkeysession):
 def dbsession():
     """Returns an sqlalchemy session."""
 
-    yield db_session
+    yield get_session()
 
 
 @pytest.fixture
-def tables(dbsession):
+def tables():
     """Create all tables for testing. Delete when done."""
-    base = get_base()
-    base.query = dbsession.query_property()
-    base.metadata.create_all(bind=engine)
+    create_all_tables()
     yield
-    dbsession.close()
-    base.metadata.drop_all(bind=engine)
+    drop_all_tables()
 
 
 @pytest.fixture
+# pylint: disable=unused-argument
 def database_base_seed(dbsession, tables):
     """Enter the base configuration data into the database."""
 

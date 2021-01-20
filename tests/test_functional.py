@@ -22,6 +22,7 @@ def test_database_env():
     assert config == DBTestConfig
 
 
+# pylint: disable=unused-argument
 def test_database_setup_for_testing(database_base_seed, dbsession):
     """Test that the database base seed is correctly added to the database."""
 
