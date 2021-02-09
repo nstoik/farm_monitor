@@ -19,7 +19,7 @@ from fm_server.system.control import (
 @click.command()
 def first_setup():
     """First time setup. load required data."""
-    click.echo("first time setup")
+    click.echo("First time setup")
     session = get_session()
 
     try:
@@ -63,6 +63,8 @@ def first_setup():
             x = x + 1
             interface_details.append(get_interface_details(interface))
         set_interfaces(interface_details)
+
+    click.echo("First time setup is complete")
 
 
 def get_interface_details(interface):
