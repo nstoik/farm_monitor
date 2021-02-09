@@ -49,10 +49,11 @@ def dbsession():
 
 
 @pytest.fixture
-def tables():
+def tables(dbsession):
     """Create all tables for testing. Delete when done."""
     create_all_tables()
     yield
+    dbsession.close()
     drop_all_tables()
 
 
