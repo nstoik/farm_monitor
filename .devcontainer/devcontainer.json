@@ -2,7 +2,6 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/master/containers/python-3
 {
 	"name": "FM SERVER",
-	"context": "..",
 
 	 // The order of the files is important since later files override previous ones
 	 "dockerComposeFile": [
@@ -18,12 +17,10 @@
 	//  Uncomment the next line to run commands after the container is created.
 	"postCreateCommand": "git config --global core.autocrlf true",
 
-	// Uncomment the next line to use a non-root user. See https://aka.ms/vscode-remote/containers/non-root-user.
-	"runArgs": [ "-u", "fm" ],
-
 	"extensions": [
 		"ms-python.python",
 		"eamodio.gitlens",
+		"ms-python.vscode-pylance",
 	],
 	"settings": {
 		"python.linting.enabled": true,
