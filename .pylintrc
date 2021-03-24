@@ -307,7 +307,11 @@ good-names=i,
            hd,
            LOGGER,
            HEARTBEAT_RECEIVER,
-           DEVICE_MESSAGES
+           HEARTBEAT,
+           MESSAGE_RECEIVER,
+           DEVICE_MESSAGES,
+           STATE,
+           ip
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
