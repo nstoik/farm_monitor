@@ -6,6 +6,7 @@ from typing import Dict
 import pika
 from fm_database.base import get_session
 from fm_database.models.device import Device
+from pika.adapters.utils.connection_workflow import AMQPConnectionWorkflowFailed
 
 from fm_server.settings import get_config
 
@@ -717,6 +718,10 @@ def run_device():
 
     try:
         device_receiver.run()
+    except AMQPConnectionWorkflowFailed:
+        LOGGER.error(
+            "AMQPConnectionError. Device Service did not start. Is RabbitMQ server running?"
+        )
     except KeyboardInterrupt:
         LOGGER.info("Stopping device receiver")
         device_receiver.stop()
