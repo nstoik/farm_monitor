@@ -28,7 +28,7 @@ class TestSetupCommands:
 
     @staticmethod
     def test_first_setup_already_completed(dbsession):
-        """Test the the cli command exits if setup already done."""
+        """Test that the the cli command exits if setup already done."""
 
         # explicitly set first_setup_complete to True
         system = dbsession.query(SystemSetup).one()
