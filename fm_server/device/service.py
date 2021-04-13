@@ -378,7 +378,7 @@ class HeartbeatReceiver:
         for device in CONNECTED_DEVICES.copy().values():
             device.heartbeat()
             if not device.is_alive():
-                self._session.query(Device).filter_by(id=device.device_id).update(
+                self._session.query(Device).filter_by(device_id=device.device_id).update(
                     {Device.connected: False}
                 )
                 self._session.commit()
@@ -388,7 +388,7 @@ class HeartbeatReceiver:
         for device in NEW_DEVICES.copy().values():
             device.heartbeat()
             if not device.is_alive():
-                self._session.query(Device).filter_by(id=device.device_id).update(
+                self._session.query(Device).filter_by(device_id=device.device_id).update(
                     {Device.connected: False}
                 )
                 self._session.commit()
@@ -449,7 +449,7 @@ class HeartbeatReceiver:
     def on_new_device(self, device_id):
         """Check if device has been configured or not when a new device connects."""
 
-        device = self._session.query(Device).filter_by(id=device_id).first()
+        device = self._session.query(Device).filter_by(device_id=device_id).first()
 
         if not device:
             # device has not been added to the db but has been seen before
@@ -463,7 +463,7 @@ class HeartbeatReceiver:
 
         # device has been added to the db but was currently a NEW_DEVICE
         if device_id in NEW_DEVICES:
-            self.LOGGER.info(f"{device_id} now connected.")
+            self.LOGGER.info(f"{device_id} now connected and configured.")
             device_object = NEW_DEVICES.pop(device_id)
             device_object.on_message_received()
             CONNECTED_DEVICES[device_id] = device_object
