@@ -378,9 +378,9 @@ class HeartbeatReceiver:
         for device in CONNECTED_DEVICES.copy().values():
             device.heartbeat()
             if not device.is_alive():
-                self._session.query(Device).filter_by(device_id=device.device_id).update(
-                    {Device.connected: False}
-                )
+                self._session.query(Device).filter_by(
+                    device_id=device.device_id
+                ).update({Device.connected: False})
                 self._session.commit()
                 self.LOGGER.info(f"{device.device_id} is no longer connected")
                 del CONNECTED_DEVICES[device.device_id]
@@ -388,9 +388,9 @@ class HeartbeatReceiver:
         for device in NEW_DEVICES.copy().values():
             device.heartbeat()
             if not device.is_alive():
-                self._session.query(Device).filter_by(device_id=device.device_id).update(
-                    {Device.connected: False}
-                )
+                self._session.query(Device).filter_by(
+                    device_id=device.device_id
+                ).update({Device.connected: False})
                 self._session.commit()
                 self.LOGGER.info(f"{device.device_id} is no longer connected")
                 del NEW_DEVICES[device.device_id]
