@@ -42,7 +42,7 @@ class Config:
     RABBITMQ_PASSWORD = "farm_monitor"
     RABBITMQ_VHOST = "farm_monitor"
 
-    RABBITMQ_HEARTBEAT_EXCHANGE_NAME = "heartbeat_events"
+    RABBITMQ_HEARTBEAT_EXCHANGE_NAME = "heartbeat_messages"
     RABBITMQ_HEARTBEAT_EXCHANGE_TYPE = "direct"
     RABBITMQ_HEARTBEAT_ROUTING_KEY = "heartbeat"
 

@@ -7,7 +7,7 @@ import pika
 
 from fm_server.settings import get_config
 
-LOGGER = logging.getLogger("fd.device.rabbitmq")
+LOGGER = logging.getLogger("fm.device.rabbitmq")
 
 
 def get_connection(config=None):
