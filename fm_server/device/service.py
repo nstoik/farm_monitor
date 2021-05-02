@@ -34,17 +34,17 @@ class DeviceReceiver(Receiver):
         """Overwrite the on_channel_open method.
 
         Run all of the normal on_channel_open commands, then
-        create the HEARTHBEAT_RECEIVER and DEVICE_MESSAGES objects.
+        create the HEARTBEAT_MESSAGES and DEVICE_MESSAGES objects.
         """
         super().on_channel_open(channel)
 
         self.HEARTBEAT_MESSAGES = HeartbeatMessage(self._connection, self._channel)
-        self.DEVICE_MESSAGES = DeviceMessage(self._connection, self._channel)
+        self.DEVICE_MESSAGES = DeviceMessage(self._channel)
 
     def stop(self):
         """Overwrite the stop method.
 
-        Stop the HEARTHBEAT_RECEIVER and DEVICE_MESSAGES objects, then
+        Stop the HEARTBEAT_MESSAGES and DEVICE_MESSAGES objects, then
         stop the rest of the items.
         """
         self.HEARTBEAT_MESSAGES.set_stopping(True)
@@ -65,13 +65,14 @@ class HeartbeatMessage(Message):
         Create the logger instance, and set the required config info.
         Call the setup_exchange function to start the communication
         """
-        super().__init__(connection, channel)
+        super().__init__(channel)
 
         config = get_config()
 
         self.LOGGER = logging.getLogger("fm.device.service.heartbeat")
 
         self._session = get_session()
+        self._connection = connection
 
         self.exchange_name = config.RABBITMQ_HEARTBEAT_EXCHANGE_NAME
         self.exchange_type = config.RABBITMQ_HEARTBEAT_EXCHANGE_TYPE
@@ -162,11 +163,12 @@ class HeartbeatMessage(Message):
 
         device = self._session.query(Device).filter_by(device_id=device_id).first()
 
+        # device has not been added to the db
         if not device:
-            # device has not been added to the db but has been seen before
+            # device has been seen before
             if device_id in NEW_DEVICES:
                 NEW_DEVICES[device_id].on_message_received()
-            # device has not been added to the db and hasn't been seen before
+            # device has not been seen before
             else:
                 self.LOGGER.info(f"{device_id} connected. Has not been configured yet.")
                 NEW_DEVICES[device_id] = DeviceRep(device_id)
@@ -190,13 +192,13 @@ class HeartbeatMessage(Message):
 class DeviceMessage(Message):
     """Receive and respond to internal message requests."""
 
-    def __init__(self, connection, channel):
+    def __init__(self, channel):
         """Override the __init__ method from Message class.
 
         Create the logger instance, and set the required config info.
         Call the setup_exchange function to start the communication
         """
-        super().__init__(connection, channel)
+        super().__init__(channel)
 
         config = get_config()
 
