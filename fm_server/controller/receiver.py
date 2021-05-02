@@ -200,13 +200,12 @@ class Message:
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, connection, channel):
+    def __init__(self, channel):
         """Instantiate a Message instance."""
 
         self.LOGGER = None
 
         # store and manage internal state
-        self._connection = connection
         self._channel = channel
         self._stopping = False
         self._consumer_tag = None
