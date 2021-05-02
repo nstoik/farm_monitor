@@ -13,8 +13,6 @@ from fm_server.device.rabbitmq_messages import get_device_status
 LOGGER = logging.getLogger("fm.device.tasks")
 # LOGGER = get_task_logger('fm.device.tasks')
 
-print(__name__)
-
 
 @app.task(name="device.create")
 def device_create(info):
