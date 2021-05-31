@@ -27,7 +27,7 @@ sqlalchemy-stubs = "~=0.4.0"
 [packages]
 SQLAlchemy = "~=1.4.15"
 passlib = "~=1.7.1"
-click = "~=7.1.2"
+click = "~=8.0.1"
 "e1839a8" = {path = ".", editable = true}
 alembic = "~=1.6.2"
 # for Postgresql
