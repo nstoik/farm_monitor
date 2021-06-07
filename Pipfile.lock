@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3c009ba40cd016acec21cdeeb636cb4a25c1bdd903847a21b08402a1f9cb832d"
+            "sha256": "af644a66af2c47e51241b5e76624dbdcddc60256580a7ae3c4eed97354674ca6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -74,7 +74,7 @@
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/fm_database",
-            "ref": "be4a06cc7d29d66e5c0ee61adf144b1e2ad62322"
+            "ref": "4f4c54d16c44985ab8d13ebf5d8b6f2375874805"
         },
         "fm-server": {
             "editable": true,

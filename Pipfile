@@ -30,8 +30,7 @@ psutil = "~=5.7.2"
 netifaces = "~=0.10.9"
 celery = "~=5.0.0"
 multiprocessing-logging = "~=0.3.1"
-# fm_database = {git = "https://github.com/nstoik/fm_database@master",editable = true}
-fm_database = {git = "https://github.com/nstoik/fm_database@session_fix",editable = true}
+fm_database = {git = "https://github.com/nstoik/fm_database@master",editable = true}
 "e1839a8" = {path = ".", editable = true}
 
 [requires]
