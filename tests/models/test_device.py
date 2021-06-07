@@ -23,43 +23,43 @@ class TestTemperatureSensor:
     """Temperature Sensor model tests."""
 
     @staticmethod
-    def test_create_temperature_sensor(dbsession):
+    def test_create_temperature_sensor():
         """Create a temperature sensor instance."""
-        temperature_cable = TemperatureCableFactory.create(dbsession)
-        temperature_cable.save(dbsession)
+        temperature_cable = TemperatureCableFactory()
+        temperature_cable.save()
 
         temperature_sensor = TemperatureSensor(temperature_cable.id)
-        temperature_sensor.save(dbsession)
+        temperature_sensor.save()
 
         assert temperature_sensor.cable_id == temperature_cable.id
         assert temperature_sensor.last_value == "unknown"
 
     @staticmethod
-    def test_get_temperature_sensor_by_id(dbsession):
+    def test_get_temperature_sensor_by_id():
         """Test retrieving a temperature sensor by its id."""
-        temperature_cable = TemperatureCableFactory.create(dbsession)
-        temperature_cable.save(dbsession)
+        temperature_cable = TemperatureCableFactory()
+        temperature_cable.save()
 
         temperature_sensor = TemperatureSensor(temperature_cable.id)
-        temperature_sensor.save(dbsession)
+        temperature_sensor.save()
 
         retrieved = TemperatureSensor.get_by_id(temperature_sensor.id)
         assert retrieved.id == temperature_sensor.id
 
     @staticmethod
-    def test_temperature_sensor_factory(dbsession):
+    def test_temperature_sensor_factory():
         """Test the TemperatureSensor factory."""
-        temperature_sensor = TemperatureSensorFactory.create(dbsession)
-        temperature_sensor.save(dbsession)
+        temperature_sensor = TemperatureSensorFactory()
+        temperature_sensor.save()
 
         retrieved = TemperatureSensor.get_by_id(temperature_sensor.id)
         assert retrieved.id == temperature_sensor.id
 
     @staticmethod
-    def test_temperature_sensor_properties(dbsession):
+    def test_temperature_sensor_properties():
         """Test TemperatureSensor properties."""
-        temperature_sensor = TemperatureSensorFactory.create(dbsession)
-        temperature_sensor.save(dbsession)
+        temperature_sensor = TemperatureSensorFactory()
+        temperature_sensor.save()
 
         assert temperature_sensor.templow is None
         assert temperature_sensor.temphigh is None
@@ -67,14 +67,14 @@ class TestTemperatureSensor:
         assert isinstance(temperature_sensor.cable_id, int)
 
     @staticmethod
-    def test_multiple_temperature_sensors_per_cable(dbsession):
+    def test_multiple_temperature_sensors_per_cable():
         """Test adding multiple temperature sensors to the same cable."""
-        temperature_cable = TemperatureCableFactory.create(dbsession)
-        temperature_cable.save(dbsession)
+        temperature_cable = TemperatureCableFactory()
+        temperature_cable.save()
 
         for _ in range(5):
             sensor = TemperatureSensor(temperature_cable.id)
-            sensor.save(dbsession)
+            sensor.save()
 
         assert isinstance(temperature_cable.sensors, list)
         assert len(temperature_cable.sensors) == 5
@@ -85,42 +85,42 @@ class TestTemperatureCable:
     """Temperature Cable model tests."""
 
     @staticmethod
-    def test_create_temperature_cable(dbsession):
+    def test_create_temperature_cable():
         """Create a temperature cable instance."""
-        grainbin = GrainbinFactory.create(dbsession)
-        grainbin.save(dbsession)
+        grainbin = GrainbinFactory()
+        grainbin.save()
 
         temperature_cable = TemperatureCable(grainbin.id)
-        temperature_cable.save(dbsession)
+        temperature_cable.save()
 
         assert temperature_cable.grainbin_id == grainbin.id
 
     @staticmethod
-    def test_get_temperature_cable_by_id(dbsession):
+    def test_get_temperature_cable_by_id():
         """Test retrieving a temperature cable by its id."""
-        grainbin = GrainbinFactory.create(dbsession)
-        grainbin.save(dbsession)
+        grainbin = GrainbinFactory()
+        grainbin.save()
 
         temperature_cable = TemperatureCable(grainbin.id)
-        temperature_cable.save(dbsession)
+        temperature_cable.save()
 
         retrieved = TemperatureCable.get_by_id(temperature_cable.id)
         assert retrieved.id == temperature_cable.id
 
     @staticmethod
-    def test_temperature_cable_factory(dbsession):
+    def test_temperature_cable_factory():
         """Test the TemperatureCable factory."""
-        temperature_cable = TemperatureCableFactory.create(dbsession)
-        temperature_cable.save(dbsession)
+        temperature_cable = TemperatureCableFactory()
+        temperature_cable.save()
 
         retrieved = TemperatureCable.get_by_id(temperature_cable.id)
         assert retrieved.id == temperature_cable.id
 
     @staticmethod
-    def test_temperature_cable_properties(dbsession):
+    def test_temperature_cable_properties():
         """Test TemperatureCable properties."""
-        temperature_cable = TemperatureCableFactory.create(dbsession)
-        temperature_cable.save(dbsession)
+        temperature_cable = TemperatureCableFactory()
+        temperature_cable.save()
 
         assert temperature_cable.sensor_count == 0
         assert temperature_cable.cable_type == "temperature"
@@ -128,14 +128,14 @@ class TestTemperatureCable:
         assert isinstance(temperature_cable.grainbin_id, int)
 
     @staticmethod
-    def test_multiple_temperature_cables_per_bin(dbsession):
+    def test_multiple_temperature_cables_per_bin():
         """Test adding multiple temperature cables to the same grainbin."""
-        grainbin = GrainbinFactory.create(dbsession)
-        grainbin.save(dbsession)
+        grainbin = GrainbinFactory()
+        grainbin.save()
 
         for _ in range(5):
             cable = TemperatureCable(grainbin.id)
-            cable.save(dbsession)
+            cable.save()
 
         assert isinstance(grainbin.cables, list)
         assert len(grainbin.cables) == 5
@@ -146,34 +146,34 @@ class TestGrainbin:
     """Grainbin model tests."""
 
     @staticmethod
-    def test_create_grainbin(dbsession):
+    def test_create_grainbin():
         """Create a grainbin instance."""
-        device = DeviceFactory.create(dbsession)
-        device.save(dbsession)
+        device = DeviceFactory()
+        device.save()
         grainbin = Grainbin(device_id=device.id, bus_number=1)
-        grainbin.save(dbsession)
+        grainbin.save()
 
         assert grainbin.device_id == device.id
         assert grainbin.bus_number == 1
 
     @staticmethod
-    def test_get_grainbin_by_id(dbsession):
+    def test_get_grainbin_by_id():
         """Test retrieving a grainbin by its ID."""
-        device = DeviceFactory.create(dbsession)
-        device.save(dbsession)
+        device = DeviceFactory()
+        device.save()
         grainbin = Grainbin(device_id=device.id, bus_number=1)
-        grainbin.save(dbsession)
+        grainbin.save()
 
         retrieved = Grainbin.get_by_id(grainbin.id)
 
         assert grainbin.id == retrieved.id
 
     @staticmethod
-    def test_grainbin_factory(dbsession):
+    def test_grainbin_factory():
         """Test GrainbinFactory."""
 
-        grainbin = GrainbinFactory.create(dbsession)
-        grainbin.save(dbsession)
+        grainbin = GrainbinFactory()
+        grainbin.save()
 
         retrieved = Grainbin.get_by_id(grainbin.id)
         device = Device.get_by_id(grainbin.device_id)
@@ -183,10 +183,10 @@ class TestGrainbin:
         assert isinstance(device, Device)
 
     @staticmethod
-    def test_grainbin_properties(dbsession):
+    def test_grainbin_properties():
         """Test all Grainbin properties."""
-        grainbin = GrainbinFactory.create(dbsession)
-        grainbin.save(dbsession)
+        grainbin = GrainbinFactory()
+        grainbin.save()
 
         assert isinstance(grainbin.creation_time, dt.datetime)
         assert isinstance(grainbin.last_updated, dt.datetime)
@@ -206,48 +206,48 @@ class TestDevice:
     """Device model tests."""
 
     @staticmethod
-    def test_create_device(dbsession):
+    def test_create_device():
         """Create a device instance."""
 
         device = Device(
             device_id="Test Device", hardware_version="1", software_version="1"
         )
-        device.save(dbsession)
+        device.save()
 
         assert device.device_id == "Test Device"
         assert device.hardware_version == "1"
         assert device.software_version == "1"
 
     @staticmethod
-    def test_get_device_by_id(dbsession):
+    def test_get_device_by_id():
         """Test retrieving a device by its ID."""
 
         device = Device(
             device_id="Test Device", hardware_version="1", software_version="1"
         )
-        device.save(dbsession)
+        device.save()
 
         retrieved = Device.get_by_id(device.id)
 
         assert device.id == retrieved.id
 
     @staticmethod
-    def test_device_factory(dbsession):
+    def test_device_factory():
         """Test DeviceFactory."""
 
-        device = DeviceFactory.create(dbsession)
-        device.save(dbsession)
+        device = DeviceFactory()
+        device.save()
 
         retrieved = Device.get_by_id(device.id)
 
         assert device.id == retrieved.id
 
     @staticmethod
-    def test_device_properties(dbsession):
+    def test_device_properties():
         """Test all Device properties."""
 
-        device = DeviceFactory.create(dbsession)
-        device.save(dbsession)
+        device = DeviceFactory()
+        device.save()
 
         assert isinstance(device.creation_time, dt.datetime)
         assert isinstance(device.last_updated, dt.datetime)
