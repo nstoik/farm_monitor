@@ -37,8 +37,6 @@ TEST_PATH = os.path.join(PROJECT_ROOT, "tests")
 )
 def test(coverage, filename, function):
     """Run the tests."""
-    import pytest  # pylint: disable=import-outside-toplevel
-
     if filename:
         pytest_args = [filename, "--verbose"]
     else:
@@ -48,7 +46,24 @@ def test(coverage, filename, function):
     if coverage:
         pytest_args.extend(["--cov", HERE])
         pytest_args.extend(["--cov-report", "term-missing:skip-covered"])
-    rv = pytest.main(args=pytest_args, plugins=["pytest_cov"])
+
+    def execute_tool(description, *args):
+        """Execute a checking tool with its arguments."""
+        command_line = list(args)
+        click.echo(f"{description}: {' '.join(command_line)}")
+        rv = call(command_line)
+        return rv
+
+    previous_env_database = os.getenv("FM_DATABASE_CONFIG", default="dev")
+    previous_env_server = os.getenv("FM_SERVER_CONFIG", default="dev")
+    os.environ["FM_DATABASE_CONFIG"] = "test"
+    os.environ["FM_SERVER_CONFIG"] = "test"
+
+    rv = execute_tool("Run pytest", "pytest", *pytest_args)
+
+    os.environ["FM_DATABASE_CONFIG"] = previous_env_database
+    os.environ["FM_SERVER_CONFIG"] = previous_env_server
+
     sys.exit(rv)
 
 
