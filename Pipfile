@@ -21,7 +21,7 @@ pep8-naming = "~=0.11.1"
 pylint = "~=2.8.2"
 
 # MyPy and stubs
-mypy = "~=0.790"
+mypy = "~=0.902"
 sqlalchemy-stubs = "~=0.4.0"
 
 [packages]
