@@ -31,4 +31,4 @@ click = "~=8.0.1"
 "e1839a8" = {path = ".", editable = true}
 alembic = "~=1.6.2"
 # for Postgresql
-psycopg2 = "~=2.8.6"
+psycopg2 = "~=2.9.1"
