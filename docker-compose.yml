@@ -26,7 +26,7 @@ services:
       - farm_monitor
   fm_pgadmin:
     container_name: fm_pgadmin
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4:5.3
     environment:
       PGADMIN_DEFAULT_EMAIL: fm@farmmonitor.ca
       PGADMIN_DEFAULT_PASSWORD: farm_monitor
