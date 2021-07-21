@@ -1,0 +1,55 @@
+version: '3.8'
+
+services: 
+  fm_server:
+    image: nstoik/fm_server:latest
+    container_name: fm_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 5554:5554/udp # presence service port   
+    networks:
+      - farm_monitor
+    volumes:
+      - "logs:/logs"
+  
+  fm_rabbitmq:
+    image: rabbitmq:3.8-management
+    container_name: fm_rabbitmq
+    hostname: fm_rabbitmq
+    volumes:
+#     - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+      - rabbitmq_data:/var/lib/rabbitmq/
+#     - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    environment:
+        RABBITMQ_DEFAULT_USER: 'fm'
+        RABBITMQ_DEFAULT_PASS: 'farm_monitor'
+        RABBITMQ_DEFAULT_VHOST: 'farm_monitor'
+    ports:
+        - 5672:5672   # RabbitMQ port
+        - 15672:15672 # Management interface
+    networks:
+      - farm_monitor
+
+  fm_flower:  
+    image: mher/flower:latest
+    container_name: fm_flower
+    volumes:
+      - "flower_data:/data"
+    environment:
+      - celery_broker_url=pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
+      - CELERY_BROKER_URL=pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
+    ports:  
+      - 5555:5555 # flower web interface
+    networks:
+      - farm_monitor
+  
+volumes:
+  logs:
+  rabbitmq_data:
+  flower_data:
+
+networks:
+  farm_monitor:
+    name: farm_monitor

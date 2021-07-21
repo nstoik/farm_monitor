@@ -1,0 +1,36 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or the definition README at
+// https://github.com/microsoft/vscode-dev-containers/tree/master/containers/python-3
+{
+	"name": "FM SERVER",
+
+	 // The order of the files is important since later files override previous ones
+	 "dockerComposeFile": [
+        "../docker-compose.yml",
+        "dev.docker-compose.yml"
+    ],
+
+	"remoteUser": "fm",
+	"service": "fm_server",
+    "workspaceFolder": "/workspaces/fm_server",
+    "shutdownAction": "stopCompose",	
+
+	//  Uncomment the next line to run commands after the container is created.
+	"postCreateCommand": "git config --global core.autocrlf true",
+
+	"extensions": [
+		"ms-python.python",
+		"eamodio.gitlens",
+		"ms-python.vscode-pylance",
+		"njpwerner.autodocstring",
+	],
+	"settings": {
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+		"python.linting.pylintArgs": [
+			"--load-plugins",
+		],
+		"python.linting.flake8Enabled": true,
+		"python.linting.mypyEnabled": true,
+		"python.formatting.provider": "black"
+	},
+}
