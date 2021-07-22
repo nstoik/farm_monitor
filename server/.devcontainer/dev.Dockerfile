@@ -12,6 +12,7 @@ ENV LC_ALL C.UTF-8
 ARG USERNAME=fm
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ARG WORKING_DIR=/workspaces/server
 
 # Configure apt and install packages
 RUN apt-get update && \
@@ -33,8 +34,8 @@ RUN pip install -U pip && pip install pipenv && \
     # echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
     # chmod 0440 /etc/sudoers.d/$USERNAME && \
     # make working directory and change owner
-    mkdir -p /workspaces/fm_server/ && \
-    chown $USER_UID:$USER_GID /workspaces/fm_server/ && \
+    mkdir -p $WORKING_DIR/ && \
+    chown $USER_UID:$USER_GID $WORKING_DIR/ && \
     # create directory for logs and change owner
     mkdir /logs/ && \
     chown $USER_UID:$USER_GID /logs/
@@ -50,9 +51,9 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 
 # Change to the newly created user
 USER $USER_UID:$USER_GID
-COPY fm_server /workspaces/fm_server/fm_server
-COPY Pipfile* package* setup.py /workspaces/fm_server/
-WORKDIR /workspaces/fm_server
+COPY --chown=${USER_UID}:${USER_GID} . $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} Pipfile* setup.py $WORKING_DIR/
+WORKDIR $WORKING_DIR
 
 # Set up the dev environment
 RUN pipenv install --dev

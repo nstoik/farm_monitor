@@ -3,19 +3,16 @@
 {
 	"name": "FM SERVER",
 
-	 // The order of the files is important since later files override previous ones
-	 "dockerComposeFile": [
-        "../docker-compose.yml",
-        "dev.docker-compose.yml"
+	// The order of the files is important since later files override previous ones
+	"dockerComposeFile": [
+		"../../docker-compose.yml",
+		"../../docker-compose.devcontainer.yml",
     ],
 
 	"remoteUser": "fm",
-	"service": "fm_server",
-    "workspaceFolder": "/workspaces/fm_server",
-    "shutdownAction": "stopCompose",	
-
-	//  Uncomment the next line to run commands after the container is created.
-	"postCreateCommand": "git config --global core.autocrlf true",
+	"service": "server",
+	"workspaceFolder": "/workspaces",
+	"shutdownAction": "none",
 
 	"extensions": [
 		"ms-python.python",
