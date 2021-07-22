@@ -7,6 +7,7 @@ ENV LC_ALL C.UTF-8
 ARG USERNAME=fm
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
+ARG WORKING_DIR=/workspaces/database
 
 
 RUN pip install -U pip && pip install pipenv && \
@@ -18,14 +19,14 @@ RUN pip install -U pip && pip install pipenv && \
     # echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
     # chmod 0440 /etc/sudoers.d/$USERNAME && \
     # make working directory and change owner
-    mkdir -p /workspaces/fm_database/ && \
-    chown $USER_UID:$USER_GID /workspaces/fm_database/
+    mkdir -p ${WORKING_DIR}/ && \
+    chown $USER_UID:$USER_GID ${WORKING_DIR}/
 
 # Change to the newly created user
 USER $USER_UID:$USER_GID
-COPY fm_database /workspaces/fm_database/fm_database
-COPY Pipfile* package* setup.py /workspaces/fm_database/
-WORKDIR /workspaces/fm_database
+COPY . ${WORKING_DIR}
+COPY Pipfile* package* setup.py ${WORKING_DIR}/
+WORKDIR ${WORKING_DIR}
 
 # Production deploy steps below
 RUN pipenv install --deploy --ignore-pipfile

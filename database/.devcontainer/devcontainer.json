@@ -5,19 +5,20 @@
 
 	// The order of the files is important since later files override previous ones
 	"dockerComposeFile": [
-		"../docker-compose.yml",
-		"dev.docker-compose.yml"
+		"../../docker-compose.yml",
+		"../../docker-compose.devcontainer.yml",
 	],
 
 	"remoteUser": "fm",
-	"service": "fm_database",
-	"workspaceFolder": "/workspaces/fm_database",
-	"shutdownAction": "stopCompose",
+	"service": "database_management",
+	"workspaceFolder": "/workspaces",
+	"shutdownAction": "none",
 
 	"extensions": [
 		"ms-python.python",
 		"eamodio.gitlens",
 		"ms-python.vscode-pylance",
+		"njpwerner.autodocstring",
 	],
 	"settings": {
 		"python.linting.enabled": true,
