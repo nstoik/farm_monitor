@@ -1,0 +1,36 @@
+version: '3.8'
+
+services: 
+    server:
+        image: nstoik/farm_monitor_server:dev
+        container_name: server
+        build:
+            context: ./server
+            dockerfile: .devcontainer/dev.Dockerfile
+
+        volumes:
+            # this is for vs code file editing inside the container
+            - .:/workspaces:cached
+            # this is for bash command history. https://code.visualstudio.com/docs/remote/containers-advanced#_persist-bash-history-between-runs
+            - bashhistory:/commandhistory
+
+        # Overrides default command so things don't shut down after the process ends.
+        command: /bin/sh -c "while sleep 1000; do :; done"
+
+    database_management:
+        image: nstoik/farm_monitor_database:dev
+        build:
+            context: ./database
+            dockerfile: .devcontainer/dev.Dockerfile
+        
+        volumes:
+            # this is for vs code file editing inside the container
+            - .:/workspaces:cached
+            # this is for bash command history. https://code.visualstudio.com/docs/remote/containers-advanced#_persist-bash-history-between-runs
+            - bashhistory:/commandhistory
+
+        # Overrides default command so things don't shut down after the process ends.
+        command: /bin/sh -c "while sleep 1000; do :; done"
+
+volumes:
+    bashhistory:
