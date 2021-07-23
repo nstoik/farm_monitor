@@ -90,6 +90,8 @@ def create_tables():
 def create_default_user(username, email, password):
     """Create a default admin user."""
 
+    click.echo("Creating a default user.")
+
     user = User("admin", "admin@farm_monitor.ca", "farm_monitor")
     user = User(username=username, email=email, password=password)
     user.is_admin = True
