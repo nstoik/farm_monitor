@@ -7,19 +7,19 @@ on:
 
 jobs:
     server-build:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2.3.4
-            - name: Set up Python
-              uses: actions/setup-python@v2
-              with:
-                    python-version: 3.9
-            - name: Install Python dependencies
-              run: |
-                pip install pipenv
-                pipenv install --dev
-            - run: cp .env.example .env
-            - name: Run Python lints
-              run: pipenv run fm_server lint --check
-            - name: Run Python tests
-              run: pipenv run fm_server test --coverage
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2.3.4
+          - name: Set up Python
+            uses: actions/setup-python@v2
+            with:
+                  python-version: 3.9
+          - name: Install Python dependencies
+            run: |
+              pip install pipenv
+              pipenv install --dev
+          - run: cp .env.example .env
+          - name: Run Python lints
+            run: pipenv run fm_server lint --check
+          - name: Run Python tests
+            run: pipenv run fm_server test --coverage
