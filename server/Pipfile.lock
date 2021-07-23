@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "bb24318152ff3eda576c1e6203f30fb972b7cffb614c705d09fd7bad51277835"
+            "sha256": "c7daa2d27728b60b18606026958ac39d742bdb5e58be7249c5f7715cde656274"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -82,7 +82,7 @@
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "a64f3acda1cde953c7b6eef1e6d4e46820935161",
+            "ref": "d6c2e4b3c1b3ea695cf8442a459290a4b323904d",
             "subdirectory": "database"
         },
         "greenlet": {
@@ -494,11 +494,11 @@
         },
         "factory-boy": {
             "hashes": [
-                "sha256:d8626622550c8ba31392f9e19fdbcef9f139cf1ad643c5923f20490a7b3e2e3d",
-                "sha256:ded73e49135c24bd4d3f45bf1eb168f8d290090f5cf4566b8df3698317dc9c08"
+                "sha256:1d3db4b44b8c8c54cdd8b83ae4bdb9aeb121e464400035f1f03ae0e1eade56a4",
+                "sha256:401cc00ff339a022f84d64a4339503d1689e8263a4478d876e58a3295b155c5b"
             ],
             "index": "pypi",
-            "version": "==3.1.0"
+            "version": "==3.2.0"
         },
         "faker": {
             "hashes": [
