@@ -23,12 +23,11 @@
 	"settings": {
 		"python.linting.enabled": true,
 		"python.linting.pylintEnabled": true,
-		"python.linting.pylintArgs": [
-			"--load-plugins",
-		],
+		"python.linting.pylintArgs": ["--load-plugins",],
 		"python.linting.flake8Enabled": true,
 		"python.linting.flake8Args": ["--config=/workspaces/server/setup.cfg"],
 		"python.linting.mypyEnabled": true,
+		"python.linting.mypyArgs": ["--config=/workspaces/server/setup.cfg"],
 		"python.formatting.provider": "black"
 	},
 }
