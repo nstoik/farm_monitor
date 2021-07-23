@@ -1,0 +1,39 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+# testing packages
+factory-boy = "~=3.2.0"
+pytest = "~=6.2.4"
+pytest-cov = "~=2.12.0"
+
+# Lint and code style
+black = "==21.5b1"
+flake8 = "~=3.9.2"
+flake8-blind-except = "~=0.2.0"
+flake8-debugger = "~=4.0.0"
+flake8-docstrings = "~=1.6.0"
+flake8-isort = "~=4.0.0"
+isort = "~=5.8.0"
+mypy = "~=0.790"
+pep8-naming = "~=0.11.1"
+pylint = "~=2.8.3"
+
+[packages]
+# Flask
+Flask = "~=2.0.1"
+
+# API
+flask-smorest = "~=0.31.1"
+marshmallow-sqlalchemy = "~=0.26.0"
+Flask-JWT-Extended = "~=4.2.1"
+
+fm_database = {subdirectory = "database", editable = true, ref = "main", git = "https://github.com/nstoik/farm_monitor"}
+
+# self
+e1839a8 = {path = ".",editable = true}
+
+[requires]
+python_version = "3.9"

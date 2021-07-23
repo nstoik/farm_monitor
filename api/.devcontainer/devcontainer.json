@@ -1,0 +1,37 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or the definition README at
+// https://github.com/microsoft/vscode-dev-containers/tree/master/containers/python-3
+{
+	"name": "FM API",
+
+	 // The order of the files is important since later files override previous ones
+	 "dockerComposeFile": [
+        "../../docker-compose.yml",
+        "../../docker-compose.devcontainer.yml"
+    ],
+
+	"remoteUser": "fm",
+	"service": "api",
+    "workspaceFolder": "/workspaces",
+    "shutdownAction": "none",
+
+	"extensions": [
+		"ms-python.python",
+		"eamodio.gitlens",
+		"ms-python.vscode-pylance",
+		"njpwerner.autodocstring",
+	],
+	"settings": {
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+		"python.linting.pylintArgs": [
+			"--load-plugins",
+			"pylint-flask,pylint-flask-sqlalchemy",
+		],
+		"python.linting.flake8Enabled": true,
+		"python.linting.flake8Args": ["--config=/workspaces/api/setup.cfg"],
+		"python.linting.mypyEnabled": true,
+		"python.linting.mypyArgs": ["--config=/workspaces/api/setup.cfg"],
+		"python.formatting.provider": "black"
+		
+	},
+}
