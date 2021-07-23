@@ -11,7 +11,7 @@ jobs:
         strategy:
             matrix:
                 folders: [database, server, api]
-            fail-fast: true
+            fail-fast: false
         defaults:
           run:
             working-directory: ${{ matrix.folders }}/
