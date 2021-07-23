@@ -10,7 +10,7 @@ class Config:  # pylint: disable=too-few-public-methods
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    SQLALCHEMY_DATABASE_URI = "postgresql://fm:farm_monitor@fm_db/farm_monitor.db"
+    SQLALCHEMY_DATABASE_URI = "postgresql://fm:farm_monitor@database/farm_monitor.db"
 
 
 class ProdConfig(Config):  # pylint: disable=too-few-public-methods
