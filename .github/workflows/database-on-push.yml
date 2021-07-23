@@ -27,9 +27,14 @@ jobs:
           - name: Install Python dependencies
             run: |
               pip install pipenv
+              cd ${{ matrix.folders }}
               pipenv install --dev
           - run: cp ${{ matrix.folders }}/.env.example ${{ matrix.folders }}/.env
           - name: Run Python lints
-            run: pipenv run fm_${{ matrix.folders }} lint --check
+            run: |
+              cd ${{ matrix.folders }}
+              pipenv run fm_${{ matrix.folders }} lint --check
           - name: Run Python tests
-            run: pipenv run fm_${{ matrix.folders }} test --coverage
+            run: |
+              cd ${{ matrix.folders }}
+              pipenv run fm_${{ matrix.folders }} test --coverage
