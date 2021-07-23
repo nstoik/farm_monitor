@@ -28,6 +28,20 @@ services:
             - "database"
         restart: unless-stopped
 
+    api:
+        image: nstoik/farm_monitor_api:latest
+        container_name: api
+        build:
+            context: ./api
+            dockerfile: Dockerfile
+        ports:
+            - 5000:5000
+        networks:
+            - farm_monitor
+        restart: unless-stopped
+
+    # standard docker containers below
+
     rabbitmq:
         image: rabbitmq:3.8-management
         container_name: rabbitmq

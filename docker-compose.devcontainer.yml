@@ -7,13 +7,11 @@ services:
         build:
             context: ./server
             dockerfile: .devcontainer/dev.Dockerfile
-
         volumes:
             # this is for vs code file editing inside the container
             - .:/workspaces:cached
             # this is for bash command history. https://code.visualstudio.com/docs/remote/containers-advanced#_persist-bash-history-between-runs
             - bashhistory:/commandhistory
-
         # Overrides default command so things don't shut down after the process ends.
         command: /bin/sh -c "while sleep 1000; do :; done"
 
@@ -22,13 +20,24 @@ services:
         build:
             context: ./database
             dockerfile: .devcontainer/dev.Dockerfile
-        
         volumes:
             # this is for vs code file editing inside the container
             - .:/workspaces:cached
             # this is for bash command history. https://code.visualstudio.com/docs/remote/containers-advanced#_persist-bash-history-between-runs
             - bashhistory:/commandhistory
+        # Overrides default command so things don't shut down after the process ends.
+        command: /bin/sh -c "while sleep 1000; do :; done"
 
+    api:
+        image: nstoik/farm_monitor_api:dev
+        build:
+            context: ./api
+            dockerfile: .devcontainer/dev.Dockerfile
+        volumes:
+            # this is for vs code file editing inside the container
+            - .:/workspaces:cached
+            # this is for bash command history. https://code.visualstudio.com/docs/remote/containers-advanced#_persist-bash-history-between-runs
+            - bashhistory:/commandhistory
         # Overrides default command so things don't shut down after the process ends.
         command: /bin/sh -c "while sleep 1000; do :; done"
 
