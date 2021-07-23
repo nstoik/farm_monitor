@@ -35,3 +35,16 @@ updates:
       directory: "/server/.devcontainer"
       schedule:
             interval: "weekly"
+    # configuration for the api directory
+    - package-ecosystem: "pip"
+      directory: "/api"
+      schedule:
+            interval: "daily"
+    - package-ecosystem: "docker"
+      directory: "/api"
+      schedule:
+            interval: "weekly"
+    - package-ecosystem: "docker"
+      directory: "/api/.devcontainer"
+      schedule:
+            interval: "weekly"

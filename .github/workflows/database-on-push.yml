@@ -10,7 +10,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                folders: [database, server]
+                folders: [database, server, api]
             fail-fast: true
         defaults:
           run:
