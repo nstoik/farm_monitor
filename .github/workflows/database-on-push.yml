@@ -14,7 +14,7 @@ jobs:
             fail-fast: true
         defaults:
           run:
-            working-directory: ${{ matrix.folders }}/
+            working-directory: .${{ matrix.folders }}/
         steps:
           - name: Checkout
             uses: actions/checkout@v2.3.4
@@ -28,7 +28,7 @@ jobs:
             run: |
               pip install pipenv
               pipenv install --dev
-          - run: cp .env.example .env
+          - run: cp ${{ matrix.folders }}/.env.example ${{ matrix.folders }}/.env
           - name: Run Python lints
             run: pipenv run fm_${{ matrix.folders }} lint --check
           - name: Run Python tests
