@@ -69,3 +69,29 @@ def create_tables():
     click.echo("stamping alembic head")
     al_command.stamp(alembic_cnf, "head")
     click.echo("done")
+
+
+@click.option(
+    "--username",
+    default="admin",
+    help="The username to use for the default user.",
+)
+@click.option(
+    "--email",
+    default="admin@farm_monitor.ca",
+    help="The email to use for the default user.",
+)
+@click.option(
+    "--password",
+    default="farm_monitor",
+    help="The password to use for the default user.",
+)
+@create.command()
+def create_default_user(username, email, password):
+    """Create a default admin user."""
+
+    user = User("admin", "admin@farm_monitor.ca", "farm_monitor")
+    user = User(username=username, email=email, password=password)
+    user.is_admin = True
+    user.save()
+    click.echo(f"Default user '{username}' created.")
