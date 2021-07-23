@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c1790976600b91a85790872dec269571169ac0918cc2117d0b19533f1411b2d0"
+            "sha256": "d28f002edb828d524928d91ca98962c9851370cd46aee1d9428c45eda5cb4ed2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -41,11 +41,11 @@
         },
         "celery": {
             "hashes": [
-                "sha256:5e8d364e058554e83bbb116e8377d90c79be254785f357cb2cec026e79febe13",
-                "sha256:f4efebe6f8629b0da2b8e529424de376494f5b7a743c321c8a2ddc2b1414921c"
+                "sha256:8d9a3de9162965e97f8e8cc584c67aad83b3f7a267584fa47701ed11c3e0d4b0",
+                "sha256:9dab2170b4038f7bf10ef2861dbf486ddf1d20592290a1040f7b7a1259705d42"
             ],
             "index": "pypi",
-            "version": "==5.0.5"
+            "version": "==5.1.2"
         },
         "click": {
             "hashes": [
@@ -82,7 +82,7 @@
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "118a92fd66c71bc66c1bb9b42fa15457eab21847",
+            "ref": "a79ea10900059505d6df21a9d035016055803724",
             "subdirectory": "database"
         },
         "greenlet": {
@@ -494,7 +494,7 @@
                 "sha256:f0b278ce10936db1a37e6954e15a3730bea96a0997c26d7fee88e6c396c2086d",
                 "sha256:f11642dddbb0253cc8853254301b51390ba0081750a8ac03f20ea8103f0c56b6"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4.0'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
             "version": "==5.5"
         },
         "factory-boy": {
