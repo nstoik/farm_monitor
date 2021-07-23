@@ -10,7 +10,7 @@ setup(
     version=__version__,
     packages=find_packages(exclude=["tests"]),
     install_requires=[
-        "click>=8",
+        "click>=7",
         "sqlalchemy>=1.4",
         "passlib",
         "psycopg2",
