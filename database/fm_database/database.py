@@ -8,7 +8,7 @@ Base = get_base(with_query=True)
 
 
 class CRUDMixin:
-    """Mixin that adds convenience methods for CRUD (create, read, update, delete) operation."""
+    """Mixin that adds convenience methods for CRUD (create, read, update, delete) operations."""
 
     @classmethod
     def create(cls, session=None, **kwargs):
