@@ -3,7 +3,7 @@ name: Server Build Status
 on:
     push:
         paths:
-            - '/server/**'
+            - 'server/**'
 
 jobs:
     server-build:
