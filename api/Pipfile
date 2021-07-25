@@ -30,7 +30,7 @@ flask-smorest = "~=0.31.1"
 marshmallow-sqlalchemy = "~=0.26.0"
 Flask-JWT-Extended = "~=4.2.1"
 
-fm_database = {subdirectory = "database", editable = true, ref = "main", git = "https://github.com/nstoik/farm_monitor"}
+fm_database = {editable = true, path = "./../database"}
 
 # self
 e1839a8 = {path = ".",editable = true}
