@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d28f002edb828d524928d91ca98962c9851370cd46aee1d9428c45eda5cb4ed2"
+            "sha256": "88edbaea877e61533f6d37c2cc844d6149c47fe79a40edc54a644710dde4d4fd"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -81,9 +81,11 @@
         },
         "fm-database": {
             "editable": true,
-            "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "a79ea10900059505d6df21a9d035016055803724",
-            "subdirectory": "database"
+            "path": "./../database"
+        },
+        "fm-server": {
+            "editable": true,
+            "path": "."
         },
         "greenlet": {
             "hashes": [
@@ -335,10 +337,6 @@
                 "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"
             ],
             "version": "==2021.1"
-        },
-        "sanitized-package": {
-            "editable": true,
-            "path": "."
         },
         "six": {
             "hashes": [
