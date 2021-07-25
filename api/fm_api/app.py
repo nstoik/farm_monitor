@@ -14,7 +14,7 @@ def create_app(config=None, testing=False):
 
     :param config_object: The configuration object to use.
     """
-    app = Flask(__name__.split(".")[0])
+    app = Flask(__name__.split(".", maxsplit=1)[0])
 
     configure_app(app, config, testing)
     register_extensions(app)
