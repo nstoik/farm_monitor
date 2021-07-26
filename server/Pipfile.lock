@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "db76b8a4aaeb05a15db6d6a28d6d6e61b927b292b9307e8f7714d7bf40dbae27"
+            "sha256": "6da80d659ea002e31811a49b4a76fb0e4ccb697d2b1b5c3f5e7e13762a0162fa"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -336,7 +336,7 @@
         },
         "sanitized-package": {
             "editable": true,
-            "path": "./../database"
+            "path": "."
         },
         "six": {
             "hashes": [
@@ -505,11 +505,11 @@
         },
         "faker": {
             "hashes": [
-                "sha256:2f62a30e79e7802655ee7f0cc88a49c39622a5d11f609992bf6ffbbbbf65db25",
-                "sha256:5e4bc11b01c2d8ddea63fa6fbd9916e9166038de0a407daba3220cf6f0157320"
+                "sha256:771b21ab55924867ac865f4b0c2f547c200172293b1056be16289584ef1215cb",
+                "sha256:f27a2a5c34042752f9d5fea2a9667aed5265d7d7bdd5ce83bc03b2f8a540d148"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==8.10.2"
+            "version": "==8.10.3"
         },
         "flake8": {
             "hashes": [
@@ -660,11 +660,11 @@
         },
         "pep8-naming": {
             "hashes": [
-                "sha256:a1dd47dd243adfe8a83616e27cf03164960b507530f155db94e10b36a6cd6724",
-                "sha256:f43bfe3eea7e0d73e8b5d07d6407ab47f2476ccaeff6937c84275cd30b016738"
+                "sha256:1f9a3ecb2f3fd83240fd40afdd70acc89695c49c333413e49788f93b61827e12",
+                "sha256:2321ac2b7bf55383dd19a6a9c8ae2ebf05679699927a3af33e60dd7d337099d3"
             ],
             "index": "pypi",
-            "version": "==0.11.1"
+            "version": "==0.12.0"
         },
         "pluggy": {
             "hashes": [
