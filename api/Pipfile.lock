@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "30118624dfbb0016cbbe3945336c6a4d663451a15c5e73267fe1654c3740a53e"
+            "sha256": "c41505e4a6468e0a42748db4307712fc150567e9b20878b1ee84c860f0db81b7"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -26,11 +26,11 @@
         },
         "apispec": {
             "hashes": [
-                "sha256:6613dbc39f41cd58942a697f11c8762ba18422bd173fe0bdfc1535b83d3f84f0",
-                "sha256:79029486d36a0d7f3c659dbf6ae50a91fbed0c22dcd5376f592e076c130bc7f9"
+                "sha256:3d4ff30b9c682045585bac38f1296cb34a6352aab3af0559d8bbaba50f911b23",
+                "sha256:741b6ee8844f4dd11c975d3c8eb703acccf58f4ac336a570c04c3a47d347f6f7"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==4.7.1"
+            "version": "==5.0.0"
         },
         "click": {
             "hashes": [
@@ -62,11 +62,11 @@
         },
         "flask-smorest": {
             "hashes": [
-                "sha256:6f7c39ab15b27798de1555e49b686a44daf42d04e249542e92a7f5cf734bfaed",
-                "sha256:a22bd7566bcee194fdfa5238a67ba163f07827722cc46d0f022c88f7074e674d"
+                "sha256:bf3d090d8490744ddb242a3dfef8b0d8f5d548548c9563815fe8a785ae91de93",
+                "sha256:f45f17501984a39189f28ba396edf6ad3f387988c3dcd9ac183136916e8bb469"
             ],
             "index": "pypi",
-            "version": "==0.31.3"
+            "version": "==0.32.0"
         },
         "fm-database": {
             "editable": true,
@@ -257,7 +257,7 @@
         },
         "sanitized-package": {
             "editable": true,
-            "path": "./../database"
+            "path": "."
         },
         "six": {
             "hashes": [
