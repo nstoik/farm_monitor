@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c41505e4a6468e0a42748db4307712fc150567e9b20878b1ee84c860f0db81b7"
+            "sha256": "881ae8966c7616740947a7ac307054a9a9bae7a67dd32fd060c22ab4f477d7fe"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -257,7 +257,7 @@
         },
         "sanitized-package": {
             "editable": true,
-            "path": "."
+            "path": "./../database"
         },
         "six": {
             "hashes": [
@@ -489,11 +489,11 @@
         },
         "isort": {
             "hashes": [
-                "sha256:eed17b53c3e7912425579853d078a0832820f023191561fcee9d7cae424e0813",
-                "sha256:f65ce5bd4cbc6abdfbe29afc2f0245538ab358c14590912df638033f157d555e"
+                "sha256:9c2ea1e62d871267b78307fe511c0838ba0da28698c5732d54e2790bf3ba9899",
+                "sha256:e17d6e2b81095c9db0a03a8025a957f334d6ea30b26f9ec70805411e5c7c81f2"
             ],
             "index": "pypi",
-            "version": "==5.9.2"
+            "version": "==5.9.3"
         },
         "lazy-object-proxy": {
             "hashes": [
