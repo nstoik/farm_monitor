@@ -26,7 +26,7 @@ pylint = "~=2.9.6"
 Flask = "~=2.0.1"
 
 # API
-flask-smorest = "~=0.32.0"
+flask-smorest = "~=0.33.0"
 marshmallow-sqlalchemy = "~=0.26.0"
 Flask-JWT-Extended = "~=4.2.1"
 
