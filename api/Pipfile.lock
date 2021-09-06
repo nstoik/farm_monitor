@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "967d6516fd4f277e63d57d38554379ba042309880365e58198098bedbf246c6f"
+            "sha256": "7de0be719275c244d903d556de648545c765b797ccadf7a562457b4a87f57c36"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -54,11 +54,11 @@
         },
         "flask-jwt-extended": {
             "hashes": [
-                "sha256:22b8ffa7587d50aaf65f3009f1d55ef7287da8260eaf4655a5837e33479216c3",
-                "sha256:26969d931bd959dd6b82b2ac07733b499d52c8967229e70bf4ad5859de6cb3b2"
+                "sha256:6e2b40d548b9dfc6051740c4552c097ac38e514e500c16c682d9a533d17ca418",
+                "sha256:80d06d3893089824659c26d0cb261999a12f425a66f09c3685f993065bc47b3a"
             ],
             "index": "pypi",
-            "version": "==4.2.3"
+            "version": "==4.3.0"
         },
         "flask-smorest": {
             "hashes": [
@@ -260,7 +260,7 @@
         },
         "sanitized-package": {
             "editable": true,
-            "path": "."
+            "path": "./../database"
         },
         "sqlalchemy": {
             "hashes": [
