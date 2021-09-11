@@ -14,8 +14,6 @@ from .settings import get_config
 def configure_logging(config):
     """Configure logging for the entire app."""
 
-    # pylint: disable=duplicate-code
-
     logger = logging.getLogger("fm")
     logfile_path = config.LOG_FILE
     log_level = config.LOG_LEVEL
