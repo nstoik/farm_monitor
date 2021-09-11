@@ -20,24 +20,24 @@ def setup_celery_logging(**kwargs):
 
 # disabled because logging is handled by the systemd file
 # @signals.after_setup_logger.connect
-def after_celery_logging(logger, *args, **kwargs):
+def after_celery_logging(celery_logger, *args, **kwargs):
     """Called after the celery logging."""
     config = get_config()
 
     logfile_path = config.CELERY_LOG_FILE
     log_level = logging.INFO
 
-    logger.setLevel(log_level)
+    celery_logger.setLevel(log_level)
 
-    formatter = logging.Formatter(
+    celery_formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
 
     file_handler = RotatingFileHandler(
         logfile_path, mode="a", maxBytes=1024 * 1024, backupCount=10
     )
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
+    file_handler.setFormatter(celery_formatter)
+    celery_logger.addHandler(file_handler)
 
 
 # disabled because logging is handled by the systemd file
