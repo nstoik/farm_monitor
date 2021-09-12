@@ -1,4 +1,4 @@
-name: FRONTEND Build Status
+name: Frontend Build Status
 
 on:
     push:
@@ -14,7 +14,7 @@ jobs:
       steps:
           - uses: actions/checkout@v2.3.4
           - name: Set up Node
-            uses: actions/setup-node@v
+            uses: actions/setup-node@v2
             with:
                   node-version: 16
           - name: Install NPM dependencies
