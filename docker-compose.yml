@@ -40,6 +40,16 @@ services:
             - farm_monitor
         restart: unless-stopped
 
+    frontend:
+        image: nstoik/farm_monitor_frontend:latest
+        container_name: frontend
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+            # args:
+        depends_on:
+            - api
+
     # standard docker containers below
 
     rabbitmq:
