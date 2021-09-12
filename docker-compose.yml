@@ -3,7 +3,7 @@ version: "3.8"
 services:
     server:
         image: nstoik/farm_monitor_server:latest
-        container_name: server
+        container_name: fm_server
         build:
             context: ./server
             dockerfile: Dockerfile
@@ -18,7 +18,7 @@ services:
 
     database_management:
         image: nstoik/farm_monitor_database:latest
-        container_name: database_management
+        container_name: fm_database_management
         build:
             context: ./database
             dockerfile: Dockerfile
@@ -30,7 +30,7 @@ services:
 
     api:
         image: nstoik/farm_monitor_api:latest
-        container_name: api
+        container_name: fm_api
         build:
             context: ./api
             dockerfile: Dockerfile
@@ -42,7 +42,7 @@ services:
 
     frontend:
         image: nstoik/farm_monitor_frontend:latest
-        container_name: frontend
+        container_name: fm_frontend
         build:
             context: ./frontend
             dockerfile: Dockerfile
@@ -54,7 +54,7 @@ services:
 
     rabbitmq:
         image: rabbitmq:3.8-management
-        container_name: rabbitmq
+        container_name: fm_rabbitmq
         hostname: rabbitmq
         volumes:
             #- ./.docker/rabbitmq/etc/:/etc/rabbitmq/
@@ -72,7 +72,7 @@ services:
 
     flower:
         image: mher/flower:latest
-        container_name: flower
+        container_name: fm_flower
         volumes:
             - "flower_data:/data"
         environment:
@@ -85,7 +85,7 @@ services:
 
     database:
         image: postgres:11
-        container_name: "database"
+        container_name: fm_database
         restart: unless-stopped
         environment:
             POSTGRES_PASSWORD: farm_monitor
@@ -97,7 +97,7 @@ services:
             - farm_monitor
 
     pgadmin:
-        container_name: pgadmin
+        container_name: fm_pgadmin
         image: dpage/pgadmin4:5.3
         restart: unless-stopped
         environment:

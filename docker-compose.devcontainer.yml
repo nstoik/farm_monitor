@@ -3,7 +3,6 @@ version: '3.8'
 services: 
     server:
         image: nstoik/farm_monitor_server:dev
-        container_name: server
         build:
             context: ./server
             dockerfile: .devcontainer/dev.Dockerfile
@@ -43,7 +42,6 @@ services:
 
     frontend:
         image: nstoik/farm_monitor_frontend:dev
-        container_name: frontend
         build:
             context: ./frontend
             dockerfile: .devcontainer/dev.Dockerfile
