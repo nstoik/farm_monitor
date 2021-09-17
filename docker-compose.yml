@@ -76,8 +76,7 @@ services:
         volumes:
             - "flower_data:/data"
         environment:
-            - celery_broker_url=pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
-            - CELERY_BROKER_URL=pyamqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
+            - CELERY_BROKER_URL=amqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
         ports:
             - 5555:5555 # flower web interface
         networks:
