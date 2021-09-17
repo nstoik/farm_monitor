@@ -1,17 +1,15 @@
 """Device tasks module."""
-import logging
 import pickle
 from datetime import timedelta
 
-# from celery.utils.log import get_task_logger
+from celery.utils.log import get_task_logger
 from fm_database.base import get_session
 from fm_database.models.message import Message
 
 from fm_server.celery_runner import app
 from fm_server.device.rabbitmq_messages import get_device_status
 
-LOGGER = logging.getLogger("fm.device.tasks")
-# LOGGER = get_task_logger('fm.device.tasks')
+LOGGER = get_task_logger('fm.device.tasks')
 
 
 @app.task(name="device.create")

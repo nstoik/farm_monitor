@@ -3,7 +3,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
-from celery import Celery  # , signals
+from celery import Celery, signals
 
 from .settings import get_config
 
@@ -18,11 +18,11 @@ def setup_celery_logging(**kwargs):
         print("keyword arg: %s: %s" % (key, kwargs[key]))
 
 
-# disabled because logging is handled by the systemd file
-# @signals.after_setup_logger.connect
-def after_celery_logging(celery_logger, *args, **kwargs):
+@signals.after_setup_logger.connect
+def after_celery_logging(logger, *args, **kwargs):
     """Called after the celery logging."""
     config = get_config()
+    celery_logger = logger
 
     logfile_path = config.CELERY_LOG_FILE
     log_level = logging.INFO
@@ -40,8 +40,7 @@ def after_celery_logging(celery_logger, *args, **kwargs):
     celery_logger.addHandler(file_handler)
 
 
-# disabled because logging is handled by the systemd file
-# @signals.after_setup_task_logger.connect
+@signals.after_setup_task_logger.connect
 def after_celery_task_logging(logger, *args, **kwargs):
     """Called after a celery task for logging."""
     config = get_config()
