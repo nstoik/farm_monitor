@@ -59,7 +59,7 @@ def first_setup():
         x = 1
         interface_details = []
         for interface in interfaces:
-            click.echo("{0}. {1}".format(x, interface))
+            click.echo(f"{x}. {interface}")
             x = x + 1
             interface_details.append(get_interface_details(interface))
         set_interfaces(interface_details)

@@ -15,7 +15,7 @@ app.config_from_object("fm_server.settings:CeleryConfig")
 def setup_celery_logging(**kwargs):
     """Setup the logging for celery."""
     for key in kwargs.items():
-        print("keyword arg: %s: %s" % (key, kwargs[key]))
+        print(f"keyword arg: {key}: {kwargs[key]}")
 
 
 # disabled because logging is handled by the systemd file
