@@ -2,6 +2,7 @@
 """Main command line interface entry point."""
 import click
 
+from .celery import commands as celery_commands
 from .device import commands as device_commands
 from .manage import commands as manage_commands
 from .manage import setup_commands
@@ -14,6 +15,8 @@ def entry_point():
 
 
 entry_point.add_command(device_commands.device)
+
+entry_point.add_command(celery_commands.run_worker)
 
 entry_point.add_command(manage_commands.run)
 entry_point.add_command(setup_commands.first_setup)
