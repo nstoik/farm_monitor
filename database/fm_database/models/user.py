@@ -29,7 +29,7 @@ class Role(SurrogatePK):
 
     def __repr__(self):
         """Represent instance as a unique string."""
-        return "<Role({name})>".format(name=self.name)
+        return f"<Role({self.name})>"
 
 
 class User(SurrogatePK):
@@ -95,4 +95,4 @@ class User(SurrogatePK):
 
     def __repr__(self):
         """Represent instance as a unique string."""
-        return "<User({username!r})>".format(username=self.username)
+        return f"<User({self.username})>"
