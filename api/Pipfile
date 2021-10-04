@@ -23,7 +23,7 @@ pylint = "~=2.11.1"
 
 [packages]
 # Flask
-Flask = "~=2.0.1"
+Flask = "~=2.0.2"
 
 # API
 flask-smorest = "~=0.34.1"
