@@ -29,6 +29,6 @@ SQLAlchemy = "~=1.4.25"
 passlib = "~=1.7.1"
 click = "~=7.0"
 "e1839a8" = {path = ".", editable = true}
-alembic = "~=1.7.3"
+alembic = "~=1.7.4"
 # for Postgresql
 psycopg2 = "~=2.9.1"
