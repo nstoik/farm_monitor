@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "70f6189639c4dc497350aa1b74336a2749a0c19c7e2d9a28c4912ad2ae32b208"
+            "sha256": "a22d38a4e6f7dca6c3e3b1fe274f1795aa86fe1cbe13a4daa4cfd2baafbc7608"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -25,6 +25,9 @@
             "version": "==1.7.4"
         },
         "apispec": {
+            "extras": [
+                "marshmallow"
+            ],
             "hashes": [
                 "sha256:5bc5404b19259aeeb307ce9956e2c1a97722c6a130ef414671dfc21acd622afc",
                 "sha256:d167890e37f14f3f26b588ff2598af35faa5c27612264ea1125509c8ff860834"
@@ -62,16 +65,16 @@
         },
         "flask-smorest": {
             "hashes": [
-                "sha256:73f3fa94d15cb766d227d22119e92f435bbc44a081216ff4f29958cef44d7c8e",
-                "sha256:97a7eb0e06032c1d5bef70e74fbee7c2128165005a65f678ddb0387c9da29458"
+                "sha256:b08b20fb15e505f4f032a82dd0d5471e431d1b8da9ae16e4a0099bb70d753c47",
+                "sha256:d97e114b972a0afae6a6c7883069c753c425ae1d8bb4c548028536465b1d1e19"
             ],
             "index": "pypi",
-            "version": "==0.34.1"
+            "version": "==0.35.0"
         },
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "1e3a69e5cbde6d1bef42f0bb8199d4397b7fb159",
+            "ref": "0f0b3e580f0afcf041fffaf027e9b70160210651",
             "subdirectory": "database"
         },
         "greenlet": {
