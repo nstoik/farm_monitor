@@ -19,6 +19,9 @@ class CeleryConfig:
 
     task_soft_time_limit = 60
 
+    # retry forever
+    broker_connection_max_retries = None
+
 
 class Config:
     """Base configuration."""
