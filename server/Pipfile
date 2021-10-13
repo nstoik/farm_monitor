@@ -9,7 +9,7 @@ factory-boy = "~=3.2.0"
 pytest = "~=6.2.5"
 pytest-cov = "~=3.0.0"
 # Lint and code style
-black = "==20.8b1"
+black = "~=21.9b0"
 flake8 = "~=3.9.2"
 flake8-blind-except = "~=0.2.0"
 flake8-debugger = "~=4.0.0"
@@ -19,6 +19,8 @@ isort = "~=5.9.3"
 mypy = "~=0.790"
 pep8-naming = "~=0.12.1"
 pylint = "~=2.11.1"
+# manually specifiy this package for mypy since it wasn't being installed automatically when upgrading to Python 3.10
+typing-extensions = "~=3.10.0.2"
 
 [packages]
 pika = "~=1.2.0"
@@ -32,4 +34,7 @@ fm_database = {subdirectory = "database", editable = true, ref = "main", git = "
 "e1839a8" = {path = ".", editable = true}
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"
+
+[pipenv]
+allow_prereleases = true
