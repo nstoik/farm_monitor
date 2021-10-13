@@ -20,6 +20,7 @@ def device_update(info):
 
     return True
 
+
 @app.task(name="device.create")
 def device_create(info):
     """Celery task for device create messages.
