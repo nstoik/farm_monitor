@@ -5,6 +5,7 @@ import pytest
 
 from fm_database.models.device import (
     Device,
+    DeviceUpdate,
     Grainbin,
     TemperatureCable,
     TemperatureSensor,
@@ -155,6 +156,7 @@ class TestGrainbin:
 
         assert grainbin.device_id == device.id
         assert grainbin.bus_number == 1
+        assert grainbin.bus_number_string == "bus.1"
 
     @staticmethod
     def test_get_grainbin_by_id():
@@ -199,6 +201,62 @@ class TestGrainbin:
         assert grainbin.average_temp is None
         assert isinstance(grainbin.bus_number, int)
         assert not grainbin.user_configured
+
+
+@pytest.mark.usefixtures("tables")
+class TestDeviceUpdate:
+    """DeviceUpdate model tests."""
+
+    @staticmethod
+    def test_create_device_update():
+        """Create a DeviceUpdate instance."""
+
+        device = DeviceFactory()
+        device.save()
+
+        device_update = DeviceUpdate(device_id=device.id)
+        device_update.timestamp = dt.datetime.now()
+        device_update.save()
+
+        assert device_update.interior_temp is None
+        assert device_update.exterior_temp is None
+        assert device_update.device_temp is None
+        assert device_update.uptime is None
+        assert device_update.load_avg is None
+        assert device_update.disk_total is None
+        assert device_update.disk_used is None
+        assert device_update.disk_free is None
+
+    @staticmethod
+    def test_device_update_properties():
+        """Add all the properties to a DeviceUpdate instance."""
+
+        payload = {
+            "created_at": dt.datetime.now(),
+            "id": "10000000255c26b4",
+            "data": {
+                "device_id": "10000000255c26b4",
+                "hardware_version": "pi3_0001",
+                "software_version": "0.1",
+                "interior_temp": 21.06,
+                "exterior_temp": 20.85,
+                "grainbin_count": 2,
+                "last_updated": "2021-10-21T00:16:00.104077",
+            },
+        }
+
+        device = DeviceFactory()
+        device.save()
+
+        device_update = DeviceUpdate(device_id=device.id)
+        device_update.timestamp = payload["created_at"]
+        device_update.interior_temp = payload["data"]["interior_temp"]
+        device_update.exterior_temp = payload["data"]["exterior_temp"]
+        device_update.save()
+
+        assert device_update.interior_temp == payload["data"]["interior_temp"]
+        assert device_update.exterior_temp == payload["data"]["exterior_temp"]
+        assert device_update.timestamp == payload["created_at"]
 
 
 @pytest.mark.usefixtures("tables")
@@ -257,12 +315,3 @@ class TestDevice:
         assert not bool(device.connected)
         assert not bool(device.user_configured)
         assert device.last_update_received is None
-        assert device.interior_temp is None
-        assert device.exterior_temp is None
-        assert device.device_temp is None
-        assert device.uptime is None
-        assert device.current_time is None
-        assert device.load_avg is None
-        assert device.disk_total is None
-        assert device.disk_used is None
-        assert device.disk_free is None
