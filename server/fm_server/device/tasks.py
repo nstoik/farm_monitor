@@ -4,6 +4,7 @@ from datetime import timedelta
 
 from celery.utils.log import get_task_logger
 from fm_database.base import get_session
+from fm_database.models.device import Device, DeviceUpdate
 from fm_database.models.message import Message
 
 from fm_server.celery_runner import app
@@ -15,8 +16,34 @@ LOGGER = get_task_logger("fm.device.tasks")
 @app.task(name="device.update")
 def device_update(info):
     """Celery task for device update messages."""
+    session = get_session()
 
-    LOGGER.info(f"Device payload is: {info}")
+    device_id = info["id"]
+    hardware_version = info["data"]["hardware_version"]
+    software_version = info["data"]["software_version"]
+    LOGGER.debug(f"Received device update from {device_id}")
+    device = session.query(Device).filter_by(device_id=device_id).one_or_none()
+
+    # check if the device is already in the database. Create it if it is not.
+    if device is None:
+        LOGGER.info(f"Adding new device to the database. {device_id}")
+        device = Device(device_id, hardware_version, software_version)
+        device.save(session=session)
+    else:
+        device.hardware_version = hardware_version
+        device.software_version = software_version
+    device.grainbin_count = info["data"]["grainbin_count"]
+    device.last_update_received = info["data"]["last_updated"]
+
+    new_device_update = DeviceUpdate(device.id)
+    new_device_update.timestamp = info["data"]["last_updated"]
+    new_device_update.interior_temp = info["data"]["interior_temp"]
+    new_device_update.exterior_temp = info["data"]["exterior_temp"]
+
+    session.add(new_device_update)
+    session.commit()
+
+    LOGGER.debug(f"New update saved for device. {new_device_update}")
 
     return True
 
