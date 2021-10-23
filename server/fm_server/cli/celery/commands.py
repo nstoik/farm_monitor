@@ -12,7 +12,7 @@ def run_worker():
     celery_worker_command = [
         "celery",
         "--app",
-        "fm_server.device.tasks",
+        "fm_server.celery_runner",
         "worker",
         "-l",
         "INFO",

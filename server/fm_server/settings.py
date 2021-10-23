@@ -12,7 +12,7 @@ class CeleryConfig:
     broker_url = "amqp://fm:farm_monitor@fm_rabbitmq/farm_monitor"
 
     # List of modules to import when the Celery worker starts.
-    imports = ("fm_server.device.tasks",)
+    imports = ("fm_server.device.tasks", "fm_server.grainbin.tasks")
 
     # Using the database to store task state and results.
     result_backend = "rpc://"
