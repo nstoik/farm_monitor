@@ -25,7 +25,7 @@ def after_celery_logging(logger, *args, **kwargs):
     celery_logger = logger
 
     logfile_path = config.CELERY_LOG_FILE
-    log_level = logging.INFO
+    log_level = config.CELERY_MAIN_PROCESS_LOG_LEVEL
 
     celery_logger.setLevel(log_level)
 
@@ -46,7 +46,7 @@ def after_celery_task_logging(logger, *args, **kwargs):
     config = get_config()
 
     logfile_path = config.CELERY_LOG_FILE
-    log_level = logging.INFO
+    log_level = config.LOG_LEVEL
 
     logger.setLevel(log_level)
 
@@ -59,3 +59,8 @@ def after_celery_task_logging(logger, *args, **kwargs):
     )
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
+
+    # if log_level == logging.DEBUG:
+    #     console_handler = logging.StreamHandler()
+    #     console_handler.setFormatter(formatter)
+    #     logger.addHandler(console_handler)

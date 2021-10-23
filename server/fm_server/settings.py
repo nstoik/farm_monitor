@@ -34,6 +34,7 @@ class Config:
     LOG_LEVEL = logging.INFO
     LOG_FILE = "/logs/farm_monitor.log"
     CELERY_LOG_FILE = "/logs/fm_celery.log"
+    CELERY_MAIN_PROCESS_LOG_LEVEL = logging.INFO
 
     RRDTOOL_LOCATION = "/home/pi/farm_monitor/fd/rrd/"
 
@@ -64,7 +65,7 @@ class ProdConfig(Config):
     """Production configuration."""
 
     DEBUG = False
-    LOG_LEVEL = logging.ERROR
+    LOG_LEVEL = logging.WARNING
 
 
 class TestConfig(Config):
