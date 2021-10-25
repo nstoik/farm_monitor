@@ -1,8 +1,8 @@
-"""inital version
+"""initial commit
 
-Revision ID: 6d2b61aa52d3
+Revision ID: 9d9cc8958287
 Revises: 
-Create Date: 2020-12-08 06:26:56.164735
+Create Date: 2021-10-25 03:55:51.174048
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6d2b61aa52d3'
+revision = '9d9cc8958287'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,15 +31,6 @@ def upgrade():
     sa.Column('connected', sa.Boolean(), nullable=True),
     sa.Column('user_configured', sa.Boolean(), nullable=True),
     sa.Column('last_update_received', sa.DateTime(), nullable=True),
-    sa.Column('interior_temp', sa.String(length=7), nullable=True),
-    sa.Column('exterior_temp', sa.String(length=7), nullable=True),
-    sa.Column('device_temp', sa.String(length=7), nullable=True),
-    sa.Column('uptime', sa.Interval(), nullable=True),
-    sa.Column('current_time', sa.DateTime(), nullable=True),
-    sa.Column('load_avg', sa.String(length=20), nullable=True),
-    sa.Column('disk_total', sa.String(length=20), nullable=True),
-    sa.Column('disk_used', sa.String(length=20), nullable=True),
-    sa.Column('disk_free', sa.String(length=20), nullable=True),
     sa.Column('grainbin_count', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('device_id')
@@ -99,12 +90,28 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('first_name', sa.String(length=30), nullable=True),
     sa.Column('last_name', sa.String(length=30), nullable=True),
-    sa.Column('active', sa.Boolean(), nullable=True),
-    sa.Column('is_admin', sa.Boolean(), nullable=True),
+    sa.Column('active', sa.Boolean(), nullable=False),
+    sa.Column('is_admin', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
+    op.create_table('device_update',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('timestamp', sa.DateTime(), nullable=False),
+    sa.Column('interior_temp', sa.Float(), nullable=True),
+    sa.Column('exterior_temp', sa.Float(), nullable=True),
+    sa.Column('device_temp', sa.Float(), nullable=True),
+    sa.Column('uptime', sa.Interval(), nullable=True),
+    sa.Column('load_avg', sa.Integer(), nullable=True),
+    sa.Column('disk_total', sa.Integer(), nullable=True),
+    sa.Column('disk_used', sa.Integer(), nullable=True),
+    sa.Column('disk_free', sa.Integer(), nullable=True),
+    sa.Column('device_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['device_id'], ['device.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_device_update_timestamp'), 'device_update', ['timestamp'], unique=True)
     op.create_table('grainbin',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('creation_time', sa.DateTime(), nullable=True),
@@ -117,9 +124,10 @@ def upgrade():
     sa.Column('total_updates', sa.Integer(), nullable=True),
     sa.Column('average_temp', sa.String(length=7), nullable=True),
     sa.Column('bus_number', sa.Integer(), nullable=False),
+    sa.Column('bus_number_string', sa.String(length=10), nullable=False),
     sa.Column('user_configured', sa.Boolean(), nullable=True),
-    sa.Column('device_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['device_id'], ['device.id'], ),
+    sa.Column('device_id', sa.String(length=20), nullable=False),
+    sa.ForeignKeyConstraint(['device_id'], ['device.device_id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('system_wifi',
@@ -137,34 +145,30 @@ def upgrade():
     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], )
     )
-    op.create_table('temperature_cable',
+    op.create_table('grainbin_update',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('sensor_count', sa.Integer(), nullable=True),
-    sa.Column('cable_type', sa.String(length=20), nullable=True),
-    sa.Column('bin_cable_number', sa.Integer(), nullable=True),
+    sa.Column('timestamp', sa.DateTime(), nullable=False),
+    sa.Column('temperature', sa.Float(), nullable=True),
+    sa.Column('temphigh', sa.Integer(), nullable=True),
+    sa.Column('templow', sa.Integer(), nullable=True),
+    sa.Column('sensor_name', sa.String(length=20), nullable=True),
     sa.Column('grainbin_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['grainbin_id'], ['grainbin.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('temperature_sensor',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('templow', sa.String(length=4), nullable=True),
-    sa.Column('temphigh', sa.String(length=4), nullable=True),
-    sa.Column('last_value', sa.String(length=7), nullable=True),
-    sa.Column('cable_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['cable_id'], ['temperature_cable.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
+    op.create_index(op.f('ix_grainbin_update_timestamp'), 'grainbin_update', ['timestamp'], unique=True)
     # ### end Alembic commands ###
 
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_table('temperature_sensor')
-    op.drop_table('temperature_cable')
+    op.drop_index(op.f('ix_grainbin_update_timestamp'), table_name='grainbin_update')
+    op.drop_table('grainbin_update')
     op.drop_table('user_roles')
     op.drop_table('system_wifi')
     op.drop_table('grainbin')
+    op.drop_index(op.f('ix_device_update_timestamp'), table_name='device_update')
+    op.drop_table('device_update')
     op.drop_table('users')
     op.drop_table('system_software')
     op.drop_table('system_setup')
