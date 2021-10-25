@@ -1,51 +1,46 @@
 # -*- coding: utf-8 -*-
 """Device models."""
-from sqlalchemy import Boolean, Column, DateTime, Float, Integer, Interval, String
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    Interval,
+    String,
+)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from ..database import SurrogatePK, reference_col
 
 
-class TemperatureSensor(SurrogatePK):
-    """Model a temperature sensor."""
+class GrainbinUpdate(SurrogatePK):
+    """Table to hold Grainbin update data."""
 
-    __tablename__ = "temperature_sensor"
+    __tablename__ = "grainbin_update"
 
-    templow = Column(String(4))
-    temphigh = Column(String(4))
-    last_value = Column(String(7))
-    cable_id = reference_col("temperature_cable")
+    timestamp = Column(DateTime, nullable=False, index=True, unique=True)
 
-    def __init__(self, cable_id):
-        """Create the instance."""
-        self.cable_id = cable_id
-        self.last_value = "unknown"
+    temperature = Column(Float(), nullable=True, default=None)
+    temphigh = Column(Integer(), nullable=True, default=None)  # cable number
+    templow = Column(Integer(), nullable=True, default=None)  # sensor number
+    sensor_name = Column(String(20), nullable=True, default=None)
 
-    def __repr__(self):
-        """Represent the instance as a string."""
-        return f"<TemperatureSensor: {self.id}>"
-
-
-class TemperatureCable(SurrogatePK):
-    """Model a temperature cable."""
-
-    __tablename__ = "temperature_cable"
-
-    sensor_count = Column(Integer, default=0)
-    cable_type = Column(String(20), default="temperature")
-    bin_cable_number = Column(Integer, default=0)
-
-    sensors = relationship("TemperatureSensor")
     grainbin_id = reference_col("grainbin")
 
-    def __init__(self, grainbin_id):
-        """Create the instance."""
+    def __init__(self, grainbin_id) -> None:
+        """Create an instance."""
+
         self.grainbin_id = grainbin_id
 
-    def __repr__(self):
-        """Represent the instance as a string."""
-        return f"<TemperatureCable: {self.id}>"
+    def __repr__(self) -> str:
+        """Represent a GrainbinUpdate as a string."""
+
+        return (
+            f"GrainbinUpdate for Grainbin {self.grainbin_id} taken on {self.timestamp}"
+        )
 
 
 class Grainbin(SurrogatePK):
@@ -66,8 +61,9 @@ class Grainbin(SurrogatePK):
     bus_number_string = Column(String(10), nullable=False)
     user_configured = Column(Boolean, default=False)
 
-    cables = relationship("TemperatureCable")
-    device_id = reference_col("device")
+    updates = relationship("GrainbinUpdate", backref="grainbin")
+    # device_id = reference_col("device", pk_name="device_id")
+    device_id = Column(String(20), ForeignKey("device.device_id"), nullable=False)
 
     def __init__(
         self,
@@ -141,7 +137,7 @@ class Device(SurrogatePK):
 
     # grainbin related data
     grainbin_count = Column(Integer, default=0)
-    bins = relationship("Grainbin")
+    bins = relationship("Grainbin", backref="device")
 
     def __init__(
         self,
