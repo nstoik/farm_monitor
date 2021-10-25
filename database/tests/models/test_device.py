@@ -3,143 +3,82 @@ import datetime as dt
 
 import pytest
 
-from fm_database.models.device import (
-    Device,
-    DeviceUpdate,
-    Grainbin,
-    TemperatureCable,
-    TemperatureSensor,
-)
+from fm_database.models.device import Device, DeviceUpdate, Grainbin, GrainbinUpdate
 
-from ..factories import (
-    DeviceFactory,
-    GrainbinFactory,
-    TemperatureCableFactory,
-    TemperatureSensorFactory,
-)
+from ..factories import DeviceFactory, GrainbinFactory
 
 
 @pytest.mark.usefixtures("tables")
-class TestTemperatureSensor:
-    """Temperature Sensor model tests."""
+class TestGrainbinUpdate:
+    """GrainbinUpdate model tests."""
 
     @staticmethod
-    def test_create_temperature_sensor():
-        """Create a temperature sensor instance."""
-        temperature_cable = TemperatureCableFactory()
-        temperature_cable.save()
+    def test_create_grainbin_update():
+        """Create a GrainbinUpdate instance."""
 
-        temperature_sensor = TemperatureSensor(temperature_cable.id)
-        temperature_sensor.save()
-
-        assert temperature_sensor.cable_id == temperature_cable.id
-        assert temperature_sensor.last_value == "unknown"
-
-    @staticmethod
-    def test_get_temperature_sensor_by_id():
-        """Test retrieving a temperature sensor by its id."""
-        temperature_cable = TemperatureCableFactory()
-        temperature_cable.save()
-
-        temperature_sensor = TemperatureSensor(temperature_cable.id)
-        temperature_sensor.save()
-
-        retrieved = TemperatureSensor.get_by_id(temperature_sensor.id)
-        assert retrieved.id == temperature_sensor.id
-
-    @staticmethod
-    def test_temperature_sensor_factory():
-        """Test the TemperatureSensor factory."""
-        temperature_sensor = TemperatureSensorFactory()
-        temperature_sensor.save()
-
-        retrieved = TemperatureSensor.get_by_id(temperature_sensor.id)
-        assert retrieved.id == temperature_sensor.id
-
-    @staticmethod
-    def test_temperature_sensor_properties():
-        """Test TemperatureSensor properties."""
-        temperature_sensor = TemperatureSensorFactory()
-        temperature_sensor.save()
-
-        assert temperature_sensor.templow is None
-        assert temperature_sensor.temphigh is None
-        assert temperature_sensor.last_value == "unknown"
-        assert isinstance(temperature_sensor.cable_id, int)
-
-    @staticmethod
-    def test_multiple_temperature_sensors_per_cable():
-        """Test adding multiple temperature sensors to the same cable."""
-        temperature_cable = TemperatureCableFactory()
-        temperature_cable.save()
-
-        for _ in range(5):
-            sensor = TemperatureSensor(temperature_cable.id)
-            sensor.save()
-
-        assert isinstance(temperature_cable.sensors, list)
-        assert len(temperature_cable.sensors) == 5
-
-
-@pytest.mark.usefixtures("tables")
-class TestTemperatureCable:
-    """Temperature Cable model tests."""
-
-    @staticmethod
-    def test_create_temperature_cable():
-        """Create a temperature cable instance."""
         grainbin = GrainbinFactory()
         grainbin.save()
 
-        temperature_cable = TemperatureCable(grainbin.id)
-        temperature_cable.save()
+        grainbin_update = GrainbinUpdate(grainbin_id=grainbin.id)
+        grainbin_update.timestamp = dt.datetime.now()
+        grainbin_update.save()
 
-        assert temperature_cable.grainbin_id == grainbin.id
+        assert grainbin_update.temperature is None
+        assert grainbin_update.temphigh is None
+        assert grainbin_update.templow is None
+        assert grainbin_update.sensor_name is None
 
     @staticmethod
-    def test_get_temperature_cable_by_id():
-        """Test retrieving a temperature cable by its id."""
+    def test_grainbin_update_properties():
+        """Add all the properties to a GrainbinUpdate instance."""
+
+        payload = {
+            "created_at": dt.datetime.now(),
+            "name": "10000000255c26b4.01",
+            "bus_number": 1,
+            "bus_number_string": "bus.1",
+            "sensor_names": ["28.CC9A290D0000", "28.BC9A290D0000", "28.BBE5290D0000"],
+            "sensor_data": [
+                {
+                    "temperature": 23.5,
+                    "temphigh": 75,
+                    "templow": 70,
+                    "sensor_name": "28.CC9A290D0000",
+                },
+                {
+                    "temperature": 23.5,
+                    "temphigh": 75,
+                    "templow": 70,
+                    "sensor_name": "28.BC9A290D0000",
+                },
+                {
+                    "temperature": 23.5,
+                    "temphigh": 75,
+                    "templow": 70,
+                    "sensor_name": "28.BBE5290D0000",
+                },
+            ],
+            "average_temp": 23.5,
+        }
+
         grainbin = GrainbinFactory()
         grainbin.save()
 
-        temperature_cable = TemperatureCable(grainbin.id)
-        temperature_cable.save()
+        grainbin_update = GrainbinUpdate(grainbin_id=grainbin.id)
+        grainbin_update.timestamp = payload["created_at"]
+        grainbin_update.temperature = payload["sensor_data"][0]["temperature"]
+        grainbin_update.temphigh = payload["sensor_data"][0]["temphigh"]
+        grainbin_update.templow = payload["sensor_data"][0]["templow"]
+        grainbin_update.sensor_name = payload["sensor_data"][0]["sensor_name"]
+        grainbin_update.save()
 
-        retrieved = TemperatureCable.get_by_id(temperature_cable.id)
-        assert retrieved.id == temperature_cable.id
+        retrieved: GrainbinUpdate = GrainbinUpdate.get_by_id(grainbin_update.id)
 
-    @staticmethod
-    def test_temperature_cable_factory():
-        """Test the TemperatureCable factory."""
-        temperature_cable = TemperatureCableFactory()
-        temperature_cable.save()
-
-        retrieved = TemperatureCable.get_by_id(temperature_cable.id)
-        assert retrieved.id == temperature_cable.id
-
-    @staticmethod
-    def test_temperature_cable_properties():
-        """Test TemperatureCable properties."""
-        temperature_cable = TemperatureCableFactory()
-        temperature_cable.save()
-
-        assert temperature_cable.sensor_count == 0
-        assert temperature_cable.cable_type == "temperature"
-        assert temperature_cable.bin_cable_number == 0
-        assert isinstance(temperature_cable.grainbin_id, int)
-
-    @staticmethod
-    def test_multiple_temperature_cables_per_bin():
-        """Test adding multiple temperature cables to the same grainbin."""
-        grainbin = GrainbinFactory()
-        grainbin.save()
-
-        for _ in range(5):
-            cable = TemperatureCable(grainbin.id)
-            cable.save()
-
-        assert isinstance(grainbin.cables, list)
-        assert len(grainbin.cables) == 5
+        assert retrieved.temperature == payload["sensor_data"][0]["temperature"]
+        assert retrieved.temphigh == payload["sensor_data"][0]["temphigh"]
+        assert retrieved.templow == payload["sensor_data"][0]["templow"]
+        assert retrieved.sensor_name == payload["sensor_data"][0]["sensor_name"]
+        assert retrieved.timestamp == payload["created_at"]
 
 
 @pytest.mark.usefixtures("tables")
@@ -151,10 +90,10 @@ class TestGrainbin:
         """Create a grainbin instance."""
         device = DeviceFactory()
         device.save()
-        grainbin = Grainbin(device_id=device.id, bus_number=1)
+        grainbin = Grainbin(device_id=device.device_id, bus_number=1)
         grainbin.save()
 
-        assert grainbin.device_id == device.id
+        assert grainbin.device_id == device.device_id
         assert grainbin.bus_number == 1
         assert grainbin.bus_number_string == "bus.1"
 
@@ -178,10 +117,10 @@ class TestGrainbin:
         grainbin.save()
 
         retrieved = Grainbin.get_by_id(grainbin.id)
-        device = Device.get_by_id(grainbin.device_id)
+        device = Device.get_by_id(grainbin.device.id)
 
         assert grainbin.id == retrieved.id
-        assert isinstance(grainbin.device_id, int)
+        assert isinstance(grainbin.device_id, str)
         assert isinstance(device, Device)
 
     @staticmethod
@@ -218,14 +157,16 @@ class TestDeviceUpdate:
         device_update.timestamp = dt.datetime.now()
         device_update.save()
 
-        assert device_update.interior_temp is None
-        assert device_update.exterior_temp is None
-        assert device_update.device_temp is None
-        assert device_update.uptime is None
-        assert device_update.load_avg is None
-        assert device_update.disk_total is None
-        assert device_update.disk_used is None
-        assert device_update.disk_free is None
+        retrieved = DeviceUpdate.get_by_id(device_update.id)
+
+        assert retrieved.interior_temp is None
+        assert retrieved.exterior_temp is None
+        assert retrieved.device_temp is None
+        assert retrieved.uptime is None
+        assert retrieved.load_avg is None
+        assert retrieved.disk_total is None
+        assert retrieved.disk_used is None
+        assert retrieved.disk_free is None
 
     @staticmethod
     def test_device_update_properties():
@@ -254,9 +195,11 @@ class TestDeviceUpdate:
         device_update.exterior_temp = payload["data"]["exterior_temp"]
         device_update.save()
 
-        assert device_update.interior_temp == payload["data"]["interior_temp"]
-        assert device_update.exterior_temp == payload["data"]["exterior_temp"]
-        assert device_update.timestamp == payload["created_at"]
+        retrieved = DeviceUpdate.get_by_id(device_update.id)
+
+        assert retrieved.interior_temp == payload["data"]["interior_temp"]
+        assert retrieved.exterior_temp == payload["data"]["exterior_temp"]
+        assert retrieved.timestamp == payload["created_at"]
 
 
 @pytest.mark.usefixtures("tables")

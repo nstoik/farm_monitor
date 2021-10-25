@@ -5,12 +5,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 from factory.declarations import SelfAttribute, SubFactory
 
 from fm_database.base import get_session
-from fm_database.models.device import (
-    Device,
-    Grainbin,
-    TemperatureCable,
-    TemperatureSensor,
-)
+from fm_database.models.device import Device, Grainbin
 from fm_database.models.user import User
 
 
@@ -68,7 +63,7 @@ class GrainbinFactory(BaseFactory):
     """Grainbin factory."""
 
     device = SubFactory(DeviceFactory)
-    device_id = SelfAttribute("device.id")
+    device_id = SelfAttribute("device.device_id")
     bus_number = Sequence(int)
 
     class Meta:
@@ -76,29 +71,3 @@ class GrainbinFactory(BaseFactory):
 
         model = Grainbin
         exclude = ("device",)
-
-
-class TemperatureCableFactory(BaseFactory):
-    """TemperatureCable factory."""
-
-    grainbin = SubFactory(GrainbinFactory)
-    grainbin_id = SelfAttribute("grainbin.id")
-
-    class Meta:
-        """Factory configurations."""
-
-        model = TemperatureCable
-        exclude = ("grainbin",)
-
-
-class TemperatureSensorFactory(BaseFactory):
-    """TemperatureSensor factory."""
-
-    cable = SubFactory(TemperatureCableFactory)
-    cable_id = SelfAttribute("cable.id")
-
-    class Meta:
-        """Factory configurations."""
-
-        model = TemperatureSensor
-        exclude = ("cable",)
