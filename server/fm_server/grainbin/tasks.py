@@ -20,7 +20,11 @@ def grainbin_update(info):
     bus_number = info["bus_number"]
     LOGGER.debug(f"Received grainbin update from {grainbin_name}")
 
-    grainbin = session.query(Grainbin).filter_by(device_id=device_id, bus_number=bus_number).one_or_none()
+    grainbin = (
+        session.query(Grainbin)
+        .filter_by(device_id=device_id, bus_number=bus_number)
+        .one_or_none()
+    )
 
     if grainbin is None:
         LOGGER.info(f"Adding new grainbin to the databse. {grainbin_name}")
