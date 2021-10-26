@@ -25,6 +25,7 @@
 		"eamodio.gitlens",
 		"esbenp.prettier-vscode",
 		"johnsoncodehk.volar",
+		"github.copilot",
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
