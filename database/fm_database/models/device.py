@@ -1,15 +1,6 @@
 # -*- coding: utf-8 -*-
 """Device models."""
-from sqlalchemy import (
-    Boolean,
-    Column,
-    DateTime,
-    Float,
-    ForeignKey,
-    Integer,
-    Interval,
-    String,
-)
+from sqlalchemy import Boolean, Column, DateTime, Float, Integer, Interval, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -21,7 +12,7 @@ class GrainbinUpdate(SurrogatePK):
 
     __tablename__ = "grainbin_update"
 
-    timestamp = Column(DateTime, nullable=False, index=True, unique=True)
+    timestamp = Column(DateTime, nullable=False, index=True)
 
     temperature = Column(Float(), nullable=True, default=None)
     temphigh = Column(Integer(), nullable=True, default=None)  # cable number
@@ -62,8 +53,7 @@ class Grainbin(SurrogatePK):
     user_configured = Column(Boolean, default=False)
 
     updates = relationship("GrainbinUpdate", backref="grainbin")
-    # device_id = reference_col("device", pk_name="device_id")
-    device_id = Column(String(20), ForeignKey("device.device_id"), nullable=False)
+    device_id = reference_col("device", pk_name="device_id")
 
     def __init__(
         self,
@@ -92,7 +82,7 @@ class DeviceUpdate(SurrogatePK):
 
     __tablename__ = "device_update"
 
-    timestamp = Column(DateTime, nullable=False, index=True, unique=True)
+    timestamp = Column(DateTime, nullable=False, index=True)
 
     interior_temp = Column(Float(), nullable=True, default=None)
     exterior_temp = Column(Float(), nullable=True, default=None)
