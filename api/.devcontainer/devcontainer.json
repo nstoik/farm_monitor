@@ -19,6 +19,7 @@
 		"eamodio.gitlens",
 		"ms-python.vscode-pylance",
 		"njpwerner.autodocstring",
+		"github.copilot",
 	],
 	"settings": {
 		"python.linting.enabled": true,

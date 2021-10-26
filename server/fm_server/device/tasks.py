@@ -24,19 +24,20 @@ def device_update(info):
     LOGGER.debug(f"Received device update from {device_id}")
     device = session.query(Device).filter_by(device_id=device_id).one_or_none()
 
-    # check if the device is already in the database. Create it if it is not.
+    # check if the device is already in the database.
     if device is None:
         LOGGER.info(f"Adding new device to the database. {device_id}")
         device = Device(device_id, hardware_version, software_version)
         device.save(session=session)
+    # create a new device if not already in the database.
     else:
         device.hardware_version = hardware_version
         device.software_version = software_version
     device.grainbin_count = info["data"]["grainbin_count"]
-    device.last_update_received = info["data"]["last_updated"]
+    device.last_update_received = info["created_at"]
 
     new_device_update = DeviceUpdate(device.id)
-    new_device_update.timestamp = info["data"]["last_updated"]
+    new_device_update.timestamp = info["created_at"]
     new_device_update.interior_temp = info["data"]["interior_temp"]
     new_device_update.exterior_temp = info["data"]["exterior_temp"]
 
