@@ -27,7 +27,7 @@ sqlalchemy-stubs = "~=0.4.0"
 typing-extensions = "~=3.10.0.2"
 
 [packages]
-SQLAlchemy = "~=1.4.25"
+SQLAlchemy = "~=1.4.26"
 passlib = "~=1.7.1"
 click = "~=7.0"
 "e1839a8" = {path = ".", editable = true}
