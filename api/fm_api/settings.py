@@ -18,6 +18,10 @@ class Config:
     API_TITLE = "FM API"
     API_VERSION = "v1"
     OPENAPI_VERSION = "3.0.2"
+    OPENAPI_URL_PREFIX = "/doc"
+    OPENAPI_SWAGGER_UI_PATH = "/swagger"
+    OPENAPI_SWAGGER_UI_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.0/"
+    OPENAPI_SWAGGER_URL = "/swagger"
 
 
 class ProdConfig(Config):
