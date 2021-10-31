@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7cb13d6514ee92907d0f9807d6904180649588b3cf81ba734608e256c53e9bc6"
+            "sha256": "9343558f980269ca95eaf7f253838fbdea7ff185669c27c54df48332ee41a577"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -84,12 +84,8 @@
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "480a0e86fc01151495df5359c7aafd44977d4a12",
+            "ref": "59898f4753c4151a59ec2a23771c18f1bdf52e67",
             "subdirectory": "database"
-        },
-        "fm-server": {
-            "editable": true,
-            "path": "."
         },
         "greenlet": {
             "hashes": [
@@ -360,6 +356,10 @@
             ],
             "version": "==2021.3"
         },
+        "sanitized-package": {
+            "editable": true,
+            "path": "."
+        },
         "six": {
             "hashes": [
                 "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
@@ -503,19 +503,19 @@
         },
         "factory-boy": {
             "hashes": [
-                "sha256:1d3db4b44b8c8c54cdd8b83ae4bdb9aeb121e464400035f1f03ae0e1eade56a4",
-                "sha256:401cc00ff339a022f84d64a4339503d1689e8263a4478d876e58a3295b155c5b"
+                "sha256:a98d277b0c047c75eb6e4ab8508a7f81fb03d2cb21986f627913546ef7a2a55e",
+                "sha256:eb02a7dd1b577ef606b75a253b9818e6f9eaf996d94449c9d5ebb124f90dc795"
             ],
             "index": "pypi",
-            "version": "==3.2.0"
+            "version": "==3.2.1"
         },
         "faker": {
             "hashes": [
-                "sha256:072b61422be9da464b0bb40cdb44267dd584582056b77a2982d7c66c767f044c",
-                "sha256:8ffd1ca479364a2ea78fe23a5710d5f940c50576f45c3f62edf9f7f9242cec0b"
+                "sha256:aad59a0cb82ac072f3109667fb2ba35ac45981ec22436c649d8fcdbf1c9e6927",
+                "sha256:d23cd665886d2e9680d90f3ce2af7a439f44de3c7becc78353ca2f49b0015352"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==9.6.0"
+            "version": "==9.7.1"
         },
         "flake8": {
             "hashes": [
@@ -730,11 +730,11 @@
         },
         "pyparsing": {
             "hashes": [
-                "sha256:84196357aa3566d64ad123d7a3c67b0e597a115c4934b097580e5ce220b91531",
-                "sha256:fd93fc45c47893c300bd98f5dd1b41c0e783eaeb727e7cea210dcc09d64ce7c3"
+                "sha256:9e3511118010f112a4b4b435ae50e1eaa610cda191acb9e421d60cf5fde83455",
+                "sha256:f8d3fe9fc404576c5164f0f0c4e382c96b85265e023c409c43d48f65da9d60d0"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==3.0.1"
+            "version": "==3.0.3"
         },
         "pytest": {
             "hashes": [
