@@ -13,6 +13,7 @@ class GrainbinUpdate(SurrogatePK):
     __tablename__ = "grainbin_update"
 
     timestamp = Column(DateTime, nullable=False, index=True)
+    update_index = Column(Integer, nullable=False, index=True)
 
     temperature = Column(Float(), nullable=True, default=None)
     temphigh = Column(Integer(), nullable=True, default=None)  # cable number
@@ -46,7 +47,7 @@ class Grainbin(SurrogatePK):
     sensor_type = Column(String(20), nullable=True, default="temperature")
     location = Column(String(20))
     description = Column(String(50))
-    total_updates = Column(Integer)
+    total_updates = Column(Integer, nullable=False, default=0)
     average_temp = Column(String(7))
     bus_number = Column(Integer, nullable=False)
     bus_number_string = Column(String(10), nullable=False)
@@ -83,6 +84,7 @@ class DeviceUpdate(SurrogatePK):
     __tablename__ = "device_update"
 
     timestamp = Column(DateTime, nullable=False, index=True)
+    update_index = Column(Integer, nullable=False, index=True)
 
     interior_temp = Column(Float(), nullable=True, default=None)
     exterior_temp = Column(Float(), nullable=True, default=None)
@@ -116,6 +118,7 @@ class Device(SurrogatePK):
 
     creation_time = Column(DateTime, default=func.now())
     last_updated = Column(DateTime, default=func.now(), onupdate=func.now())
+    total_updates = Column(Integer, nullable=False, default=0)
     name = Column(String(20), nullable=False, unique=False)
     location = Column(String(20))
     description = Column(String(50))
