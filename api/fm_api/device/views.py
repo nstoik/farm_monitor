@@ -19,7 +19,7 @@ blueprint = Blueprint(
 class Devices(MethodView):
     """MethodView for Device Schema."""
 
-    decorators = [jwt_required()]
+    # decorators = [jwt_required()]
 
     @staticmethod
     @blueprint.response(200, DeviceSchema(many=True))
@@ -42,7 +42,7 @@ class Devices(MethodView):
 class DevicesById(MethodView):
     """MethodView for Device schema that require an ID."""
 
-    decorators = [jwt_required()]
+    # decorators = [jwt_required()]
 
     @staticmethod
     @blueprint.response(200, DeviceSchema)
