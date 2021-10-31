@@ -29,7 +29,7 @@ typing-extensions = "~=3.10.0.2"
 [packages]
 SQLAlchemy = "~=1.4.26"
 passlib = "~=1.7.1"
-click = "~=7.0"
+click = "~=8.0"
 "e1839a8" = {path = ".", editable = true}
 alembic = "~=1.7.4"
 # for Postgresql
