@@ -10,9 +10,6 @@ class Config:
     JWT_SECRET_KEY = os.environ.get("FM_API_JWT_SECRET", "secret-key")
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
-    DEBUG_TB_ENABLED = False  # Disable Debug toolbar
-    DEBUG_TB_INTERCEPT_REDIRECTS = False
-    CACHE_TYPE = "flask_caching.backends.SimpleCache"  # Can be "MemcachedCache ", "RedisCache ", etc.
 
     # For Flask-Smorest
     API_TITLE = "FM API"
@@ -29,7 +26,6 @@ class ProdConfig(Config):
 
     ENV = "prod"
     DEBUG = False
-    DEBUG_TB_ENABLED = False  # Disable Debug toolbar
 
 
 class DevConfig(Config):
@@ -37,8 +33,6 @@ class DevConfig(Config):
 
     ENV = "dev"
     DEBUG = True
-    DEBUG_TB_ENABLED = True
-    CACHE_TYPE = "flask_caching.backends.SimpleCache"  # Can be "MemcachedCache ", "RedisCache ", etc.
 
 
 class TestConfig(Config):
@@ -46,7 +40,6 @@ class TestConfig(Config):
 
     TESTING = True
     DEBUG = True
-    WTF_CSRF_ENABLED = False  # Allows form testing
 
 
 def get_config(override_default=None):
