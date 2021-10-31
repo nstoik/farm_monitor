@@ -21,6 +21,7 @@ class TestGrainbinUpdate:
 
         grainbin_update = GrainbinUpdate(grainbin_id=grainbin.id)
         grainbin_update.timestamp = dt.datetime.now()
+        grainbin_update.update_index = 0
         grainbin_update.save()
 
         assert grainbin_update.temperature is None
@@ -66,6 +67,7 @@ class TestGrainbinUpdate:
 
         grainbin_update = GrainbinUpdate(grainbin_id=grainbin.id)
         grainbin_update.timestamp = payload["created_at"]
+        grainbin_update.update_index = 0
         grainbin_update.temperature = payload["sensor_data"][0]["temperature"]
         grainbin_update.temphigh = payload["sensor_data"][0]["temphigh"]
         grainbin_update.templow = payload["sensor_data"][0]["templow"]
@@ -136,7 +138,7 @@ class TestGrainbin:
         assert grainbin.sensor_type == "temperature"
         assert grainbin.location == "Not Set"
         assert grainbin.description == "Not Set"
-        assert isinstance(grainbin.total_updates, int)
+        assert grainbin.total_updates == 0
         assert grainbin.average_temp is None
         assert isinstance(grainbin.bus_number, int)
         assert not grainbin.user_configured
@@ -155,6 +157,7 @@ class TestDeviceUpdate:
 
         device_update = DeviceUpdate(device_id=device.id)
         device_update.timestamp = dt.datetime.now()
+        device_update.update_index = 0
         device_update.save()
 
         retrieved = DeviceUpdate.get_by_id(device_update.id)
@@ -191,6 +194,7 @@ class TestDeviceUpdate:
 
         device_update = DeviceUpdate(device_id=device.id)
         device_update.timestamp = payload["created_at"]
+        device_update.update_index = 0
         device_update.interior_temp = payload["data"]["interior_temp"]
         device_update.exterior_temp = payload["data"]["exterior_temp"]
         device_update.save()
@@ -258,3 +262,4 @@ class TestDevice:
         assert not bool(device.connected)
         assert not bool(device.user_configured)
         assert device.last_update_received is None
+        assert device.total_updates == 0
