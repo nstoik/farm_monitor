@@ -39,6 +39,7 @@ def grainbin_update(info):
     for sensor in sensor_data:
         new_grainbin_update = GrainbinUpdate(grainbin.id)
         new_grainbin_update.timestamp = info["created_at"]
+        new_grainbin_update.update_index = grainbin.total_updates
         new_grainbin_update.sensor_name = sensor["sensor_name"]
         new_grainbin_update.temperature = sensor["temperature"]
         new_grainbin_update.temphigh = sensor["temphigh"]

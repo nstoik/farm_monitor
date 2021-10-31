@@ -84,8 +84,12 @@
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "b1f70293c89887cadb8ef1eeff739ce772ea8544",
+            "ref": "131a382c5db2c5537ec85fcb90433514de8614fe",
             "subdirectory": "database"
+        },
+        "fm-server": {
+            "editable": true,
+            "path": "."
         },
         "greenlet": {
             "hashes": [
@@ -355,10 +359,6 @@
                 "sha256:acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326"
             ],
             "version": "==2021.3"
-        },
-        "sanitized-package": {
-            "editable": true,
-            "path": "."
         },
         "six": {
             "hashes": [
