@@ -17,7 +17,7 @@ class TestAPIDevices:
             device = DeviceFactory()
             device.save()
 
-        url = url_for("api_device.Devices")
+        url = url_for("device.Devices")
         rep = flaskclient.get(url, headers=auth_headers)
         fetched_devices = rep.get_json()
 
@@ -34,7 +34,7 @@ class TestAPIDevices:
             "hardware_version": "v0.1",
             "software_version": "v0.2",
         }
-        url = url_for("api_device.Devices")
+        url = url_for("device.Devices")
         rep = flaskclient.post(url, json=json, headers=auth_headers)
 
         returned_device = rep.get_json()
@@ -54,7 +54,7 @@ class TestAPIDevicesById:
         device = DeviceFactory()
         device.save()
 
-        url = url_for("api_device.DevicesById", device_id=device.id)
+        url = url_for("device.DevicesById", device_id=device.id)
         rep = flaskclient.get(url, headers=auth_headers)
         fetched_device = rep.get_json()
 
@@ -68,7 +68,7 @@ class TestAPIDevicesById:
         device = DeviceFactory()
         device.save()
 
-        url = url_for("api_device.DevicesById", device_id=device.id)
+        url = url_for("device.DevicesById", device_id=device.id)
         rep = flaskclient.get(url, headers=auth_headers)
         fetched_device = rep.get_json()
 
@@ -79,7 +79,7 @@ class TestAPIDevicesById:
     def test_api_devices_by_id_get_404(flaskclient, auth_headers):
         """Test that a 404 message is returned for non-existent device."""
 
-        url = url_for("api_device.DevicesById", device_id=5)
+        url = url_for("device.DevicesById", device_id=5)
         rep = flaskclient.get(url, headers=auth_headers)
         message = rep.get_json()
 
