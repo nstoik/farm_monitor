@@ -17,7 +17,7 @@ class UserSchema(BaseSchema):  # pylint: disable=too-few-public-methods
         load_instance = True
 
 
-class UserSchemaDict(BaseSchema):  # pylint: disable=too-few-public-methods
+class UserDictSchema(BaseSchema):  # pylint: disable=too-few-public-methods
     """Marshmallow UserSchema that produces a dict of changed values."""
 
     class Meta:  # pylint: disable=too-few-public-methods
