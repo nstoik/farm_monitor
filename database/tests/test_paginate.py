@@ -19,7 +19,21 @@ def test_basic_pagination():
     assert page.next_num == 2
     assert list(page.iter_pages()) == [1, 2, 3, 4, 5, None, 24, 25]
     page.page = 10
-    assert list(page.iter_pages()) == [1, 2, None, 8, 9, 10, 11, 12, 13, 14, None, 24, 25]
+    assert list(page.iter_pages()) == [
+        1,
+        2,
+        None,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        None,
+        24,
+        25,
+    ]
 
 
 def test_pagination_pages_when_0_items_per_page():
