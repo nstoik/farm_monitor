@@ -18,7 +18,7 @@ def create_app(config=None, testing=False):
 
     configure_app(app, config, testing)
     register_extensions(app)
-    register_blueprints(app)
+    register_blueprints()
     register_errorhandlers()
     register_shellcontext(app)
     register_teardown_request(app)
@@ -50,7 +50,7 @@ def register_extensions(app):
     jwt.init_app(app)
 
 
-def register_blueprints(app):
+def register_blueprints():
     """Register Flask blueprints."""
     smorest_api.register_blueprint(auth.views.blueprint)
     smorest_api.register_blueprint(device.views.blueprint)
