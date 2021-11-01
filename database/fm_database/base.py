@@ -6,13 +6,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+from .paginate import PaginateQuerty
 from .settings import get_config
 
 Base = declarative_base()
 
 config = get_config()  # pylint: disable=invalid-name
 engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
-db_session = scoped_session(sessionmaker(bind=engine))
+db_session = scoped_session(sessionmaker(bind=engine, query_cls=PaginateQuerty))
 
 
 def get_session():
