@@ -6,10 +6,12 @@ import os
 class Config:
     """Base configuration."""
 
-    SECRET_KEY = os.environ.get("FM_API_SECRET", "secret-key")
-    JWT_SECRET_KEY = os.environ.get("FM_API_JWT_SECRET", "secret-key")
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
+    TEST_PATH = os.path.join(PROJECT_ROOT, "tests")
+
+    SECRET_KEY = os.environ.get("FM_API_SECRET", "secret-key")
+    JWT_SECRET_KEY = os.environ.get("FM_API_JWT_SECRET", "secret-key")
 
     # For Flask-Smorest
     API_TITLE = "FM API"
