@@ -3,7 +3,7 @@
 import os
 import sys
 from glob import glob
-from subprocess import call
+from subprocess import PIPE, call, run
 
 import click
 
@@ -48,11 +48,21 @@ def test(coverage, filename, function):
         pytest_args.extend(["--cov", APP_DIR])
         pytest_args.extend(["--cov-report", "term-missing:skip-covered"])
 
+    # Get the virtual environment to the path for subprocess calls
+    pipenv_path = run(["pipenv", "--venv"], check=True, stdout=PIPE)
+    pipenv_path = pipenv_path.stdout.decode().replace("\n", "")
+    pipenv_path = os.path.join(pipenv_path, "bin")
+
     def execute_tool(description, *args):
         """Execute a checking tool with its arguments."""
+
+        # Add the virtual environment to the path for subprocess calls
+        my_env = os.environ.copy()
+        my_env["PATH"] = os.pathsep.join([pipenv_path, my_env["PATH"]])
+
         command_line = list(args)
         click.echo(f"{description}: {' '.join(command_line)}")
-        rv = call(command_line)
+        rv = call(command_line, env=my_env)
         return rv
 
     previous_env = os.getenv("FM_DATABASE_CONFIG", default="dev")
@@ -95,11 +105,18 @@ def lint(fix_imports, check):
         arg for arg in root_files + root_directories if arg not in skip
     ]
 
+    # Get the virtual environment to the path for subprocess calls
+    pipenv_path = run(["pipenv", "--venv"], check=True, stdout=PIPE)
+    pipenv_path = pipenv_path.stdout.decode().replace("\n", "")
+    pipenv_path = os.path.join(pipenv_path, "bin")
+    my_env = os.environ.copy()
+    my_env["PATH"] = os.pathsep.join([pipenv_path, my_env["PATH"]])
+
     def execute_tool(description, *args):
         """Execute a checking tool with its arguments."""
         command_line = list(args) + files_and_directories
         click.echo(f"{description}: {' '.join(command_line)}")
-        rv = call(command_line)
+        rv = call(command_line, env=my_env)
         if rv != 0:
             sys.exit(rv)
 
