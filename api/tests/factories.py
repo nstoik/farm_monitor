@@ -3,8 +3,9 @@
 # pylint: disable=too-few-public-methods
 from factory import PostGenerationMethodCall, Sequence
 from factory.alchemy import SQLAlchemyModelFactory
+from factory.declarations import SelfAttribute, SubFactory
 from fm_database.base import get_session
-from fm_database.models.device import Device
+from fm_database.models.device import Device, Grainbin
 from fm_database.models.user import User
 
 
@@ -56,3 +57,17 @@ class DeviceFactory(BaseFactory):
         """Factory configuration."""
 
         model = Device
+
+
+class GrainbinFactory(BaseFactory):
+    """Grainbin factory."""
+
+    device = SubFactory(DeviceFactory)
+    device_id = SelfAttribute("device.device_id")
+    bus_number = Sequence(int)
+
+    class Meta:
+        """Factory configuration."""
+
+        model = Grainbin
+        exclude = ("device",)
