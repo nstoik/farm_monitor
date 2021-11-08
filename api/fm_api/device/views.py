@@ -74,14 +74,14 @@ class DeviceUpdates(MethodView):
         Ordered by most recent updates first.
         """
 
-        devices: Pagination = (
+        device_updates: Pagination = (
             DeviceUpdate.query.filter_by(device_id=device_id)
             .order_by(DeviceUpdate.update_index.desc())
             .paginate(pagination_parameters.page, pagination_parameters.page_size)
         )
 
-        pagination_parameters.item_count = devices.total
-        return devices.items
+        pagination_parameters.item_count = device_updates.total
+        return device_updates.items
 
 
 @blueprint.route("/<device_id>/updates/latest")
