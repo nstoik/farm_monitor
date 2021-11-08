@@ -100,8 +100,8 @@ def test_query_paginate_min(dbsession):
     dbsession.commit()
 
     assert User.query.paginate(page=-1).page == 1
-    assert len(User.query.paginate(per_page=0).items) == 0
-    assert len(User.query.paginate(per_page=-1).items) == 20
+    assert len(User.query.paginate(per_page=0).items) == 1
+    assert len(User.query.paginate(per_page=-1).items) == 1
 
 
 @pytest.mark.usefixtures("tables")
