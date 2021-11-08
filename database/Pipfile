@@ -10,26 +10,24 @@ pytest = "~=6.2.5"
 pytest-cov = "*"
 
 # Lint and code style
-black = "~=21.9b0"
-flake8 = "~=3.9.2"
+black = "~=21.10b0"
+flake8 = "~=4.0.1"
 flake8-blind-except = "~=0.2.0"
 flake8-debugger = "~=4.0.0"
 flake8-docstrings = "~=1.6.0"
 flake8-isort = "~=4.1.1"
-isort = "~=5.9.3"
+isort = "~=5.10.0"
 pep8-naming = "~=0.12.1"
 pylint = "~=2.11.1"
 
 # MyPy and stubs
 mypy = "~=0.910"
 sqlalchemy-stubs = "~=0.4.0"
-# manually specifiy this package for mypy since it wasn't being installed automatically when upgrading to Python 3.10
-typing-extensions = "~=3.10.0.2"
 
 [packages]
 SQLAlchemy = "~=1.4.26"
 passlib = "~=1.7.1"
-click = "~=7.0"
+click = "~=8.0.3"
 "e1839a8" = {path = ".", editable = true}
 alembic = "~=1.7.4"
 # for Postgresql
