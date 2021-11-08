@@ -5,7 +5,7 @@ from flask.helpers import get_env
 from fm_database.base import get_session
 from fm_database.models.user import User
 
-from fm_api import auth, device, user
+from fm_api import auth, device, grainbin, user
 from fm_api.extensions import jwt, smorest_api
 
 
@@ -18,7 +18,7 @@ def create_app(config=None, testing=False):
 
     configure_app(app, config, testing)
     register_extensions(app)
-    register_blueprints(app)
+    register_blueprints()
     register_errorhandlers()
     register_shellcontext(app)
     register_teardown_request(app)
@@ -50,11 +50,12 @@ def register_extensions(app):
     jwt.init_app(app)
 
 
-def register_blueprints(app):
+def register_blueprints():
     """Register Flask blueprints."""
-    app.register_blueprint(auth.views.blueprint)
-    app.register_blueprint(device.views.blueprint)
-    app.register_blueprint(user.views.blueprint)
+    smorest_api.register_blueprint(auth.views.blueprint)
+    smorest_api.register_blueprint(device.views.blueprint)
+    smorest_api.register_blueprint(grainbin.views.blueprint)
+    smorest_api.register_blueprint(user.views.blueprint)
 
 
 def register_errorhandlers():

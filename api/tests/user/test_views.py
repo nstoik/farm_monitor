@@ -4,7 +4,7 @@ import pytest
 from flask import url_for
 from fm_database.models.user import User
 
-from ...factories import UserFactory
+from ..factories import UserFactory
 
 
 @pytest.mark.usefixtures("tables")

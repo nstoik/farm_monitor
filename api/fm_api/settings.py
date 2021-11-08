@@ -6,18 +6,21 @@ import os
 class Config:
     """Base configuration."""
 
-    SECRET_KEY = os.environ.get("FM_API_SECRET", "secret-key")
-    JWT_SECRET_KEY = os.environ.get("FM_API_JWT_SECRET", "secret-key")
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
-    DEBUG_TB_ENABLED = False  # Disable Debug toolbar
-    DEBUG_TB_INTERCEPT_REDIRECTS = False
-    CACHE_TYPE = "flask_caching.backends.SimpleCache"  # Can be "MemcachedCache ", "RedisCache ", etc.
+    TEST_PATH = os.path.join(PROJECT_ROOT, "tests")
+
+    SECRET_KEY = os.environ.get("FM_API_SECRET", "secret-key")
+    JWT_SECRET_KEY = os.environ.get("FM_API_JWT_SECRET", "secret-key")
 
     # For Flask-Smorest
     API_TITLE = "FM API"
     API_VERSION = "v1"
     OPENAPI_VERSION = "3.0.2"
+    OPENAPI_URL_PREFIX = "/doc"
+    OPENAPI_SWAGGER_UI_PATH = "/swagger"
+    OPENAPI_SWAGGER_UI_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.52.0/"
+    OPENAPI_SWAGGER_URL = "/swagger"
 
 
 class ProdConfig(Config):
@@ -25,7 +28,6 @@ class ProdConfig(Config):
 
     ENV = "prod"
     DEBUG = False
-    DEBUG_TB_ENABLED = False  # Disable Debug toolbar
 
 
 class DevConfig(Config):
@@ -33,8 +35,6 @@ class DevConfig(Config):
 
     ENV = "dev"
     DEBUG = True
-    DEBUG_TB_ENABLED = True
-    CACHE_TYPE = "flask_caching.backends.SimpleCache"  # Can be "MemcachedCache ", "RedisCache ", etc.
 
 
 class TestConfig(Config):
@@ -42,7 +42,6 @@ class TestConfig(Config):
 
     TESTING = True
     DEBUG = True
-    WTF_CSRF_ENABLED = False  # Allows form testing
 
 
 def get_config(override_default=None):

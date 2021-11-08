@@ -6,7 +6,7 @@ from flask_smorest import Blueprint, abort
 from fm_database.base import get_session
 from fm_database.models.user import User
 
-from .schemas import UserSchema, UserSchemaDict
+from .schemas import UserDictSchema, UserSchema
 
 blueprint = Blueprint(
     "api_user",
@@ -57,7 +57,7 @@ class UsersById(MethodView):
         return item
 
     @staticmethod
-    @blueprint.arguments(UserSchemaDict)
+    @blueprint.arguments(UserDictSchema)
     @blueprint.response(200, UserSchema)
     def put(update_data, user_id):
         """Update existing User."""
