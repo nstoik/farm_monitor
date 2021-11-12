@@ -1,0 +1,8 @@
+{
+    "api": {
+      "port": 5000,
+      "baseURL": "/",
+      "scheme": "http://",
+      "httpTimeout": 10000
+    }
+  }
