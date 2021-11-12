@@ -6,7 +6,7 @@ on:
             - 'frontend/**'
 
 jobs:
-    api-build:
+    frontend-build:
       runs-on: ubuntu-latest
       defaults:
         run:
