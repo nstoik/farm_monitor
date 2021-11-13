@@ -8,7 +8,7 @@ import { camelizeKeys, decamelizeKeys } from "humps";
 
 import { AuthService } from "./auth.api";
 import configSettings from "../config.json";
-import { PaginationHeader } from "@/interfaces/fetch.interfaces";
+import { PaginationHeader } from "@/interfaces/fetch.interface";
 
 export default abstract class Request {
   protected baseURL: string;
