@@ -12,7 +12,7 @@ class DeviceSchema(BaseSchema):
     class Meta:  # pylint: disable=too-few-public-methods
         """Meta configuration for DeviceSchema."""
 
-        exclude = ("creation_time", "id", "updates", "bins")
+        exclude = ("creation_time", "updates", "bins")
 
         model = Device
         include_relationships = True
