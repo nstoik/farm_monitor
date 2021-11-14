@@ -31,7 +31,7 @@ click = "~=8.0.3"
 "e1839a8" = {path = ".", editable = true}
 alembic = "~=1.7.5"
 # for Postgresql
-psycopg2 = "~=2.9.1"
+psycopg2 = "~=2.9.2"
 
 [requires]
 python_version = "3.10"
