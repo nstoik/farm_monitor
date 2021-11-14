@@ -6,7 +6,7 @@ from fm_database.base import get_session
 from fm_database.models.user import User
 
 from fm_api import auth, device, grainbin, user
-from fm_api.extensions import jwt, smorest_api
+from fm_api.extensions import cors, jwt, smorest_api
 
 
 def create_app(config=None, testing=False):
@@ -48,6 +48,7 @@ def register_extensions(app):
     """Register Flask extensions."""
     smorest_api.init_app(app)
     jwt.init_app(app)
+    cors.init_app(app)
 
 
 def register_blueprints():

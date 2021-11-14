@@ -13,6 +13,8 @@ class Config:
     SECRET_KEY = os.environ.get("FM_API_SECRET", "secret-key")
     JWT_SECRET_KEY = os.environ.get("FM_API_JWT_SECRET", "secret-key")
 
+    CORS_EXPOSE_HEADERS = ["X-Pagination"]
+
     # For Flask-Smorest
     API_TITLE = "FM API"
     API_VERSION = "v1"
