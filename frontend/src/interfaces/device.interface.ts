@@ -1,4 +1,5 @@
 export type Device = {
+  id: number;
   location: string;
   lastUpdateReceived: Date;
   deviceId: string;
