@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts" setup>
-import Navbar from "@/components/navigation/Navbar.vue";
+import Navbar from "@/components/navigation/NavbarMain.vue";
 </script>
 
 <style></style>
