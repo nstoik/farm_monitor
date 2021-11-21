@@ -3,8 +3,13 @@
   <div class="row">
     <div v-if="devices.length == 0">No devices found.</div>
     <div v-else>
-      <div class="col-md-12 col-lg-6 col-xl-4" v-for="device in devices" :key="device.id">
+      <div
+        class="col-md-12 col-lg-6 col-xl-4"
+        v-for="device in devices"
+        :key="device.id"
+      >
         <device-card :device="device" />
+        <device-update :deviceID="device.id" />
       </div>
     </div>
   </div>
@@ -15,6 +20,7 @@ import { onMounted, ref } from "vue";
 import { DeviceRequest } from "@/api/device.api";
 import { Device } from "@/interfaces/device.interface";
 import DeviceCard from "@/components/device/DeviceCard.vue";
+import DeviceUpdate from "@/components/device/DeviceUpdate.vue";
 
 const deviceAPI = new DeviceRequest();
 const devices = ref<Array<Device>>([]);

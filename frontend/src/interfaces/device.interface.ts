@@ -14,3 +14,17 @@ export type Device = {
   lastUpdated: Date;
   softwareVersion: string;
 };
+
+export type DeviceUpdate = {
+  deviceTemp: number;
+  diskFree: number;
+  diskTotal: number;
+  interiorTemp: number;
+  timestamp: Date;
+  exteriorTemp: number;
+  updateIndex: number;
+  uptime: number;
+  loadAvg: number;
+  diskUsed: number;
+  device: number;
+};
