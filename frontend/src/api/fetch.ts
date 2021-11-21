@@ -43,22 +43,30 @@ export default abstract class Request {
   }
 
   /**
-   * A public function to get all of a resource type from the
+   * A public function to get a resource type from the
    * server.
+   * @param url: the url to the resource. eg: `${this.resourceLocation}/paginate`
+   * @param params: optional. the parameters to send to the server.
    *
    * @returns An array of two items. The first item is an array
    * of the returned resources. The second is a pagination header
    * object detailing the current status of the return.
    */
-  public getAllPaginate<T>(): Promise<[Array<T>, PaginationHeader]> {
-    const url = `${this.resourceLocation}/paginate`;
-    return this.client.get<Array<T>>(url).then((response) => {
-      const paginationHeader: PaginationHeader = JSON.parse(
-        response.headers["x-pagination"]
-      );
-      camelizeKeys(paginationHeader);
-      return [response.data, paginationHeader];
-    });
+  public getPaginate<T>(
+    url: string,
+    page = 1,
+    pageSize = 10
+  ): Promise<[Array<T>, PaginationHeader]> {
+    const params = { page: page, page_size: pageSize };
+    return this.client
+      .get<Array<T>>(url, { params: params })
+      .then((response) => {
+        const paginationHeader: PaginationHeader = JSON.parse(
+          response.headers["x-pagination"]
+        );
+        camelizeKeys(paginationHeader);
+        return [response.data, paginationHeader];
+      });
   }
 
   /**
