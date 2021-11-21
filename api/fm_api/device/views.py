@@ -41,7 +41,7 @@ class Devices(MethodView):
         return new_device
 
 
-@blueprint.route("/<device_id>")
+@blueprint.route("/<int:device_id>")
 class DevicesById(MethodView):
     """MethodView for Device schema that require an ID."""
 
@@ -58,7 +58,7 @@ class DevicesById(MethodView):
         return item
 
 
-@blueprint.route("/<device_id>/updates")
+@blueprint.route("/<int:device_id>/updates")
 class DeviceUpdates(MethodView):
     """MethodView for DeviceUpdate schema that require an ID."""
 
@@ -84,7 +84,7 @@ class DeviceUpdates(MethodView):
         return device_updates.items
 
 
-@blueprint.route("/<device_id>/updates/latest")
+@blueprint.route("/<int:device_id>/updates/latest")
 class DeviceUpdatesLatest(MethodView):
     """MethodView for DeviceUpdate schema that require an ID."""
 
