@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <div class="container">
-      <device></device>
       <grainbin></grainbin>
+      <device></device>
     </div>
   </div>
 </template>
