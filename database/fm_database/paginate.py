@@ -117,7 +117,7 @@ class Pagination:
                 last = num
 
 
-class PaginateQuerty(Query):  # pylint: disable=too-many-ancestors
+class PaginateQuery(Query):  # pylint: disable=too-many-ancestors
     """Custom Query class to add paginate method."""
 
     def paginate(
