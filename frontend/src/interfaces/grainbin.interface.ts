@@ -13,3 +13,16 @@ export type Grainbin = {
   busNumberString: string;
   grainbinType: string;
 };
+
+export type GrainbinUpdate = {
+  id: number;
+  // cable number
+  temphigh: number;
+  // sensor number
+  templow: number;
+  timestamp: Date;
+  grainbin: number;
+  updateIndex: number;
+  sensorName: string;
+  temperature: number;
+};
