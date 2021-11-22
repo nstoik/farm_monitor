@@ -9,7 +9,9 @@
     </thead>
     <tbody>
       <tr v-for="update in deviceUpdates" :key="update.updateIndex">
-        <td>{{ formatDistanceToNow(update.timestamp) }} ago</td>
+        <td>
+          {{ formatDistanceToNow(update.timestamp, { addSuffix: true }) }}
+        </td>
         <td>{{ update.interiorTemp }}</td>
         <td>{{ update.exteriorTemp }}</td>
       </tr>
@@ -32,7 +34,7 @@ const props = defineProps({
 });
 
 const startingPage = 1;
-const pageSize = 5;
+const pageSize = 4;
 
 const deviceAPI = new DeviceRequest();
 const deviceUpdates = ref<Array<DeviceUpdate>>([]);

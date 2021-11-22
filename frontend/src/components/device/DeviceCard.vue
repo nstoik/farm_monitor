@@ -18,13 +18,15 @@
       </li>
     </ul>
     <div class="card-footer text-center text-muted">
-      Last Update: {{ device.lastUpdateReceived }}
+      Last Update:
+      {{ formatDistanceToNow(device.lastUpdateReceived, { addSuffix: true }) }}
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { defineProps, PropType } from "vue";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 import { Device } from "@/interfaces/device.interface";
 
