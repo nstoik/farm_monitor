@@ -10,7 +10,7 @@ from .schemas import GrainbinSchema, GrainbinUpdateSchema
 blueprint = Blueprint(
     "grainbin",
     "grainbin",
-    url_prefix="/api/grainbin",
+    url_prefix="/api/grainbins",
     description="Operations on grainbins",
 )
 
