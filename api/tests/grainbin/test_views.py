@@ -130,6 +130,7 @@ class TestAPIGrainbinUpdatesLatest:
             grainbin_update = GrainbinUpdate(grainbin.id)
             grainbin_update.timestamp = dt.datetime.now()
             grainbin_update.update_index = x
+            grainbin.total_updates = x
             dbsession.add(grainbin_update)
 
         dbsession.commit()
@@ -139,7 +140,35 @@ class TestAPIGrainbinUpdatesLatest:
         fetched_update = rep.get_json()
 
         assert rep.status_code == 200
-        assert fetched_update["update_index"] == 24
+        assert fetched_update[0]["update_index"] == 24
+
+    @staticmethod
+    def test_grainbin_updates_latest_get_multiple(flaskclient, auth_headers, dbsession):
+        """Test that all the latest updates are returned for a grainbin."""
+
+        grainbin = GrainbinFactory().save()
+
+        # create two GrainbinUpdates for each iteration
+        for x in range(5):
+            grainbin_update = GrainbinUpdate(grainbin.id)
+            grainbin_update.timestamp = dt.datetime.now()
+            grainbin_update.update_index = x
+            grainbin_update_2 = GrainbinUpdate(grainbin.id)
+            grainbin_update_2.timestamp = dt.datetime.now()
+            grainbin_update_2.update_index = x
+            grainbin.total_updates = x
+            dbsession.add(grainbin_update)
+            dbsession.add(grainbin_update_2)
+
+        dbsession.commit()
+
+        url = url_for("grainbin.GrainbinUpdatesLatest", grainbin_id=grainbin.id)
+        rep = flaskclient.get(url, headers=auth_headers)
+        fetched_update = rep.get_json()
+
+        assert rep.status_code == 200
+        assert len(fetched_update) == 2
+        assert fetched_update[0]["update_index"] == 4
 
     @staticmethod
     def test_grainbin_updates_latest_get_no_grainbin(flaskclient, auth_headers):
@@ -147,5 +176,20 @@ class TestAPIGrainbinUpdatesLatest:
 
         url = url_for("grainbin.GrainbinUpdatesLatest", grainbin_id=1)
         rep = flaskclient.get(url, headers=auth_headers)
+        rep_json = rep.get_json()
 
         assert rep.status_code == 404
+        assert rep_json["message"] == "Grainbin with id: 1 not found"
+
+    @staticmethod
+    def test_grainbin_updates_latest_get_no_updates(flaskclient, auth_headers):
+        """Test that the route returns 404 for a bin that has no updates."""
+
+        grainbin = GrainbinFactory().save()
+
+        url = url_for("grainbin.GrainbinUpdatesLatest", grainbin_id=grainbin.id)
+        rep = flaskclient.get(url, headers=auth_headers)
+        rep_json = rep.get_json()
+
+        assert rep.status_code == 404
+        assert rep_json["message"] == f"No updates for Grainbin with id: {grainbin.id}"

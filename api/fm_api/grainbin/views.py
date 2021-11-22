@@ -72,16 +72,30 @@ class GrainbinUpdatesLatest(MethodView):
     """MethodView for GrainbinUpdate schema that require an ID."""
 
     @staticmethod
-    @blueprint.response(200, GrainbinUpdateSchema())
+    @blueprint.response(200, GrainbinUpdateSchema(many=True))
     def get(grainbin_id):
-        """Get latest GrainbinUpdate for a given Grainbin ID."""
+        """Get the set of latest GrainbinUpdates for a given Grainbin ID.
 
-        grainbin_update = (
-            GrainbinUpdate.query.filter_by(grainbin_id=grainbin_id)
-            .order_by(GrainbinUpdate.update_index.desc())
-            .first()
+        There is an update for each sensor reading in the Grainbin.
+        """
+
+        # get the grainbin with grainbin_id
+        grainbin = Grainbin.get_by_id(grainbin_id)
+
+        if grainbin is None:
+            abort(404, message=f"Grainbin with id: {grainbin_id} not found")
+
+        if grainbin.total_updates == 0:
+            abort(404, message=f"No updates for Grainbin with id: {grainbin_id}")
+
+        # get all updates for grainbin_id with update_index equalling the grainbin total_update count.
+        # Sort by templow which is the sensor number
+        grainbin_updates = (
+            GrainbinUpdate.query.filter_by(
+                grainbin_id=grainbin_id, update_index=grainbin.total_updates
+            )
+            .order_by(GrainbinUpdate.templow.desc())
+            .all()
         )
 
-        if grainbin_update is None:
-            abort(404, message=f"Grainbin with id: {grainbin_id} not found.")
-        return grainbin_update
+        return grainbin_updates
