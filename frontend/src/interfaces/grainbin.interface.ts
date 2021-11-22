@@ -8,6 +8,7 @@ export type Grainbin = {
   sensorType: string;
   totalUpdates: number;
   description: string;
+  id: number;
   url: string;
   busNumberString: string;
   grainbinType: string;
