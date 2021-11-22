@@ -12,7 +12,7 @@
       <grainbin-card :grainbin="grainbin" />
     </div>
     <div class="col-md-12 col-lg-6 col-xl-3">
-      <grainbin-update :grainbinID="grainbin.id"/>
+      <grainbin-update :grainbinID="grainbin.id" />
     </div>
   </div>
 </template>
