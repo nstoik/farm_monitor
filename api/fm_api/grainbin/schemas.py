@@ -12,7 +12,7 @@ class GrainbinSchema(BaseSchema):
     class Meta:  # pylint: disable=too-few-public-methods
         """Meta class for GrainbinSchema."""
 
-        exclude = ("id", "creation_time", "updates")
+        exclude = ("creation_time", "updates")
 
         model = Grainbin
         include_relationships = True
@@ -32,7 +32,7 @@ class GrainbinUpdateSchema(BaseSchema):
     class Meta:  # pylint: disable=too-few-public-methods
         """Meta class for GrainbinUpdateSchema."""
 
-        exclude = ("id",)
+        # exclude = ("id",)
 
         model = GrainbinUpdate
         include_relationships = True
