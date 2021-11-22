@@ -8,10 +8,10 @@
     :key="grainbin.id"
     class="row align-items-start g-3 mb-3"
   >
-    <div class="col-md-12 col-lg-6 col-xl-3">
+    <div class="col-md-12 col-lg-4">
       <grainbin-card :grainbin="grainbin" />
     </div>
-    <div class="col-md-12 col-lg-6 col-xl-3">
+    <div class="col-md-12 col-lg-8">
       <grainbin-update :grainbinID="grainbin.id" />
     </div>
   </div>
