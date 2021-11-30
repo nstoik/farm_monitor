@@ -27,8 +27,8 @@ RUN pip install -U pip && pip install pipenv && \
 
 # Change to the newly created user
 USER $USER_UID:$USER_GID
-COPY . $WORKING_DIR/
-COPY Pipfile* setup.py $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} . $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} Pipfile* setup.py $WORKING_DIR/
 WORKDIR $WORKING_DIR
 
 # Production deploy steps below
@@ -40,4 +40,4 @@ ENV DEBIAN_FRONTEND=
 
 EXPOSE 5000
 
-CMD ["pipenv", "run", "fm_api", "run", "--host=0.0.0.0"]
+CMD ["pipenv", "run", "fm_api", "flask-cli", "run", "--host=0.0.0.0"]
