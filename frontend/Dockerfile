@@ -22,8 +22,9 @@ RUN npm run build
 ENV DEBIAN_FRONTEND=
 
 FROM nginx:latest
+ARG WORKING_DIR=/workspaces/frontend
 
 COPY --from=build-stage $WORKING_DIR/dist/ /usr/share/nginx/html
 
-COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
-COPY ./nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
+COPY --from=build-stage $WORKING_DIR/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-stage $WORKING_DIR/nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
