@@ -16,17 +16,21 @@ services:
         depends_on:
             - "database"
 
+    # in order to reduce the number of unique containers, we use the same container
+    # as fm_server since the fm_database package and commands are included in
+    # that container.
     database_management:
-        image: nstoik/farm_monitor_database:latest
+        image: nstoik/farm_monitor_server:latest
         container_name: fm_database_management
+        command: ["pipenv", "run", "fm_database", "update", "database-upgrade", "--revision", "head"]
         build:
-            context: ./database
+            context: ./server
             dockerfile: Dockerfile
         networks:
             - farm_monitor
         depends_on:
             - "database"
-        restart: unless-stopped
+        restart: on-failure
 
     api:
         image: nstoik/farm_monitor_api:latest
@@ -50,6 +54,30 @@ services:
         depends_on:
             - api
 
+    # traefik contrainer configuration below
+    traefik:
+        image: traefik:latest
+        container_name: fm_traefik
+        # Enables the web UI and tells Traefik to listen to docker
+        command: --api.insecure=true --providers.docker
+        networks:
+            - farm_monitor
+        ports:
+            - 80:80
+            - 443:443
+            # The Web UI (enabled by --api.insecure=true)
+            - "8080:8080"
+        volumes:
+            - ./traefik/traefik.toml:/etc/traefik/traefik.toml
+            - "/var/run/docker.sock:/var/run/docker.sock:ro"
+        restart: unless-stopped
+        depends_on:
+            - frontend
+            - api
+            - database_management
+            - server
+    
+    
     # standard docker containers below
 
     rabbitmq:
