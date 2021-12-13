@@ -15,6 +15,7 @@ services:
             - "logs:/logs"
         depends_on:
             - "database"
+        restart: on-failure
 
     # in order to reduce the number of unique containers, we use the same container
     # as fm_server since the fm_database package and commands are included in
@@ -39,10 +40,13 @@ services:
             context: ./api
             dockerfile: Dockerfile
         ports:
-            - 5000:5000
+            - 8000
         networks:
             - farm_monitor
         restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.flask.rule=Host(`flask.localhost`)"
 
     frontend:
         image: nstoik/farm_monitor_frontend:latest
@@ -53,13 +57,12 @@ services:
             # args:
         depends_on:
             - api
+        restart: unless-stopped
 
     # traefik contrainer configuration below
     traefik:
         image: traefik:latest
         container_name: fm_traefik
-        # Enables the web UI and tells Traefik to listen to docker
-        command: --api.insecure=true --providers.docker
         networks:
             - farm_monitor
         ports:
@@ -68,7 +71,7 @@ services:
             # The Web UI (enabled by --api.insecure=true)
             - "8080:8080"
         volumes:
-            - ./traefik/traefik.toml:/etc/traefik/traefik.toml
+            - ./traefik/traefik.prod.toml:/etc/traefik/traefik.toml
             - "/var/run/docker.sock:/var/run/docker.sock:ro"
         restart: unless-stopped
         depends_on:
@@ -97,6 +100,7 @@ services:
             - 15672:15672 # Management interface
         networks:
             - farm_monitor
+        restart: unless-stopped
 
     flower:
         image: mher/flower:latest
@@ -109,6 +113,7 @@ services:
             - 5555:5555 # flower web interface
         networks:
             - farm_monitor
+        restart: unless-stopped
 
     database:
         image: postgres:11
@@ -126,7 +131,6 @@ services:
     pgadmin:
         container_name: fm_pgadmin
         image: dpage/pgadmin4:6
-        restart: unless-stopped
         environment:
             PGADMIN_DEFAULT_EMAIL: fm@farmmonitor.ca
             PGADMIN_DEFAULT_PASSWORD: farm_monitor
@@ -137,6 +141,7 @@ services:
             - "5050:80"
         networks:
             - farm_monitor
+        restart: unless-stopped
 
 volumes:
     logs:
