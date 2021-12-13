@@ -38,6 +38,7 @@ RUN pipenv run pip install -e .
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
 
-EXPOSE 5000
+EXPOSE 8000
 
-CMD ["pipenv", "run", "fm_api", "flask-cli", "run", "--host=0.0.0.0"]
+# CMD ["pipenv", "run", "fm_api", "flask-cli", "run", "--host=0.0.0.0"]
+CMD ["pipenv", "run", "gunicorn", "fm_api.wsgi:app", "--bind", "0.0.0.0:8000"]

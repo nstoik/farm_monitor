@@ -31,6 +31,9 @@ flask-smorest = "~=0.35.0"
 marshmallow-sqlalchemy = "~=0.26.0"
 Flask-JWT-Extended = "~=4.3.1"
 
+# Production
+gunicorn = "~=20.1.0"
+
 fm_database = {subdirectory = "database", editable = true, ref = "main", git = "https://github.com/nstoik/farm_monitor"}
 # fm_database = {editable = true, path = "./../database"}
 
