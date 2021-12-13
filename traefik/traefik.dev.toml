@@ -15,4 +15,6 @@ level = "INFO"
 # containers are not discovered automatically
 [providers]
   [providers.docker]
+    endpoint = "unix:///var/run/docker.sock"
     exposedByDefault = false
+    network = "farm_monitor"
