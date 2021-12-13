@@ -2,10 +2,10 @@ version: '3.8'
 
 services: 
     server:
-        image: nstoik/farm_monitor_server:dev
+        image: nstoik/farm_monitor_server:devcontainer
         build:
             context: ./server
-            dockerfile: .devcontainer/dev.Dockerfile
+            dockerfile: .devcontainer/devcontainer.Dockerfile
         volumes:
             # this is for vs code file editing inside the container
             - .:/workspaces:cached
@@ -15,10 +15,10 @@ services:
         command: /bin/sh -c "while sleep 1000; do :; done"
 
     database_management:
-        image: nstoik/farm_monitor_database:dev
+        image: nstoik/farm_monitor_database:devcontainer
         build:
             context: ./database
-            dockerfile: .devcontainer/dev.Dockerfile
+            dockerfile: .devcontainer/devcontainer.Dockerfile
         volumes:
             # this is for vs code file editing inside the container
             - .:/workspaces:cached
@@ -28,10 +28,10 @@ services:
         command: /bin/sh -c "while sleep 1000; do :; done"
 
     api:
-        image: nstoik/farm_monitor_api:dev
+        image: nstoik/farm_monitor_api:devcontainer
         build:
             context: ./api
-            dockerfile: .devcontainer/dev.Dockerfile
+            dockerfile: .devcontainer/devcontainer.Dockerfile
         volumes:
             # this is for vs code file editing inside the container
             - .:/workspaces:cached
@@ -41,10 +41,10 @@ services:
         command: /bin/sh -c "while sleep 1000; do :; done"
 
     frontend:
-        image: nstoik/farm_monitor_frontend:dev
+        image: nstoik/farm_monitor_frontend:devcontainer
         build:
             context: ./frontend
-            dockerfile: .devcontainer/dev.Dockerfile
+            dockerfile: .devcontainer/devcontainer.Dockerfile
         volumes:
             # Update this to wherever you want VS Code to mount the folder of your project
             - .:/workspaces:cached
