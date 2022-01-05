@@ -38,3 +38,10 @@ To bring down the stack run:
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml down
 ```
+
+## VS Code Development
+To bring the farm_monitor docker stack down in VS Code run the following command:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.devcontainer.yml down
+```
