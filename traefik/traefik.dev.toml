@@ -2,6 +2,8 @@
 [entryPoints]
   [entryPoints.web]
     address = ":80"
+  [entryPoints.presence]
+    address = ":5554/udp"
 
 # Traefik dashboard over http
 [api]
@@ -12,9 +14,9 @@ level = "INFO"
 
 [accessLog]
 
-# containers are not discovered automatically
 [providers]
   [providers.docker]
     endpoint = "unix:///var/run/docker.sock"
+    # containers are not discovered automatically
     exposedByDefault = false
     network = "farm_monitor"

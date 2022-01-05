@@ -2,6 +2,10 @@
 [entryPoints]
   [entryPoints.web]
     address = ":80"
+  [entryPoints.websecure]
+    address = ":443"
+  [entryPoints.presence]
+    address = ":5554/udp"
 
 # Traefik dashboard over http
 [api]
@@ -12,7 +16,8 @@ level = "INFO"
 
 [accessLog]
 
-# containers are not discovered automatically
 [providers]
   [providers.docker]
+    # containers are not discovered automatically
     exposedByDefault = false
+    network = "farm_monitor"
