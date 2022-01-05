@@ -8,7 +8,7 @@ services:
             context: ./server
             dockerfile: Dockerfile
         ports:
-            - 5554:5554/udp # presence service port
+            - ${FM_SERVER_PRESENCE_PORT}:5554/udp # presence service port
         networks:
             - farm_monitor
         volumes:
@@ -40,7 +40,7 @@ services:
             context: ./api
             dockerfile: Dockerfile
         ports:
-            - 8000
+            - ${FM_API_PORT}
         networks:
             - farm_monitor
         restart: unless-stopped
@@ -87,12 +87,12 @@ services:
             - rabbitmq_data:/var/lib/rabbitmq/
             #- ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
         environment:
-            RABBITMQ_DEFAULT_USER: "fm"
-            RABBITMQ_DEFAULT_PASS: "farm_monitor"
-            RABBITMQ_DEFAULT_VHOST: "farm_monitor"
+            RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
+            RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
+            RABBITMQ_DEFAULT_VHOST: "${RABBITMQ_DEFAULT_VHOST}"
         ports:
-            - 5672:5672 # RabbitMQ port
-            - 15672:15672 # Management interface
+            - ${RABBITMQ_DEFAULT_PORT}:5672 # RabbitMQ port
+            - ${RABBITMQ_MANAGEMENT_PORT}:15672 # Management interface
         networks:
             - farm_monitor
         restart: unless-stopped
@@ -103,9 +103,9 @@ services:
         volumes:
             - "flower_data:/data"
         environment:
-            - CELERY_BROKER_URL=amqp://fm:farm_monitor@fm_rabbitmq/farm_monitor
+            - CELERY_BROKER_URL=${FLOWER_CELLERY_BROKER_URL}
         ports:
-            - 5555:5555 # flower web interface
+            - ${FLOWER_PORT}:5555 # flower web interface
         networks:
             - farm_monitor
         restart: unless-stopped
@@ -115,9 +115,9 @@ services:
         container_name: fm_database
         restart: unless-stopped
         environment:
-            POSTGRES_PASSWORD: farm_monitor
-            POSTGRES_USER: fm
-            POSTGRES_DB: farm_monitor.db
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_DB: ${POSTGRES_DB}
         volumes:
             - "dbdata:/var/lib/postgresql/data"
         networks:
@@ -127,13 +127,13 @@ services:
         container_name: fm_pgadmin
         image: dpage/pgadmin4:6
         environment:
-            PGADMIN_DEFAULT_EMAIL: fm@farmmonitor.ca
-            PGADMIN_DEFAULT_PASSWORD: farm_monitor
+            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
         volumes:
             - pgadmin:/root/.pgadmin
             - pgadmin:/var/lib/pgadmin
         ports:
-            - "5050:80"
+            - ${PGADMIN_PORT}:80
         networks:
             - farm_monitor
         restart: unless-stopped
