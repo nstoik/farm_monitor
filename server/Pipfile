@@ -23,7 +23,7 @@ pylint = "~=2.12.2"
 [packages]
 pika = "~=1.2.0"
 click = "~=7.0"
-psutil = "~=5.8.0"
+psutil = "~=5.9.0"
 netifaces = "~=0.11.0"
 celery = "~=5.1.2"
 multiprocessing-logging = "~=0.3.1"
