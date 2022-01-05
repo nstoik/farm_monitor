@@ -24,4 +24,4 @@ class BaseSchema(SQLAlchemyAutoSchema):
     https://marshmallow-sqlalchemy.readthedocs.io/en/latest/recipes.html#base-schema-ii
     """
 
-    OPTIONS_CLASS = BaseOpts
+    OPTIONS_CLASS = BaseOpts  # type: ignore
