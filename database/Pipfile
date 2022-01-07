@@ -22,7 +22,7 @@ pylint = "~=2.12.2"
 
 # MyPy and stubs
 # pinned because of: https://github.com/dropbox/sqlalchemy-stubs/issues/232
-mypy = "==0.921"
+mypy = "==0.931"
 sqlalchemy-stubs = "~=0.4.0"
 
 [packages]
