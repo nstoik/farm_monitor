@@ -10,6 +10,6 @@ services:
             # The Web UI (enabled by --api.insecure=true)
             - "8080:8080"
         volumes:
-            - ./traefik/traefik.prod.toml:/etc/traefik/traefik.toml
+            - ./traefik/traefik.prod.yml:/etc/traefik/traefik.yml
 
     # standard docker containers below

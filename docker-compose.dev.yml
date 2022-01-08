@@ -26,4 +26,4 @@ services:
             # The Web UI (enabled by --api.insecure=true)
             - "8080:8080"
         volumes:
-            - ./traefik/traefik.dev.toml:/etc/traefik/traefik.toml
+            - ./traefik/traefik.dev.yml:/etc/traefik/traefik.yml

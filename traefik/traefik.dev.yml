@@ -1,0 +1,20 @@
+entryPoints:
+  web:
+    address: ':80'
+  presence:
+    address: ':5554/udp'
+
+# Traefik dashboard over http
+api:
+  insecure: true
+
+log:
+  level: INFO
+
+accessLog: {}
+
+providers:
+  docker:
+    endpoint: 'unix:///var/run/docker.sock'
+    exposedByDefault: false # containers are not discovered automatically
+    network: farm_monitor

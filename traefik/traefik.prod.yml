@@ -1,0 +1,21 @@
+entryPoints:
+  web:
+    address: ':80'
+  websecure:
+    address: ':443'
+  presence:
+    address: ':5554/udp'
+
+# Traefik dashboard over http
+api:
+  insecure: true
+
+log:
+  level: INFO
+
+accessLog: {}
+
+providers:
+  docker:
+    exposedByDefault: false  # containers are not discovered automatically
+    network: farm_monitor
