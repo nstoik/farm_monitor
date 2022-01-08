@@ -79,7 +79,7 @@ services:
     # standard docker containers below
 
     rabbitmq:
-        image: rabbitmq:3.8-management
+        image: rabbitmq:management
         container_name: fm_rabbitmq
         hostname: rabbitmq
         volumes:
@@ -125,7 +125,7 @@ services:
 
     pgadmin:
         container_name: fm_pgadmin
-        image: dpage/pgadmin4:6
+        image: dpage/pgadmin4:latest
         environment:
             PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
             PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
