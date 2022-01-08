@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5a237ed4ba7a5cb24ec8ec4ce7de9a66195891b30392db3276fac4979fe508a2"
+            "sha256": "e3a1a863b4ce061f09b36f628eb542e4133c481df58b0d5d128aa47aa3bac2cf"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -41,19 +41,19 @@
         },
         "celery": {
             "hashes": [
-                "sha256:8d9a3de9162965e97f8e8cc584c67aad83b3f7a267584fa47701ed11c3e0d4b0",
-                "sha256:9dab2170b4038f7bf10ef2861dbf486ddf1d20592290a1040f7b7a1259705d42"
+                "sha256:8aacd02fc23a02760686d63dde1eb0daa9f594e735e73ea8fb15c2ff15cb608c",
+                "sha256:e2cd41667ad97d4f6a2f4672d1c6a6ebada194c619253058b5f23704aaadaa82"
             ],
             "index": "pypi",
-            "version": "==5.1.2"
+            "version": "==5.2.3"
         },
         "click": {
             "hashes": [
-                "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a",
-                "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"
+                "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3",
+                "sha256:410e932b050f5eed773c4cda94de75971c89cdb3155a72a0831139a79e5ecb5b"
             ],
             "index": "pypi",
-            "version": "==7.1.2"
+            "version": "==8.0.3"
         },
         "click-didyoumean": {
             "hashes": [
@@ -84,8 +84,12 @@
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "3c9ad11dc953106f3db7de096de3429602383550",
+            "ref": "d71fe042a94aa24533266f7bddb68fb98bd09386",
             "subdirectory": "database"
+        },
+        "fm-server": {
+            "editable": true,
+            "path": "."
         },
         "greenlet": {
             "hashes": [
@@ -367,17 +371,13 @@
             ],
             "version": "==2021.3"
         },
-        "sanitized-package": {
-            "editable": true,
-            "path": "."
-        },
         "setuptools": {
             "hashes": [
-                "sha256:2932bfeb248c648dc411ea9714d5a6de7a33ef1a0db2f0fce644d8172b0479e8",
-                "sha256:2b62b3dbec1fe95585dadf3bd9a014c8c578624918190428c3a7994bb52ae2b8"
+                "sha256:22c7348c6d2976a52632c67f7ab0cdf40147db7789f9aed18734643fe9cf3373",
+                "sha256:4ce92f1e1f8f01233ee9952c04f6b81d1e02939d6e1b488428154974a4d0783e"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==60.3.1"
+            "markers": "python_version >= '3.6'",
+            "version": "==59.6.0"
         },
         "six": {
             "hashes": [
@@ -472,11 +472,11 @@
         },
         "click": {
             "hashes": [
-                "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a",
-                "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"
+                "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3",
+                "sha256:410e932b050f5eed773c4cda94de75971c89cdb3155a72a0831139a79e5ecb5b"
             ],
             "index": "pypi",
-            "version": "==7.1.2"
+            "version": "==8.0.3"
         },
         "coverage": {
             "extras": [
@@ -807,11 +807,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:2932bfeb248c648dc411ea9714d5a6de7a33ef1a0db2f0fce644d8172b0479e8",
-                "sha256:2b62b3dbec1fe95585dadf3bd9a014c8c578624918190428c3a7994bb52ae2b8"
+                "sha256:22c7348c6d2976a52632c67f7ab0cdf40147db7789f9aed18734643fe9cf3373",
+                "sha256:4ce92f1e1f8f01233ee9952c04f6b81d1e02939d6e1b488428154974a4d0783e"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==60.3.1"
+            "markers": "python_version >= '3.6'",
+            "version": "==59.6.0"
         },
         "six": {
             "hashes": [

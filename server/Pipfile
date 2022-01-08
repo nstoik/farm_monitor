@@ -22,10 +22,10 @@ pylint = "~=2.12.2"
 
 [packages]
 pika = "~=1.2.0"
-click = "~=7.0"
+click = "~=8.0.3"
 psutil = "~=5.9.0"
 netifaces = "~=0.11.0"
-celery = "~=5.1.2"
+celery = "~=5.2.3"
 multiprocessing-logging = "~=0.3.1"
 fm_database = {subdirectory = "database", editable = true, ref = "main", git = "https://github.com/nstoik/farm_monitor"}
 #fm_database = {editable = true, path = "./../database"}
