@@ -46,7 +46,19 @@ services:
         restart: unless-stopped
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.flask.rule=Host(`flask.localhost`)"
+          # enable the docs to be loaded by traefik with no extra path.
+          # this configuration adds the '/docs/swagger' if the '/' path is visited.
+          - "traefik.http.routers.fm_api_doc.rule=Host(`api.localhost`) && Path(`/`)"
+          - "traefik.http.middlewares.doc_strip_prefix.stripprefix.forceSlash=false"
+          - "traefik.http.middlewares.doc_strip_prefix.stripprefix.prefixes=/"
+          - "traefik.http.middlewares.doc_add_prefix.addprefix.prefix=/doc/swagger"
+          - "traefik.http.routers.fm_api_doc.middlewares=doc_strip_prefix@docker,doc_add_prefix@docker"
+          - "traefik.http.services.fm_api_doc.loadbalancer.server.port=${FM_API_PORT}"
+          - "traefik.http.routers.fm_api_doc.service=fm_api"
+          # enable the rest of the api and files to be served as normal.
+          - "traefik.http.routers.fm_api.rule=Host(`api.localhost`)"
+          - "traefik.http.services.fm_api.loadbalancer.server.port=${FM_API_PORT}"
+          - "traefik.http.routers.fm_api.service=fm_api"
 
     frontend:
         image: nstoik/farm_monitor_frontend:latest
@@ -57,7 +69,13 @@ services:
             # args:
         depends_on:
             - api
+        networks:
+            - farm_monitor
         restart: unless-stopped
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.fm_frontend.rule=Host(`frontend.localhost`)"
+          - "traefik.http.services.fm_frontend.loadbalancer.server.port=80"
 
     # traefik contrainer configuration below
     traefik:
