@@ -6,10 +6,11 @@ entryPoints:
 
 # Traefik dashboard over http
 api:
+  dashboard: true
   insecure: true
 
 log:
-  level: INFO
+  level: DEBUG
 
 accessLog: {}
 
