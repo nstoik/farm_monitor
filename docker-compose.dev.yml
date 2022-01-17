@@ -15,6 +15,7 @@ services:
 
     api:
         image: nstoik/farm_monitor_api:dev
+        # command: ["pipenv", "run", "gunicorn", "fm_api.wsgi:app", "--bind", "0.0.0.0:8000", "--access-logfile", "-"]
 
     frontend:
         image: nstoik/farm_monitor_frontend:dev
