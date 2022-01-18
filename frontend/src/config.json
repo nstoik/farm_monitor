@@ -1,6 +1,5 @@
 {
     "api": {
-      "port": 5000,
       "URLprefix": "/api/",
       "scheme": "http://",
       "httpTimeout": 10000

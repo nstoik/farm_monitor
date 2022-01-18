@@ -13,7 +13,9 @@ export class AuthService {
 
   constructor() {
     const config = configSettings;
-    this.baseURL = `${config.api.scheme}${window.location.hostname}:${config.api.port}`;
+    const apiHostname: string = process.env.VUE_APP_API_HOSTNAME;
+    const apiPort: string = process.env.VUE_APP_API_PORT;
+    this.baseURL = `${config.api.scheme}${apiHostname}:${apiPort}`;
     this.newTokenURL = `${this.baseURL}${config.api.URLprefix}auth/`;
     this.refreshTokenURL = `${this.baseURL}${config.api.URLprefix}auth/refresh`;
 

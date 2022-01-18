@@ -1,8 +1,10 @@
 # frontend
 
 ## Project setup
+An example environment file is included in the repository. Copy it to your project and modify it to your needs.
 ```
 npm install
+cp .env.example .env
 ```
 
 ### Compiles and hot-reloads for development
