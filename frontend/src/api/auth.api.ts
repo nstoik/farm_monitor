@@ -14,8 +14,8 @@ export class AuthService {
   constructor() {
     const config = configSettings;
     this.baseURL = `${config.api.scheme}${window.location.hostname}:${config.api.port}`;
-    this.newTokenURL = `${this.baseURL}${config.api.baseURL}auth/`;
-    this.refreshTokenURL = `${this.baseURL}${config.api.baseURL}auth/refresh`;
+    this.newTokenURL = `${this.baseURL}${config.api.URLprefix}auth/`;
+    this.refreshTokenURL = `${this.baseURL}${config.api.URLprefix}auth/refresh`;
 
     this.axiosClient = axios.create({ timeout: config.api.httpTimeout });
 

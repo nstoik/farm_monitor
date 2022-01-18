@@ -21,7 +21,7 @@ export default abstract class Request {
 
   constructor() {
     const config = configSettings;
-    this.baseURL = `${config.api.scheme}${window.location.hostname}:${config.api.port}${config.api.baseURL}`;
+    this.baseURL = `${config.api.scheme}${window.location.hostname}:${config.api.port}${config.api.URLprefix}`;
     this.isRefreshing = false;
     this.failedRequests = [];
     this.authService = new AuthService();
