@@ -25,7 +25,7 @@ mypy = "~=0.931"
 sqlalchemy-stubs = "~=0.4.0"
 
 [packages]
-SQLAlchemy = "~=1.4.29"
+SQLAlchemy = "~=1.4.30"
 passlib = "~=1.7.1"
 click = "~=8.0.3"
 "e1839a8" = {path = ".", editable = true}
