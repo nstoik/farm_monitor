@@ -24,6 +24,9 @@
             <li class="nav-item">
               <router-link to="/about" class="nav-link">About</router-link>
             </li>
+            <li>
+              <navbar-s-w-status-vue></navbar-s-w-status-vue>
+            </li>
           </ul>
         </div>
       </div>
@@ -31,7 +34,9 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import NavbarSWStatusVue from "./NavbarSWStatus.vue";
+</script>
 
 <style>
 #nav {
