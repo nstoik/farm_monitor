@@ -67,6 +67,9 @@ services:
             context: ./frontend
             dockerfile: Dockerfile
             # args:
+        environment:
+          - VUE_APP_API_HOSTNAME=$VUE_APP_API_HOSTNAME
+          - VUE_APP_API_PORT=$VUE_APP_API_PORT
         depends_on:
             - api
         networks:
