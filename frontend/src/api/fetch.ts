@@ -23,8 +23,6 @@ export default abstract class Request {
     const config = configSettings;
     const apiHostname: string = process.env.VUE_APP_API_HOSTNAME;
     const apiPort: string = process.env.VUE_APP_API_PORT;
-    console.log("apiHostname", apiHostname);
-    console.log("apiPort", apiPort);
     this.baseURL = `${config.api.scheme}${apiHostname}:${apiPort}${config.api.URLprefix}`;
     this.isRefreshing = false;
     this.failedRequests = [];

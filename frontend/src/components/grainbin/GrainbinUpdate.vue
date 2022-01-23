@@ -40,7 +40,6 @@ const grainbinUpdates = ref<Array<GrainbinUpdate>>([]);
 
 onMounted(() => {
   grainbinAPI.getGrainbinLatestUpdates(props.grainbinID).then((response) => {
-    console.log(response);
     grainbinUpdates.value = response;
   });
 });
