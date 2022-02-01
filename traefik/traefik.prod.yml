@@ -3,8 +3,10 @@ entryPoints:
     address: ':80'
   websecure:
     address: ':443'
-  presence:
-    address: ':5554/udp'
+  rabbitmq:
+    address: ':5672'
+  # presence:
+  #  address: ':5554/udp'
 
 # Traefik dashboard over http
 api:
