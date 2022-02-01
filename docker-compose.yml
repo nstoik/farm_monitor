@@ -60,8 +60,8 @@ services:
         build:
             context: ./api
             dockerfile: Dockerfile
-        ports:
-            - ${FM_API_PORT}
+        #ports:
+        #    - ${FM_API_PORT}
         networks:
             - farm_monitor
         restart: unless-stopped
