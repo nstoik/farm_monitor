@@ -29,5 +29,9 @@ services:
             - 80:80
             # The Web UI (enabled by --api.insecure=true)
             - "8080:8080"
+            # for RabbitMQ
+            - "5672:5672"
+            # For the presence notifer
+            #- "5554:5554/udp"
         volumes:
             - ./traefik/traefik.dev.yml:/etc/traefik/traefik.yml
