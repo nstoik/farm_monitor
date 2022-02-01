@@ -5,16 +5,37 @@ services:
         image: nstoik/farm_monitor_server:latest
         container_name: fm_server
         build:
+           context: ./server
+           dockerfile: Dockerfile
+        networks:
+            - farm_monitor
+        volumes:
+            - "logs:/logs"
+        depends_on:
+           - "database"
+        restart: on-failure
+    # couldn't get UDP presence service to work with traefik.
+    # so, skipping it for now.
+    #    labels:
+    #        - "traefik.enable=true"
+    #        - "traefik.udp.routers.fm_server.entrypoints=presence"
+    #        - "traefik.udp.routers.fm_server.service=fm_server"
+    #        - "traefik.udp.services.fm_server.loadbalancer.server.port=5554"
+    server_worker:
+        image: nstoik/farm_monitor_server:latest
+        container_name: fm_server_worker
+        # specifically run the celery worker, not the normal run command.
+        command: ["pipenv", "run", "fm_server", "run-worker"]
+        build:
             context: ./server
             dockerfile: Dockerfile
-        ports:
-            - ${FM_SERVER_PRESENCE_PORT}:5554/udp # presence service port
         networks:
             - farm_monitor
         volumes:
             - "logs:/logs"
         depends_on:
             - "database"
+            - "rabbitmq"
         restart: on-failure
 
     # in order to reduce the number of unique containers, we use the same container

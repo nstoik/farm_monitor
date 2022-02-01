@@ -7,6 +7,9 @@ services:
     server:
         image: nstoik/farm_monitor_server:dev
 
+    server_worker:
+        image: nstoik/farm_monitor_server:dev
+
     # in order to reduce the number of unique containers, we use the same container
     # as fm_server since the fm_database package and commands are included in
     # that container.
