@@ -75,7 +75,7 @@ services:
           - "traefik.http.middlewares.doc_add_prefix.addprefix.prefix=/doc/swagger"
           - "traefik.http.routers.fm_api_doc.middlewares=doc_strip_prefix@docker,doc_add_prefix@docker"
           - "traefik.http.services.fm_api_doc.loadbalancer.server.port=${FM_API_PORT}"
-          - "traefik.http.routers.fm_api_doc.service=fm_api"
+          - "traefik.http.routers.fm_api_doc.service=fm_api_doc"
           # enable the rest of the api and files to be served as normal.
           - "traefik.http.routers.fm_api.rule=Host(`api.localhost`)"
           - "traefik.http.services.fm_api.loadbalancer.server.port=${FM_API_PORT}"
@@ -132,12 +132,25 @@ services:
             RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
             RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
             RABBITMQ_DEFAULT_VHOST: "${RABBITMQ_DEFAULT_VHOST}"
-        ports:
-            - ${RABBITMQ_DEFAULT_PORT}:5672 # RabbitMQ port
-            - ${RABBITMQ_MANAGEMENT_PORT}:15672 # Management interface
+        #ports:
+        #    - ${RABBITMQ_DEFAULT_PORT}:5672 # RabbitMQ port
+        #    - ${RABBITMQ_MANAGEMENT_PORT}:15672 # Management interface
         networks:
             - farm_monitor
         restart: unless-stopped
+        labels:
+            - "traefik.enable=true"
+            # RabbitMQ Management interface
+            - "traefik.http.routers.fm_rabbitmq.rule=Host(`mq.localhost`)"
+            - "traefik.http.routers.fm_rabbitmq.entrypoints=web"
+            - "traefik.http.services.fm_rabbitmq.loadbalancer.server.port=${RABBITMQ_MANAGEMENT_PORT}"
+            - "traefik.http.routers.fm_rabbitmq.service=fm_rabbitmq"
+            # RabbitMQ
+            #- "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`mq-connect.localhost`)"
+            - "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`*`)"
+            - "traefik.tcp.routers.fm_rabbitmq-connect.entrypoints=rabbitmq"
+            - "traefik.tcp.services.fm_rabbitmq-connect.loadbalancer.server.port=${RABBITMQ_DEFAULT_PORT}"
+            - "traefik.tcp.routers.fm_rabbitmq-connect.service=fm_rabbitmq-connect"
 
     flower:
         image: mher/flower:latest
