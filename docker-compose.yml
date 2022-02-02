@@ -132,9 +132,6 @@ services:
             RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
             RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
             RABBITMQ_DEFAULT_VHOST: "${RABBITMQ_DEFAULT_VHOST}"
-        #ports:
-        #    - ${RABBITMQ_DEFAULT_PORT}:5672 # RabbitMQ port
-        #    - ${RABBITMQ_MANAGEMENT_PORT}:15672 # Management interface
         networks:
             - farm_monitor
         restart: unless-stopped
@@ -159,11 +156,18 @@ services:
             - "flower_data:/data"
         environment:
             - CELERY_BROKER_URL=${FLOWER_CELLERY_BROKER_URL}
-        ports:
-            - ${FLOWER_PORT}:5555 # flower web interface
         networks:
             - farm_monitor
+        depends_on:
+            - rabbitmq
         restart: unless-stopped
+        labels:
+            - "traefik.enable=true"
+            # Flower
+            - "traefik.http.routers.fm_flower.rule=Host(`flower.localhost`)"
+            - "traefik.http.routers.fm_flower.entrypoints=web"
+            - "traefik.http.services.fm_flower.loadbalancer.server.port=${FLOWER_PORT}"
+            - "traefik.http.routers.fm_flower.service=fm_flower"
 
     database:
         image: postgres:11
