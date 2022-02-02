@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Farm Monitor Server",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "fm",
+            "Host": "fm_database",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres"
+        }
+    }
+}

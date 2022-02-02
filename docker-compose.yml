@@ -187,11 +187,19 @@ services:
         volumes:
             - pgadmin:/root/.pgadmin
             - pgadmin:/var/lib/pgadmin
-        ports:
-            - ${PGADMIN_PORT}:80
+            - "./pgadmin/server_definition.json:/pgadmin4/servers.json:ro"
         networks:
             - farm_monitor
+        depends_on:
+            - database
         restart: unless-stopped
+        labels:
+            - "traefik.enable=true"
+            # pgadmin
+            - "traefik.http.routers.fm_pgadmin.rule=Host(`pgadmin.localhost`)"
+            - "traefik.http.routers.fm_pgadmin.entrypoints=web"
+            - "traefik.http.services.fm_pgadmin.loadbalancer.server.port=80"
+            - "traefik.http.routers.fm_pgadmin.service=fm_pgadmin"
 
 volumes:
     logs:
