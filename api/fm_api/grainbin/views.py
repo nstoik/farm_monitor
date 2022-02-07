@@ -5,12 +5,16 @@ from flask_smorest.pagination import PaginationParameters
 from fm_database.models.device import Grainbin, GrainbinUpdate
 from fm_database.paginate import Pagination
 
+from fm_api.settings import get_config
+
 from .schemas import GrainbinSchema, GrainbinUpdateSchema
+
+config = get_config()
 
 blueprint = Blueprint(
     "grainbin",
     "grainbin",
-    url_prefix="/api/grainbins",
+    url_prefix=f"{config.API_PREFIX}grainbin",
     description="Operations on grainbins",
 )
 

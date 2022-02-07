@@ -8,12 +8,16 @@ from flask_smorest.pagination import PaginationParameters
 from fm_database.models.device import Device, DeviceUpdate
 from fm_database.paginate import Pagination
 
+from fm_api.settings import get_config
+
 from .schemas import DeviceSchema, DeviceUpdateSchema
+
+config = get_config()
 
 blueprint = Blueprint(
     "device",
     "device",
-    url_prefix="/api/devices",
+    url_prefix=f"{config.API_PREFIX}device",
     description="Operations on devices",
 )
 

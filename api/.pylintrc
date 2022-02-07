@@ -306,7 +306,8 @@ good-names=i,
            hd,
            LOGGER,
            HEARTBEAT_RECEIVER,
-           DEVICE_MESSAGES
+           DEVICE_MESSAGES,
+           config
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted

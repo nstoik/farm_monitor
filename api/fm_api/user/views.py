@@ -6,12 +6,16 @@ from flask_smorest import Blueprint, abort
 from fm_database.base import get_session
 from fm_database.models.user import User
 
+from fm_api.settings import get_config
+
 from .schemas import UserDictSchema, UserSchema
+
+config = get_config()
 
 blueprint = Blueprint(
     "api_user",
     "user",
-    url_prefix="/api/users",
+    url_prefix=f"{config.API_PREFIX}user",
     description="Operations on users and roles",
 )
 

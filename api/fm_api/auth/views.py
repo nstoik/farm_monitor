@@ -13,13 +13,16 @@ from flask_smorest import Blueprint, abort
 from fm_database.models.user import User
 
 from fm_api.extensions import jwt
+from fm_api.settings import get_config
 
 from .schemas import JWTSchema, LoginArgsSchema
+
+config = get_config()
 
 blueprint = Blueprint(
     "api_auth",
     "auth",
-    url_prefix="/api/auth",
+    url_prefix=f"{config.API_PREFIX}auth",
     description="Get and refresh auth tokens",
 )
 
