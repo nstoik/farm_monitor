@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
-import configSettings from "../config.json";
 
 /**
  * AuthService is used to get delete and retrieve access and refresh
@@ -12,14 +11,18 @@ export class AuthService {
   private axiosClient: AxiosInstance;
 
   constructor() {
-    const config = configSettings;
-    const apiHostname: string = process.env.VUE_APP_API_HOSTNAME;
-    const apiPort: string = process.env.VUE_APP_API_PORT;
-    this.baseURL = `${config.api.scheme}${apiHostname}:${apiPort}`;
-    this.newTokenURL = `${this.baseURL}${config.api.URLprefix}auth/`;
-    this.refreshTokenURL = `${this.baseURL}${config.api.URLprefix}auth/refresh`;
+    const apiHostname: string = process.env.VUE_APP_API_HOSTNAME; // eg. api.localhost
+    const apiPort: string = process.env.VUE_APP_API_PORT; // eg. 80
+    const apiPrefix: string = process.env.VUE_APP_API_PREFIX; // eg. /api/
+    const apiProtocol: string = process.env.VUE_APP_API_PROTOCOL || "http"; // eg. http
+    const apiHTTPTimeout: number =
+      Number(process.env.VUE_APP_API_HTTP_TIMEOUT) || 5000; // eg. 5000
 
-    this.axiosClient = axios.create({ timeout: config.api.httpTimeout });
+    this.baseURL = `${apiProtocol}://${apiHostname}:${apiPort}${apiPrefix}`;
+    this.newTokenURL = `${this.baseURL}auth/`;
+    this.refreshTokenURL = `${this.baseURL}auth/refresh`;
+
+    this.axiosClient = axios.create({ timeout: apiHTTPTimeout });
 
     this.axiosClient.interceptors.request.use(
       undefined,

@@ -4,7 +4,8 @@
  *  @tyype {import('@vue/cli-service').ProjectOptions}
  */
 module.exports = {
-    pwa: {
-        workboxPluginMode: 'GenerateSW',
-    }
+  publicPath: process.env.VUE_APP_PUBLIC_PATH,
+  pwa: {
+    workboxPluginMode: "GenerateSW",
+  },
 };

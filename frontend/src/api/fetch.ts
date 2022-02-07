@@ -7,7 +7,6 @@ import axios, {
 import { camelizeKeys, decamelizeKeys } from "humps";
 
 import { AuthService } from "./auth.api";
-import configSettings from "../config.json";
 import { PaginationHeader } from "@/interfaces/fetch.interface";
 
 export default abstract class Request {
@@ -20,14 +19,18 @@ export default abstract class Request {
   private authService: AuthService;
 
   constructor() {
-    const config = configSettings;
-    const apiHostname: string = process.env.VUE_APP_API_HOSTNAME;
-    const apiPort: string = process.env.VUE_APP_API_PORT;
-    this.baseURL = `${config.api.scheme}${apiHostname}:${apiPort}${config.api.URLprefix}`;
+    const apiHostname: string = process.env.VUE_APP_API_HOSTNAME; // eg. api.localhost
+    const apiPort: string = process.env.VUE_APP_API_PORT; // eg. 80
+    const apiPrefix: string = process.env.VUE_APP_API_PREFIX; // eg. /api/
+    const apiProtocol: string = process.env.VUE_APP_API_PROTOCOL || "http"; // eg. http
+    const apiHTTPTimeout: number =
+      Number(process.env.VUE_APP_API_HTTP_TIMEOUT) || 5000; // eg. 5000
+
+    this.baseURL = `${apiProtocol}://${apiHostname}:${apiPort}${apiPrefix}`;
     this.isRefreshing = false;
     this.failedRequests = [];
     this.authService = new AuthService();
-    this.client = axios.create({ timeout: config.api.httpTimeout });
+    this.client = axios.create({ timeout: apiHTTPTimeout });
     this.resourceLocation = this.baseURL;
 
     this.client.interceptors.request.use(

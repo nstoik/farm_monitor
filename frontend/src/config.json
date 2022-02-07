@@ -1,7 +1,0 @@
-{
-    "api": {
-      "URLprefix": "/api/",
-      "scheme": "http://",
-      "httpTimeout": 10000
-    }
-  }
