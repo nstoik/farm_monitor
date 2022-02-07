@@ -70,6 +70,7 @@ services:
           # enable the docs to be loaded by traefik with no extra path.
           # this configuration adds the '/docs/swagger' if the '/' path is visited.
           - "traefik.http.routers.fm_api_doc.rule=Host(`api.localhost`) && Path(`/`)"
+          - "traefik.http.routers.fm_api_doc.rule=Host(`api.${TRAEFIK_DOMAIN}`) && Path(`/`)"
           - "traefik.http.middlewares.doc_strip_prefix.stripprefix.forceSlash=false"
           - "traefik.http.middlewares.doc_strip_prefix.stripprefix.prefixes=/"
           - "traefik.http.middlewares.doc_add_prefix.addprefix.prefix=/doc/swagger"
@@ -77,7 +78,7 @@ services:
           - "traefik.http.services.fm_api_doc.loadbalancer.server.port=${FM_API_PORT}"
           - "traefik.http.routers.fm_api_doc.service=fm_api_doc"
           # enable the rest of the api and files to be served as normal.
-          - "traefik.http.routers.fm_api.rule=Host(`api.localhost`)"
+          - "traefik.http.routers.fm_api.rule=Host(`api.${TRAEFIK_DOMAIN}`)"
           - "traefik.http.services.fm_api.loadbalancer.server.port=${FM_API_PORT}"
           - "traefik.http.routers.fm_api.service=fm_api"
 
@@ -144,12 +145,12 @@ services:
         labels:
             - "traefik.enable=true"
             # RabbitMQ Management interface
-            - "traefik.http.routers.fm_rabbitmq.rule=Host(`mq.localhost`)"
+            - "traefik.http.routers.fm_rabbitmq.rule=Host(`mq.${TRAEFIK_DOMAIN}`)"
             - "traefik.http.routers.fm_rabbitmq.entrypoints=web"
             - "traefik.http.services.fm_rabbitmq.loadbalancer.server.port=${RABBITMQ_MANAGEMENT_PORT}"
             - "traefik.http.routers.fm_rabbitmq.service=fm_rabbitmq"
             # RabbitMQ
-            #- "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`mq-connect.localhost`)"
+            #- "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`mq-connect.${TRAEFIK_DOMAIN}`)"
             - "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`*`)"
             - "traefik.tcp.routers.fm_rabbitmq-connect.entrypoints=rabbitmq"
             - "traefik.tcp.services.fm_rabbitmq-connect.loadbalancer.server.port=${RABBITMQ_DEFAULT_PORT}"
@@ -170,7 +171,7 @@ services:
         labels:
             - "traefik.enable=true"
             # Flower
-            - "traefik.http.routers.fm_flower.rule=Host(`flower.localhost`)"
+            - "traefik.http.routers.fm_flower.rule=Host(`flower.${TRAEFIK_DOMAIN}`)"
             - "traefik.http.routers.fm_flower.entrypoints=web"
             - "traefik.http.services.fm_flower.loadbalancer.server.port=${FLOWER_PORT}"
             - "traefik.http.routers.fm_flower.service=fm_flower"
@@ -206,7 +207,7 @@ services:
         labels:
             - "traefik.enable=true"
             # pgadmin
-            - "traefik.http.routers.fm_pgadmin.rule=Host(`pgadmin.localhost`)"
+            - "traefik.http.routers.fm_pgadmin.rule=Host(`pgadmin.${TRAEFIK_DOMAIN}`)"
             - "traefik.http.routers.fm_pgadmin.entrypoints=web"
             - "traefik.http.services.fm_pgadmin.loadbalancer.server.port=80"
             - "traefik.http.routers.fm_pgadmin.service=fm_pgadmin"
