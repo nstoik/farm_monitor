@@ -87,10 +87,12 @@ services:
         build:
             context: ./frontend
             dockerfile: Dockerfile
-            # args:
-        environment:
-          - VUE_APP_API_HOSTNAME=$VUE_APP_API_HOSTNAME
-          - VUE_APP_API_PORT=$VUE_APP_API_PORT
+            args:
+                VUE_APP_API_HOSTNAME: "${VUE_APP_API_HOSTNAME}"
+                VUE_APP_API_PREFIX: "${VUE_APP_API_PREFIX}"
+                VUE_APP_API_PORT: "${VUE_APP_API_PORT}"
+                VUE_APP_API_PROTOCOL: "${VUE_APP_API_PROTOCOL}"
+                VUE_APP_PUBLIC_PATH: "${VUE_APP_PUBLIC_PATH}"
         depends_on:
             - api
         networks:
@@ -98,7 +100,11 @@ services:
         restart: unless-stopped
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.fm_frontend.rule=Host(`frontend.localhost`)"
+          # - "traefik.http.routers.fm_frontend.rule=Host(`frontend.${TRAEFIK_DOMAIN}`)"
+          - "traefik.http.routers.fm_frontend.rule=PathPrefix(`/frontend`)"
+          - "traefik.http.middlewares.frontend_strip_prefix.stripprefix.prefixes=/frontend"
+          - "traefik.http.routers.fm_frontend.middlewares=frontend_strip_prefix@docker"
+          - "traefik.http.routers.fm_frontend.entrypoints=web"
           - "traefik.http.services.fm_frontend.loadbalancer.server.port=80"
 
     # traefik contrainer configuration below
