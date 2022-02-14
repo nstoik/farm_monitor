@@ -66,8 +66,15 @@ services:
         build:
             context: ./api
             dockerfile: Dockerfile
-        #ports:
-        #    - ${FM_API_PORT}
+        environment:
+            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
+            - FM_API_PORT=${FM_API_PORT}
+            - FM_API_SECRET=${FM_API_SECRET}
+            - FM_API_JWT_SECRET=${FM_API_JWT_SECRET}
+            - FM_API_PREFIX=${FM_API_PREFIX}
+            - FM_API_OPENAPI_URL_PREFIX=${FM_API_OPENAPI_URL_PREFIX}
+            - FLASK_ENV=${FM_API_FLASK_ENV}
+            - FLASK_APP=${FM_API_FLASK_APP}
         networks:
             - farm_monitor
         restart: unless-stopped
