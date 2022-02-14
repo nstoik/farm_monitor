@@ -20,7 +20,7 @@ from .schemas import JWTSchema, LoginArgsSchema
 config = get_config()
 
 blueprint = Blueprint(
-    "api_auth",
+    "auth",
     "auth",
     url_prefix=f"{config.API_PREFIX}auth",
     description="Get and refresh auth tokens",

@@ -13,7 +13,7 @@ from .schemas import UserDictSchema, UserSchema
 config = get_config()
 
 blueprint = Blueprint(
-    "api_user",
+    "user",
     "user",
     url_prefix=f"{config.API_PREFIX}user",
     description="Operations on users and roles",
