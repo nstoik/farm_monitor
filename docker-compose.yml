@@ -95,11 +95,11 @@ services:
             context: ./frontend
             dockerfile: Dockerfile
             args:
-                VUE_APP_API_HOSTNAME: "${VUE_APP_API_HOSTNAME}"
-                VUE_APP_API_PREFIX: "${VUE_APP_API_PREFIX}"
-                VUE_APP_API_PORT: "${VUE_APP_API_PORT}"
-                VUE_APP_API_PROTOCOL: "${VUE_APP_API_PROTOCOL}"
-                VUE_APP_PUBLIC_PATH: "${VUE_APP_PUBLIC_PATH}"
+                VUE_APP_API_HOSTNAME: ${VUE_APP_API_HOSTNAME}
+                VUE_APP_API_PREFIX: ${VUE_APP_API_PREFIX}
+                VUE_APP_API_PORT: ${VUE_APP_API_PORT}
+                VUE_APP_API_PROTOCOL: ${VUE_APP_API_PROTOCOL}
+                VUE_APP_PUBLIC_PATH: ${VUE_APP_PUBLIC_PATH}
         depends_on:
             - api
         networks:
@@ -142,9 +142,9 @@ services:
             - rabbitmq_data:/var/lib/rabbitmq/
             #- ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
         environment:
-            RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
-            RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
-            RABBITMQ_DEFAULT_VHOST: "${RABBITMQ_DEFAULT_VHOST}"
+            RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+            RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+            RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST}
         networks:
             - farm_monitor
         restart: unless-stopped
