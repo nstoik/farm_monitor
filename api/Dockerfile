@@ -9,7 +9,7 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ARG WORKING_DIR=/workspaces/api
 
-ARG FM_API_PORT=8000
+ARG FM_API_PORT
 
 
 RUN pip install -U pip && pip install pipenv && \
@@ -43,4 +43,4 @@ ENV DEBIAN_FRONTEND=
 EXPOSE 8000
 
 # CMD ["pipenv", "run", "fm_api", "flask-cli", "run", "--host=0.0.0.0"]
-CMD ["pipenv", "run", "gunicorn", "fm_api.wsgi:app", "--bind", "0.0.0.0:${FM_API_PORT}"]
+CMD pipenv run gunicorn fm_api.wsgi:app --bind 0.0.0.0:$FM_API_PORT
