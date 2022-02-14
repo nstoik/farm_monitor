@@ -43,4 +43,4 @@ ENV DEBIAN_FRONTEND=
 EXPOSE 8000
 
 # CMD ["pipenv", "run", "fm_api", "flask-cli", "run", "--host=0.0.0.0"]
-CMD pipenv run gunicorn fm_api.wsgi:app --bind 0.0.0.0:$FM_API_PORT
+CMD pipenv run gunicorn fm_api.wsgi:app --access-logfile '-' --bind 0.0.0.0:$FM_API_PORT
