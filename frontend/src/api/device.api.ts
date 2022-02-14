@@ -5,7 +5,7 @@ import { PaginationHeader } from "@/interfaces/fetch.interface";
 export class DeviceRequest extends Request {
   constructor() {
     super();
-    this.resourceLocation = `${this.baseURL}devices/`;
+    this.resourceLocation = `${this.baseURL}device/`;
   }
 
   public async getDevices(): Promise<Array<Device>> {

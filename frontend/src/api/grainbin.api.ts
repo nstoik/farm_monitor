@@ -4,7 +4,7 @@ import { Grainbin, GrainbinUpdate } from "@/interfaces/grainbin.interface";
 export class GrainbinRequest extends Request {
   constructor() {
     super();
-    this.resourceLocation = `${this.baseURL}grainbins/`;
+    this.resourceLocation = `${this.baseURL}grainbin/`;
   }
 
   /**
