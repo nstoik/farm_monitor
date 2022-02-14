@@ -15,7 +15,7 @@ class TestAPIUser:
     def test_api_users_list_users_authorize(flaskclient):
         """Test that authorization is required to return data."""
 
-        url = url_for("api_user.Users")
+        url = url_for("user.Users")
         rep = flaskclient.get(url)
         assert rep.status_code == 401
 
@@ -23,7 +23,7 @@ class TestAPIUser:
     def test_api_users_list_users(flaskclient, auth_headers):
         """Test that auth headers work."""
 
-        url = url_for("api_user.Users")
+        url = url_for("user.Users")
         rep = flaskclient.get(url, headers=auth_headers)
         assert rep.status_code == 200
 
@@ -35,7 +35,7 @@ class TestAPIUser:
             user = UserFactory()
             user.save()
 
-        url = url_for("api_user.Users")
+        url = url_for("user.Users")
         rep = flaskclient.get(url, headers=auth_headers)
         fetched_users = rep.get_json()
 
@@ -51,7 +51,7 @@ class TestAPIUser:
             "username": "new_user",
         }
 
-        url = url_for("api_user.Users")
+        url = url_for("user.Users")
         rep = flaskclient.post(url, json=json, headers=auth_headers)
 
         returned_user = rep.get_json()
@@ -68,7 +68,7 @@ class TestAPIUser:
             "first_name": "Bob",
         }
 
-        url = url_for("api_user.Users")
+        url = url_for("user.Users")
         rep = flaskclient.post(url, json=json, headers=auth_headers)
 
         returned_user = rep.get_json()
@@ -85,7 +85,7 @@ class TestAPIUserById:
     def test_api_users_get_by_id_list(flaskclient, auth_headers, user):
         """Test that a user can be returned by ID."""
 
-        url = url_for("api_user.UsersById", user_id=user.id)
+        url = url_for("user.UsersById", user_id=user.id)
         rep = flaskclient.get(url, headers=auth_headers)
 
         returned_user = rep.get_json()
@@ -97,7 +97,7 @@ class TestAPIUserById:
     def test_api_users_get_by_id_not_exist(flaskclient, auth_headers):
         """Test that a non-existent user returns 404."""
 
-        url = url_for("api_user.UsersById", user_id="5")
+        url = url_for("user.UsersById", user_id="5")
         rep = flaskclient.get(url, headers=auth_headers)
 
         returned_message = rep.get_json()
@@ -114,7 +114,7 @@ class TestAPIUserById:
             "first_name": "Bob",
         }
 
-        url = url_for("api_user.UsersById", user_id=user.id)
+        url = url_for("user.UsersById", user_id=user.id)
         rep = flaskclient.put(url, json=json, headers=auth_headers)
 
         returned_user = rep.get_json()
@@ -133,7 +133,7 @@ class TestAPIUserById:
             "email": user.email,
         }
 
-        url = url_for("api_user.UsersById", user_id=9999)
+        url = url_for("user.UsersById", user_id=9999)
         rep = flaskclient.put(url, json=json, headers=auth_headers)
 
         returned_message = rep.get_json()
@@ -149,7 +149,7 @@ class TestAPIUserById:
             "email": user.email,
         }
 
-        url = url_for("api_user.UsersById", user_id=user.id)
+        url = url_for("user.UsersById", user_id=user.id)
         rep = flaskclient.put(url, json=json, headers=auth_headers)
 
         returned_user = rep.get_json()
@@ -163,7 +163,7 @@ class TestAPIUserById:
     def test_api_users_delete(flaskclient, auth_headers, user):
         """Test deleting a user by ID."""
 
-        url = url_for("api_user.UsersById", user_id=user.id)
+        url = url_for("user.UsersById", user_id=user.id)
         rep = flaskclient.delete(url, headers=auth_headers)
 
         deleted_user = User.query.filter_by(id=user.id).first()
@@ -175,7 +175,7 @@ class TestAPIUserById:
     def test_api_users_delete_not_found(flaskclient, auth_headers):
         """Test deleting a user by ID that does not exist."""
 
-        url = url_for("api_user.UsersById", user_id=9999)
+        url = url_for("user.UsersById", user_id=9999)
         rep = flaskclient.delete(url, headers=auth_headers)
 
         returned_message = rep.get_json()

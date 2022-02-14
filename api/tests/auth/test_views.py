@@ -12,7 +12,7 @@ class TestAPIAuthLogin:
         """Test successful login."""
 
         data = {"username": admin_user.username, "password": "admin"}
-        url = url_for("api_auth.AuthLogin")
+        url = url_for("auth.AuthLogin")
         rep = flaskclient.post(url, json=data)
         tokens = rep.get_json()
 
@@ -27,7 +27,7 @@ class TestAPIAuthLogin:
         """Test bad login with wrong password."""
 
         data = {"username": admin_user.username, "password": "wrong"}
-        url = url_for("api_auth.AuthLogin")
+        url = url_for("auth.AuthLogin")
         rep = flaskclient.post(url, json=data)
         reply = rep.get_json()
 
@@ -39,7 +39,7 @@ class TestAPIAuthLogin:
         """Test bad login with wrong user."""
 
         data = {"username": "wrong", "password": "admin"}
-        url = url_for("api_auth.AuthLogin")
+        url = url_for("auth.AuthLogin")
         rep = flaskclient.post(url, json=data)
         reply = rep.get_json()
 
@@ -50,7 +50,7 @@ class TestAPIAuthLogin:
     def test_api_auth_no_input(flaskclient):
         """Test bad login with no input."""
 
-        url = url_for("api_auth.AuthLogin")
+        url = url_for("auth.AuthLogin")
         rep = flaskclient.post(url)
         reply = rep.get_json()
 
@@ -61,7 +61,7 @@ class TestAPIAuthLogin:
     def test_api_auth_get(flaskclient):
         """Test bad login with no input."""
 
-        url = url_for("api_auth.AuthLogin")
+        url = url_for("auth.AuthLogin")
         rep = flaskclient.get(url)
         reply = rep.get_json()
 
@@ -80,7 +80,7 @@ class TestAPIAuthRefresh:
         """Helper function to get tokens from API."""
 
         data = {"username": "admin", "password": "admin"}
-        url_login = url_for("api_auth.AuthLogin")
+        url_login = url_for("auth.AuthLogin")
         rep = flaskclient.post(url_login, json=data)
         return rep.get_json()
 
@@ -94,7 +94,7 @@ class TestAPIAuthRefresh:
             "content-type": "application/json",
             "authorization": f"Bearer { tokens['refresh_token'] }",
         }
-        url_refresh = url_for("api_auth.AuthRefresh")
+        url_refresh = url_for("auth.AuthRefresh")
         rep = flaskclient.post(url_refresh, headers=auth_headers)
         tokens = rep.get_json()
 
@@ -112,7 +112,7 @@ class TestAPIAuthRefresh:
             "content-type": "application/json",
             "authorization": f"Bearer { tokens['access_token'] }",
         }
-        url_refresh = url_for("api_auth.AuthRefresh")
+        url_refresh = url_for("auth.AuthRefresh")
         rep = flaskclient.post(url_refresh, headers=auth_headers)
         message = rep.get_json()
 
