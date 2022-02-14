@@ -80,18 +80,8 @@ services:
         restart: unless-stopped
         labels:
           - "traefik.enable=true"
-          # enable the docs to be loaded by traefik with no extra path.
-          # this configuration adds the '/docs/swagger' if the '/' path is visited.
-          - "traefik.http.routers.fm_api_doc.rule=Host(`api.localhost`) && Path(`/`)"
-          - "traefik.http.routers.fm_api_doc.rule=Host(`api.${TRAEFIK_DOMAIN}`) && Path(`/`)"
-          - "traefik.http.middlewares.doc_strip_prefix.stripprefix.forceSlash=false"
-          - "traefik.http.middlewares.doc_strip_prefix.stripprefix.prefixes=/"
-          - "traefik.http.middlewares.doc_add_prefix.addprefix.prefix=/doc/swagger"
-          - "traefik.http.routers.fm_api_doc.middlewares=doc_strip_prefix@docker,doc_add_prefix@docker"
-          - "traefik.http.services.fm_api_doc.loadbalancer.server.port=${FM_API_PORT}"
-          - "traefik.http.routers.fm_api_doc.service=fm_api_doc"
-          # enable the rest of the api and files to be served as normal.
-          - "traefik.http.routers.fm_api.rule=Host(`api.${TRAEFIK_DOMAIN}`)"
+          - "traefik.http.routers.fm_api.rule=PathPrefix(`/api`)"
+          - "traefik.http.routers.fm_api.entrypoints=web"
           - "traefik.http.services.fm_api.loadbalancer.server.port=${FM_API_PORT}"
           - "traefik.http.routers.fm_api.service=fm_api"
 
