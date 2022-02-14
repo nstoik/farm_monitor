@@ -104,7 +104,6 @@ services:
         restart: unless-stopped
         labels:
           - "traefik.enable=true"
-          # - "traefik.http.routers.fm_frontend.rule=Host(`frontend.${TRAEFIK_DOMAIN}`)"
           - "traefik.http.routers.fm_frontend.rule=PathPrefix(`/frontend`)"
           - "traefik.http.middlewares.frontend_strip_prefix.stripprefix.prefixes=/frontend"
           - "traefik.http.routers.fm_frontend.middlewares=frontend_strip_prefix@docker"
