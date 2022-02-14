@@ -7,6 +7,8 @@ services:
         build:
            context: ./server
            dockerfile: Dockerfile
+        environment:
+            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
         networks:
             - farm_monitor
         volumes:
@@ -29,6 +31,8 @@ services:
         build:
             context: ./server
             dockerfile: Dockerfile
+        environment:
+            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
         networks:
             - farm_monitor
         volumes:
@@ -48,6 +52,8 @@ services:
         build:
             context: ./server
             dockerfile: Dockerfile
+        environment:
+            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
         networks:
             - farm_monitor
         depends_on:
