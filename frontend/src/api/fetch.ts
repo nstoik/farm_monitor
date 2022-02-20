@@ -100,8 +100,10 @@ export default abstract class Request {
   ): AxiosRequestConfig {
     const newConfig = { ...config };
 
-    if (newConfig.headers["Content-Type"] === "multipart/form-data") {
-      return newConfig;
+    if (newConfig.headers) {
+      if (newConfig.headers["Content-Type"] === "multipart/form-data") {
+        return newConfig;
+      }
     }
     if (config.params) {
       newConfig.params = decamelizeKeys(config.params);
