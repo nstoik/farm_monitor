@@ -9,7 +9,7 @@ updates:
     - package-ecosystem: "pip"
       directory: "/database"
       schedule:
-            interval: "daily"
+            interval: "weekly"
     - package-ecosystem: "docker"
       directory: "/database"
       schedule:
@@ -22,7 +22,7 @@ updates:
     - package-ecosystem: "pip"
       directory: "/server"
       schedule:
-            interval: "daily"
+            interval: "weekly"
     - package-ecosystem: "docker"
       directory: "/server"
       schedule:
@@ -35,7 +35,7 @@ updates:
     - package-ecosystem: "pip"
       directory: "/api"
       schedule:
-            interval: "daily"
+            interval: "weekly"
     - package-ecosystem: "docker"
       directory: "/api"
       schedule:
