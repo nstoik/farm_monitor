@@ -1,5 +1,5 @@
 # Add the pyton parts
-FROM python:3.10-buster
+FROM python:3.10
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG C.UTF-8

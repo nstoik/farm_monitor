@@ -191,7 +191,7 @@ services:
             - "traefik.http.routers.fm_flower.service=fm_flower"
 
     database:
-        image: postgres:11
+        image: postgres:14
         container_name: fm_database
         restart: unless-stopped
         environment:
