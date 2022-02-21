@@ -168,6 +168,7 @@ services:
     flower:
         image: mher/flower:latest
         container_name: fm_flower
+        command: ["celery", "flower", "--url_prefix=flower"] 
         volumes:
             - "flower_data:/data"
         environment:
@@ -179,8 +180,12 @@ services:
         restart: unless-stopped
         labels:
             - "traefik.enable=true"
-            # Flower
-            - "traefik.http.routers.fm_flower.rule=Host(`flower.${TRAEFIK_DOMAIN}`)"
+            - "traefik.http.routers.fm_flower.rule=PathPrefix(`/flower`)"
+            # this middleware redirects to a trailing slash if not present
+            - "traefik.http.middlewares.fm_flower_redirect_slash.redirectregex.regex=^(https?://[^/]+/[a-z0-9_]+)$$"
+            - "traefik.http.middlewares.fm_flower_redirect_slash.redirectregex.replacement=$${1}/"
+            - "traefik.http.middlewares.fm_flower_redirect_slash.redirectregex.permanent=true"
+            - "traefik.http.routers.fm_flower.middlewares=fm_flower_redirect_slash@docker"
             - "traefik.http.routers.fm_flower.entrypoints=web"
             - "traefik.http.services.fm_flower.loadbalancer.server.port=${FLOWER_PORT}"
             - "traefik.http.routers.fm_flower.service=fm_flower"
