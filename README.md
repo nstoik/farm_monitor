@@ -14,7 +14,7 @@ Each monorepo can have its own set of environment variables if applicable. This 
 To run the farm_monitor in production, execute the following docker-compose command from the root of the project:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.prod.yml  --env-file .env -p fm_prod up -d
+docker compose -f docker-compose.yml -f docker-compose.prod.yml  --env-file .env -p fm_prod up -d --no-build
 ```
 
 To bring down the stack run:
@@ -77,3 +77,21 @@ docker compose --file docker-compose.yml --env-file .env build --no-cache --pull
 ```
 - {docker-compose file} is the docker-compose file
 - {env file} is the .env file
+## Building multi platform containers and pushing to a registry
+First setup the prequisites. Configure buildx tools
+```bash
+docker buildx create --name fm_buildx
+``` 
+To list the available builders run:
+```bash
+docker buildx ls
+```
+
+Bake all the containers
+```bash
+TAG={docker-tag} docker buildx bake --builder fm_buildx --file docker-bake.hcl --push
+```
+You can overwrite variables defined in the `docker-bake.hcl` file by specifying them as arguments to the command.
+- {docker-tag} is the tag you want to build
+- print is optional and will print the configuration of the builder
+- push will push the built images to the registry
