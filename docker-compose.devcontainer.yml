@@ -2,7 +2,7 @@ version: '3.8'
 
 services: 
     server:
-        image: nstoik/farm_monitor_server:devcontainer
+        image: nstoik/fm_server:devcontainer
         build:
             context: ./server
             dockerfile: .devcontainer/devcontainer.Dockerfile
@@ -15,7 +15,7 @@ services:
         command: /bin/sh -c "while sleep 1000; do :; done"
 
     database_management:
-        image: nstoik/farm_monitor_database:devcontainer
+        image: nstoik/fm_database:devcontainer
         build:
             context: ./database
             dockerfile: .devcontainer/devcontainer.Dockerfile
@@ -28,7 +28,7 @@ services:
         command: /bin/sh -c "while sleep 1000; do :; done"
 
     api:
-        image: nstoik/farm_monitor_api:devcontainer
+        image: nstoik/fm_api:devcontainer
         build:
             context: ./api
             dockerfile: .devcontainer/devcontainer.Dockerfile
@@ -41,7 +41,7 @@ services:
         command: /bin/sh -c "while sleep 1000; do :; done"
 
     frontend:
-        image: nstoik/farm_monitor_frontend:devcontainer
+        image: nstoik/fm_frontend:devcontainer
         build:
             context: ./frontend
             dockerfile: .devcontainer/devcontainer.Dockerfile

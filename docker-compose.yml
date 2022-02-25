@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
     server:
-        image: nstoik/farm_monitor_server:${FM_SERVER_TAG}
+        image: nstoik/fm_server:${FM_SERVER_TAG}
         container_name: fm_server
         build:
            context: ./server
@@ -24,7 +24,7 @@ services:
     #        - "traefik.udp.routers.fm_server.service=fm_server"
     #        - "traefik.udp.services.fm_server.loadbalancer.server.port=5554"
     server_worker:
-        image: nstoik/farm_monitor_server:${FM_SERVER_TAG}
+        image: nstoik/fm_server:${FM_SERVER_TAG}
         container_name: fm_server_worker
         # specifically run the celery worker, not the normal run command.
         command: ["pipenv", "run", "fm_server", "run-worker"]
@@ -46,7 +46,7 @@ services:
     # as fm_server since the fm_database package and commands are included in
     # that container.
     database_management:
-        image: nstoik/farm_monitor_server:${FM_SERVER_TAG}
+        image: nstoik/fm_server:${FM_SERVER_TAG}
         container_name: fm_database_management
         command: ["pipenv", "run", "fm_database", "update", "database-upgrade", "--revision", "head"]
         build:
@@ -61,7 +61,7 @@ services:
         restart: on-failure
 
     api:
-        image: nstoik/farm_monitor_api:${FM_API_TAG}
+        image: nstoik/fm_api:${FM_API_TAG}
         container_name: fm_api
         build:
             context: ./api
@@ -86,7 +86,7 @@ services:
           - "traefik.http.routers.fm_api.service=fm_api"
 
     frontend:
-        image: nstoik/farm_monitor_frontend:${FM_FRONTEND_TAG}
+        image: nstoik/fm_frontend:${FM_FRONTEND_TAG}
         container_name: fm_frontend
         build:
             context: ./frontend
