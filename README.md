@@ -46,3 +46,34 @@ To bring the farm_monitor docker stack down in VS Code run the following command
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.devcontainer.yml down
 ```
+
+# Building Docker Containers
+There are multiple options for building the docker containers. 
+
+## Build single platform container
+To build a single docker container for a single platform, execute the following command:
+```bash
+docker build {PATH} --file {PATH}/Dockerfile --no-cache --pull --build-arg {ENV NAME}={ENV VALUE} --tag nstoik/{module}:{tag}
+```
+An example command for building the fm_frontend container version 1.0.0-rc is:
+```bash
+docker build frontend --file frontend/Dockerfile --no-cache --pull --build-arg VUE_APP_API_HOSTNAME=localhost --build-arg VUE_APP_PUBLIC_PATH=/frontend/ --tag nstoik/fm_frontend:1.0.0-rc
+```
+- {PATH} is the submodule path
+- --build-arg is optional and can pass in environment variables to docker build. It can be repeated for multiple variables.
+    - {ENV NAME} is the name of the environment variable
+    - {ENV VALUE} is the value of the environment variable
+- {module} is the name of the module
+- {tag} is the tag of the docker image
+
+## Bulid multiple containers for a single platform
+To build multiple docker containers for a single platform, execute the following command:
+```bash
+docker compose --file {docker-compose file} --env-file {env file} build --no-cache --pull
+```
+An example command for building all containers is below. Upddate the `FM_TAG` variable in the environment file to the tag you want to build.
+```bash
+docker compose --file docker-compose.yml --env-file .env build --no-cache --pull
+```
+- {docker-compose file} is the docker-compose file
+- {env file} is the .env file
