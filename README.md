@@ -14,13 +14,13 @@ Each monorepo can have its own set of environment variables if applicable. This 
 To run the farm_monitor in production, execute the following docker-compose command from the root of the project:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.prod.yml  -p fm_prod up -d
+docker compose -f docker-compose.yml -f docker-compose.prod.yml  --env-file .env -p fm_prod up -d
 ```
 
 To bring down the stack run:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.prod.yml -p fm_prod down
+docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env -p fm_prod down
 ```
 
 # Development
@@ -29,7 +29,7 @@ To run the farm_monitor in development, execute the following docker-compose com
 Note the different second file paramater, `-f docker-compose.dev.yml` flag. This is for the development environment.
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml -p fm_dev up -d
+docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env -p fm_dev up -d
 ```
 
 
@@ -37,7 +37,7 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml -p fm_dev up -d
 To bring down the stack run:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml -p fm_dev down
+docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env -p fm_dev down
 ```
 
 # VS Code Development
