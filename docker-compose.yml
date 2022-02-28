@@ -119,6 +119,10 @@ services:
         # ports are set in the docker-compose.dev and docker-compose.prod files
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
+            - traefik:/letsencrypt
+        environment:
+            - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
+            - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
         restart: unless-stopped
         depends_on:
             - frontend
@@ -233,6 +237,7 @@ volumes:
     flower_data:
     dbdata:
     pgadmin:
+    traefik:
 
 networks:
     farm_monitor:
