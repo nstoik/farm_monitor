@@ -2,6 +2,19 @@ version: "3.8"
 
 services:
 
+    api:
+        labels:
+          - "traefik.http.routers.fm_api.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/api`)"
+          - "traefik.http.routers.fm_api.entrypoints=websecure"
+          - "traefik.http.routers.fm_api.tls.certresolver=letsencrypt"
+
+    frontend:
+        labels:
+          - "traefik.http.routers.fm_frontend.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/frontend`)"
+          - "traefik.http.routers.fm_frontend.entrypoints=websecure"
+          - "traefik.http.routers.fm_frontend.tls.certresolver=letsencrypt"
+
+
     # traefik contrainer configuration below
     traefik:
         ports:
@@ -15,5 +28,33 @@ services:
             #- "5554:5554/udp"
         volumes:
             - ./traefik/traefik.prod.yml:/etc/traefik/traefik.yml
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.fm_traefik.rule=Host(`traefik.${TRAEFIK_DOMAIN}`)"
+            - "traefik.http.routers.fm_traefik.entrypoints=websecure"
+            - "traefik.http.routers.fm_traefik.tls.certresolver=letsencrypt"
+            - "traefik.http.routers.fm_traefik.service=api@internal"
 
     # standard docker containers below
+
+    rabbitmq:
+        labels:
+        # RabbitMQ Management interface
+          - "traefik.http.routers.fm_rabbitmq.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/rabbitmq`)"
+          - "traefik.http.routers.fm_rabbitmq.entrypoints=websecure"
+          - "traefik.http.routers.fm_rabbitmq.tls.certresolver=letsencrypt"
+        # RabbitMQ
+          - "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`${TRAEFIK_DOMAIN}`)"
+          - "traefik.tcp.routers.fm_rabbitmq-connect.tls.certresolver=letsencrypt"
+
+    flower:
+        labels:
+            - "traefik.http.routers.fm_flower.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/flower`)"
+            - "traefik.http.routers.fm_flower.entrypoints=websecure"
+            - "traefik.http.routers.fm_flower.tls.certresolver=letsencrypt"
+
+    pgadmin:
+        labels:
+            - "traefik.http.routers.fm_pgadmin.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/pgadmin`)"
+            - "traefik.http.routers.fm_pgadmin.entrypoints=websecure"
+            - "traefik.http.routers.fm_pgadmin.tls.certresolver=letsencrypt"

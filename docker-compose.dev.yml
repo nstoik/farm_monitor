@@ -19,14 +19,22 @@ services:
     api:
         image: nstoik/fm_api:dev
         # command: ["pipenv", "run", "gunicorn", "fm_api.wsgi:app", "--bind", "0.0.0.0:8000", "--access-logfile", "-"]
+        labels:
+          - "traefik.http.routers.fm_api.rule=PathPrefix(`/api`)"
+          - "traefik.http.routers.fm_api.entrypoints=web"
 
     frontend:
         image: nstoik/fm_frontend:dev
+        labels:
+          - "traefik.http.routers.fm_frontend.rule=PathPrefix(`/frontend`)"
+          - "traefik.http.routers.fm_frontend.entrypoints=web"
+
 
     # traefik contrainer configuration below
     traefik:
         ports:
             - 80:80
+            # - 443:443
             # The Web UI (enabled by --api.insecure=true)
             - "8080:8080"
             # for RabbitMQ
@@ -35,3 +43,23 @@ services:
             #- "5554:5554/udp"
         volumes:
             - ./traefik/traefik.dev.yml:/etc/traefik/traefik.yml
+
+    # standard docker containers below
+
+    rabbitmq:
+        labels:
+        # RabbitMQ Management interface
+          - "traefik.http.routers.fm_rabbitmq.rule=PathPrefix(`/rabbitmq`)"
+          - "traefik.http.routers.fm_rabbitmq.entrypoints=web"
+        # RabbitMQ
+          - "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`*`)"
+
+    flower:
+        labels:
+          - "traefik.http.routers.flower.rule=PathPrefix(`/flower`)"
+          - "traefik.http.routers.fm_flower.entrypoints=web"
+
+    pgadmin:
+        labels:
+            - "traefik.http.routers.fm_pgadmin.rule=PathPrefix(`/pgadmin`)"
+            - "traefik.http.routers.fm_pgadmin.entrypoints=web"

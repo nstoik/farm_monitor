@@ -80,8 +80,6 @@ services:
         restart: unless-stopped
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.fm_api.rule=PathPrefix(`/api`)"
-          - "traefik.http.routers.fm_api.entrypoints=web"
           - "traefik.http.services.fm_api.loadbalancer.server.port=${FM_API_PORT}"
           - "traefik.http.routers.fm_api.service=fm_api"
 
@@ -104,10 +102,8 @@ services:
         restart: unless-stopped
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.fm_frontend.rule=PathPrefix(`/frontend`)"
           - "traefik.http.middlewares.frontend_strip_prefix.stripprefix.prefixes=/frontend"
           - "traefik.http.routers.fm_frontend.middlewares=frontend_strip_prefix@docker"
-          - "traefik.http.routers.fm_frontend.entrypoints=web"
           - "traefik.http.services.fm_frontend.loadbalancer.server.port=80"
 
     # traefik contrainer configuration below
@@ -151,7 +147,6 @@ services:
         labels:
             - "traefik.enable=true"
             # RabbitMQ Management interface
-            - "traefik.http.routers.fm_rabbitmq.rule=PathPrefix(`/rabbitmq`)"
             # this middleware redirects to a trailing slash if not present
             - "traefik.http.middlewares.rabbitmq_redirect_slash.redirectregex.regex=^(https?://[^/]+/[a-z0-9_]+)$$"
             - "traefik.http.middlewares.rabbitmq_redirect_slash.redirectregex.replacement=$${1}/"
@@ -159,12 +154,9 @@ services:
             # this middleware strips the path prefix
             - "traefik.http.middlewares.rabbitmq_strip_prefix.stripprefix.prefixes=/rabbitmq"
             - "traefik.http.routers.fm_rabbitmq.middlewares=rabbitmq_redirect_slash@docker,rabbitmq_strip_prefix@docker"
-            - "traefik.http.routers.fm_rabbitmq.entrypoints=web"
             - "traefik.http.services.fm_rabbitmq.loadbalancer.server.port=${RABBITMQ_MANAGEMENT_PORT}"
             - "traefik.http.routers.fm_rabbitmq.service=fm_rabbitmq"
             # RabbitMQ
-            #- "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`${TRAEFIK_DOMAIN}`)"
-            - "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`*`)"
             - "traefik.tcp.routers.fm_rabbitmq-connect.entrypoints=rabbitmq"
             - "traefik.tcp.services.fm_rabbitmq-connect.loadbalancer.server.port=${RABBITMQ_DEFAULT_PORT}"
             - "traefik.tcp.routers.fm_rabbitmq-connect.service=fm_rabbitmq-connect"
@@ -184,13 +176,11 @@ services:
         restart: unless-stopped
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.fm_flower.rule=PathPrefix(`/flower`)"
             # this middleware redirects to a trailing slash if not present
             - "traefik.http.middlewares.fm_flower_redirect_slash.redirectregex.regex=^(https?://[^/]+/[a-z0-9_]+)$$"
             - "traefik.http.middlewares.fm_flower_redirect_slash.redirectregex.replacement=$${1}/"
             - "traefik.http.middlewares.fm_flower_redirect_slash.redirectregex.permanent=true"
             - "traefik.http.routers.fm_flower.middlewares=fm_flower_redirect_slash@docker"
-            - "traefik.http.routers.fm_flower.entrypoints=web"
             - "traefik.http.services.fm_flower.loadbalancer.server.port=${FLOWER_PORT}"
             - "traefik.http.routers.fm_flower.service=fm_flower"
 
@@ -226,8 +216,6 @@ services:
         labels:
             - "traefik.enable=true"
             # pgadmin
-            - "traefik.http.routers.fm_pgadmin.rule=PathPrefix(`/pgadmin`)"
-            - "traefik.http.routers.fm_pgadmin.entrypoints=web"
             - "traefik.http.services.fm_pgadmin.loadbalancer.server.port=80"
             - "traefik.http.routers.fm_pgadmin.service=fm_pgadmin"
 
