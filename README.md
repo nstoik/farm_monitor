@@ -4,9 +4,13 @@ Main documentation for the farm_monitor package.
 # env variables
 There is a set of environment variables that can be used to configure the application. In the GitHub repository, an example configuration file is available in the root directory as `.env.example`.
 
+There are SECRET variables and there are CONFIGURATION variables.
+
 This file has a `FM_GENERAL_CONFIG` variable at the top that controls the general configuration of the different mono repos. Hint: change this variable between 'dev', 'prod', or 'test'.
 
-By default the `.env` file is loaded by docker compose in the commands below.
+The docker commands below use the `.env` file by default to configure the containers. Edit the file as needed for the specific environment (including setting SECRET and TOKEN variables).
+
+All the containers use the current environment variables when the stack is brought up, except for the `fm_frontend` container. That container requires a rebuild of the docker image in order for the environment variables to be applied since they are applied as build-args.
 
 Each monorepo can have its own set of environment variables if applicable. This are used for local development and testing. An example configuration file is available in the monorepo directory as `.env.example`.
  
