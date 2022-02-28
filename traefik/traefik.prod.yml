@@ -1,6 +1,11 @@
 entryPoints:
   web:
     address: ':80'
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
   websecure:
     address: ':443'
   rabbitmq:
@@ -10,7 +15,8 @@ entryPoints:
 
 # Traefik dashboard over http
 api:
-  insecure: true
+  dashboard: true
+  insecure: false
 
 log:
   level: INFO
@@ -20,7 +26,7 @@ accessLog: {}
 providers:
   docker:
     endpoint: 'unix:///var/run/docker.sock'
-    exposedByDefault: false  # containers are not discovered automatically
+    exposedByDefault: false # containers are not discovered automatically
     network: farm_monitor
 
 certificatesResolvers:
