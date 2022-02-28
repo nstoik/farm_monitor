@@ -1,8 +1,8 @@
 entryPoints:
   web:
     address: ':80'
-  websecure:
-    address: ':443'
+  #websecure:
+  #  address: ':443'
   rabbitmq:
     address: ':5672'
   # presence:
