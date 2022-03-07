@@ -2,6 +2,18 @@ version: "3.8"
 
 services:
 
+    server:
+        build:
+            target: prod-stage
+
+    server_worker:
+        build:
+            target: prod-stage
+
+    database_management:
+        build:
+            target: prod-stage
+
     api:
         labels:
           - "traefik.http.routers.fm_api.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/api`)"

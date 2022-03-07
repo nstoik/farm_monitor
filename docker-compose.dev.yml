@@ -6,15 +6,21 @@ version: "3.8"
 services:
     server:
         image: nstoik/fm_server:dev
+        build:
+            target: dev-stage
 
     server_worker:
         image: nstoik/fm_server:dev
+        build:
+            target: dev-stage
 
     # in order to reduce the number of unique containers, we use the same container
     # as fm_server since the fm_database package and commands are included in
     # that container.
     database_management:
         image: nstoik/fm_server:dev
+        build:
+            target: dev-stage
 
     api:
         image: nstoik/fm_api:dev
