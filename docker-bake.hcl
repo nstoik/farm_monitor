@@ -1,6 +1,9 @@
 variable "TAG" {
     default = "dev"
 }
+variable "MULTI_STAGE_TARGET" {
+    default = "prod-stage"
+}
 variable "VUE_APP_API_HOSTNAME" {
     default = "localhost"
 }
@@ -32,6 +35,7 @@ target "fm_server" {
     inherits = ["default"]
     context = "server"
     tags = ["nstoik/fm_server:${TAG}"]
+    target = "${MULTI_STAGE_TARGET}"
 }
 
 target "fm_frontend" {
