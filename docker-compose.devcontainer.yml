@@ -19,6 +19,7 @@ services:
         build:
             context: ./database
             dockerfile: .devcontainer/devcontainer.Dockerfile
+            target: build-stage
         volumes:
             # this is for vs code file editing inside the container
             - .:/workspaces:cached
