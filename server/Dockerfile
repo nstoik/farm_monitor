@@ -55,6 +55,7 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ARG WORKING_DIR=/workspaces/server
 
+# install libpq-dev for python postgres support
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
