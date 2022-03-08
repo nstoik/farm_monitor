@@ -83,9 +83,14 @@ To build multiple docker containers for a single platform, execute the following
 ```bash
 docker compose --file {docker-compose file} --env-file {env file} build --no-cache --pull
 ```
-An example command for building all containers is below. Upddate the `FM_TAG` variable in the environment file to the tag you want to build.
+An example command for building all containers for prod is below. Upddate the `FM_TAG` variable in the environment file to the tag you want to build.
 ```bash
-docker compose --file docker-compose.yml --env-file .env build --no-cache --pull
+docker compose --file docker-compose.yml --file docker-compose.prod.yml --env-file .env build --no-cache --pull
+```
+
+To push the containers to the docker hub, execute the following command:
+```bash
+docker compose --file {docker-compose file} --env-file {env file} push
 ```
 - {docker-compose file} is the docker-compose file
 - {env file} is the .env file
