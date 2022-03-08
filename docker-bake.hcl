@@ -11,10 +11,10 @@ variable "VUE_APP_API_PREFIX" {
     default = "/api/"
 }
 variable "VUE_APP_API_PORT" {
-    default = "80"
+    default = "443"
 }
 variable "VUE_APP_API_PROTOCOL" {
-    default = "http"
+    default = "https"
 }
 variable "VUE_APP_PUBLIC_PATH" {
     default = "/frontend/"
