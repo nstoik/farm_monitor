@@ -8,13 +8,17 @@ There are SECRET variables and there are CONFIGURATION variables.
 
 This file has a `FM_GENERAL_CONFIG` variable at the top that controls the general configuration of the different mono repos. Hint: change this variable between 'dev', 'prod', or 'test'.
 
-The docker commands below use the `.env` file by default to configure the containers. Edit the file as needed for the specific environment (including setting SECRET and TOKEN variables).
+The majority of the docker commands use the `.env` file by default to configure the containers. Edit the `.env` file as needed for the specific environment (including setting SECRET and TOKEN variables).
 
-All the containers use the current environment variables when the stack is brought up, except for the `fm_frontend` container. That container requires a rebuild of the docker image in order for the environment variables to be applied since they are applied as build-args.
+The `docker buildx bake` commands use configuration variables in the `docker-bake.hcl` file. These can be overridden as shown below when building images using `docker buildx bake`.
+
+The containers use environment variables when the stack is brought up (environment variables). Some containers require build-args to be applied at build time instead. Currently, the two containers that have build-args are `fm_frontend` and `fm_api`.
 
 Each monorepo can have its own set of environment variables if applicable. This are used for local development and testing. An example configuration file is available in the monorepo directory as `.env.example`.
  
 # Production
+**Make sure to set the appropriate environment variables**
+
 To run the farm_monitor in production, execute the following docker-compose command from the root of the project:
 
 ```bash
@@ -28,6 +32,8 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env 
 ```
 
 # Development
+**Make sure to set the appropriate environment variables**
+
 To run the farm_monitor in development, execute the following docker-compose command from the root of the project:
 
 Note the different second file paramater, `-f docker-compose.dev.yml` flag. This is for the development environment.
@@ -45,6 +51,8 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env -
 ```
 
 # VS Code Development
+VS Code automatically builds the required contaibers when you launch into a remote container. This uses the `docker-compose.devcontainer.yml` overrides. 
+
 To bring the farm_monitor docker stack down in VS Code run the following command:
 
 ```bash
@@ -91,11 +99,22 @@ To list the available builders run:
 docker buildx ls
 ```
 
-Bake all the containers
+Bake all the containers. In the example below, the TAG variable is set to the tag you want to build.
 ```bash
-TAG={docker-tag} docker buildx bake --builder fm_buildx --file docker-bake.hcl --push
+TAG=0.1 docker buildx bake --builder fm_buildx --file docker-bake.hcl --push
 ```
-You can overwrite variables defined in the `docker-bake.hcl` file by specifying them as arguments to the command.
-- {docker-tag} is the tag you want to build
+**Note** Overwrite variables defined in the `docker-bake.hcl` file by specifying them as arguments to the command. Any required `ARG` in the docker files need to be specified in the `docker-bake.hcl` file.
+
+The list of available variables are:
+- TAG: The tag of the docker image to build. Defaults to "dev"
+- MULTI_STAGE_TARGET: The target to build. Defaults to "prod-stage"
+- VUE_APP_API_HOSTNAME: The hostname of the API. Defaults to "localhost"
+- VUE_APP_API_PREFIX: defaults to "/api/"
+- VUE_APP_API_PORT: The port the frontend connects to. Defaults to "80"
+- VUE_APP_API_PROTOCOL: The protocol the API is exposed on. Defaults to "http"
+- VUE_APP_PUBLIC_PATH: The public path of the frontend. Defaults to "/frontend/"
+- FM_API_PORT: The port the container exposes the API on. Defaults to "8080"
+
+A few additional comments on the `docker-bake.hcl` file:
 - print is optional and will print the configuration of the builder
 - push will push the built images to the registry
