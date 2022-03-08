@@ -24,7 +24,8 @@ services:
 
     api:
         image: nstoik/fm_api:dev
-        # command: ["pipenv", "run", "gunicorn", "fm_api.wsgi:app", "--bind", "0.0.0.0:8000", "--access-logfile", "-"]
+        build:
+            target: dev-stage
         labels:
           - "traefik.http.routers.fm_api.rule=PathPrefix(`/api`)"
           - "traefik.http.routers.fm_api.entrypoints=web"
