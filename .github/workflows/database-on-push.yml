@@ -17,7 +17,7 @@ jobs:
             working-directory: ${{ matrix.folders }}/
         steps:
           - name: Checkout
-            uses: actions/checkout@v2.4.0
+            uses: actions/checkout@v3
             with:
                   path: ${{ matrix.folders }}
           - name: Set up Python
