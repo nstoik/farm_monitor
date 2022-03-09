@@ -81,8 +81,14 @@ RUN pip install -U pip && pip install pipenv && \
     mkdir /logs/ && \
     chown $USER_UID:$USER_GID /logs/
 
-WORKDIR $WORKING_DIR
+# Change to the newly created user
+USER $USER_UID:$USER_GID
 COPY --chown=${USER_UID}:${USER_GID} . $WORKING_DIR/
+# here we copy the venv from the dev stage to the prod stage
+COPY --from=build-stage /home/fm/.local/share /home/fm/.local/share
+
+
+WORKDIR $WORKING_DIR
 RUN pipenv run pip install -e .
 
 # Switch back to dialog for any ad-hoc use of apt-get
