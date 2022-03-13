@@ -44,7 +44,7 @@ CMD ["pipenv", "run", "fm_server", "run"]
 
 
 # prod stage steps below. Similiar as the dev stage, but we copy the venv from
-# thge dev stage to the prod stage. (no git in the slim version of this docker base image)
+# the build stage to the prod stage. (no git in the slim version of this docker base image)
 FROM python:3.10-slim AS prod-stage
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -79,7 +79,7 @@ RUN pip install -U pip && pip install pipenv && \
 USER $USER_UID:$USER_GID
 COPY --chown=${USER_UID}:${USER_GID} . $WORKING_DIR/
 # here we copy the venv from the dev stage to the prod stage
-COPY --from=build-stage /home/fm/.local/share /home/fm/.local/share
+COPY --from=build-stage /home/${USERNAME}/.local/share /home/${USERNAME}/.local/share
 
 WORKDIR $WORKING_DIR
 RUN pipenv run pip install -e .
