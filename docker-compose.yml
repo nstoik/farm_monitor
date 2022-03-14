@@ -8,6 +8,8 @@ services:
            context: ./server
            dockerfile: Dockerfile
         environment:
+            - FM_SERVER_PRESENCE_PORT=${FM_SERVER_PRESENCE_PORT}
+            - FM_SERVER_CONFIG=${FM_SERVER_CONFIG}
             - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
         networks:
             - farm_monitor
@@ -32,6 +34,7 @@ services:
             context: ./server
             dockerfile: Dockerfile
         environment:
+            - FM_SERVER_CONFIG=${FM_SERVER_CONFIG}
             - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
         networks:
             - farm_monitor
