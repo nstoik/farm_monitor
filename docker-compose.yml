@@ -139,13 +139,9 @@ services:
         container_name: fm_rabbitmq
         hostname: rabbitmq
         volumes:
-            #- ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+            - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+            - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
             - rabbitmq_data:/var/lib/rabbitmq/
-            #- ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
-        environment:
-            RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-            RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
-            RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST}
         networks:
             - farm_monitor
         restart: unless-stopped

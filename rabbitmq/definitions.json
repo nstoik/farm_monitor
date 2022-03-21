@@ -1,0 +1,49 @@
+{
+    "rabbit_version": "3.9",
+    "users": [
+        {
+            "name": "fd",
+            "password_hash": "55tx2A49iXkpeDp+J0Bazyx+6M9RIkT3zHAHhau/9mXskryd",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": [],
+            "limits": {}
+        },
+        {
+            "name": "fm",
+            "password_hash": "3z+NQo014OgDbqO6www/XW5Kbdpv5El1A0N8kQDRlSFM6I9u",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": [
+                "administrator"
+            ],
+            "limits": {}
+        }
+    ],
+    "vhosts": [
+        {
+            "name": "farm_monitor"
+        }
+    ],
+    "permissions": [
+        {
+            "user": "fd",
+            "vhost": "farm_monitor",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        },
+        {
+            "user": "fm",
+            "vhost": "farm_monitor",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        }
+    ],
+    "topic_permissions": [],
+    "parameters": [],
+    "global_parameters": [],
+    "policies": [],
+    "queues": [],
+    "exchanges": [],
+    "bindings": []
+}
