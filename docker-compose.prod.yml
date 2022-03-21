@@ -58,8 +58,10 @@ services:
           - "traefik.http.routers.fm_rabbitmq.entrypoints=websecure"
           - "traefik.http.routers.fm_rabbitmq.tls.certresolver=letsencrypt"
         # RabbitMQ
-          - "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`${TRAEFIK_DOMAIN}`)"
-          - "traefik.tcp.routers.fm_rabbitmq-connect.tls.certresolver=letsencrypt"
+          #- "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`${TRAEFIK_DOMAIN}`)"
+          #- "traefik.tcp.routers.fm_rabbitmq-connect.tls.certresolver=letsencrypt"
+          # don't use ssl for rabbitmq connections (for now)
+          - "traefik.tcp.routers.fm_rabbitmq-connect.rule=HostSNI(`*`)"
 
     flower:
         labels:
