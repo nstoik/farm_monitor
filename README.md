@@ -65,7 +65,7 @@ There are multiple options for building the docker containers.
 ## Build single platform container
 To build a single docker container for a single platform, execute the following command:
 ```bash
-docker build {PATH} --file {PATH}/Dockerfile --no-cache --pull --build-arg {ENV NAME}={ENV VALUE} --tag nstoik/{module}:{tag}
+docker build {PATH} --file {PATH}/Dockerfile --no-cache --pull --build-arg {ENV NAME}={ENV VALUE} --tag nstoik/{module}:{tag}  --target {target}
 ```
 An example command for building the fm_frontend container version 1.0.0-rc is:
 ```bash
@@ -77,6 +77,7 @@ docker build frontend --file frontend/Dockerfile --no-cache --pull --build-arg V
     - {ENV VALUE} is the value of the environment variable
 - {module} is the name of the module
 - {tag} is the tag of the docker image
+- {target} is the target to build
 
 ## Bulid multiple containers for a single platform
 To build multiple docker containers for a single platform, execute the following command:
