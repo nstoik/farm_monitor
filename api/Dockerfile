@@ -44,8 +44,7 @@ RUN pipenv run pip install -e .
 ENV DEBIAN_FRONTEND=
 
 EXPOSE $FM_API_PORT
-CMD ["pipenv", "run", "fm_api", "flask-cli", "run", "--host=0.0.0.0"]
-
+CMD pipenv run fm_api flask-cli run --host=0.0.0.0 --port=$FM_API_PORT
 
 # prod stage steps below. Similiar as the dev stage, but we copy the venv from
 # the build stage to the prod stage. (no git in the slim version of this docker base image)
