@@ -63,7 +63,7 @@ services:
 
     flower:
         labels:
-          - "traefik.http.routers.flower.rule=PathPrefix(`/flower`)"
+          - "traefik.http.routers.fm_flower.rule=PathPrefix(`/flower`)"
           - "traefik.http.routers.fm_flower.entrypoints=web"
 
     pgadmin:
