@@ -23,7 +23,7 @@ pylint = "~=2.12.2"
 
 [packages]
 # Flask
-Flask = "~=2.0.3"
+Flask = "~=2.1.0"
 Flask-Cors = "~=3.0.10"
 
 # API
