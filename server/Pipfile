@@ -22,7 +22,7 @@ pylint = "~=2.12.2"
 
 [packages]
 pika = "~=1.2.0"
-click = "~=8.0.4"
+click = "~=8.1.2"
 psutil = "~=5.9.0"
 netifaces = "~=0.11.0"
 celery = "~=5.2.3"
