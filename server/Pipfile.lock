@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3ef38a818d23d37e426d8ae0a705627ccf4bbae85068932b82c9d184a34e0d0c"
+            "sha256": "6a27dbf45d12ff456aa624bf7cd1d399b94809f9ebe8f238c90182a4b09c416a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -84,7 +84,7 @@
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "5be4fe38e7e41d3563e4875630a497f763df498a",
+            "ref": "9a3982ef4e3706d51c6b64fc16c33f489b98f9b4",
             "subdirectory": "database"
         },
         "greenlet": {
@@ -261,11 +261,11 @@
         },
         "pika": {
             "hashes": [
-                "sha256:59da6701da1aeaf7e5e93bb521cc03129867f6e54b7dd352c4b3ecb2bd7ec624",
-                "sha256:f023d6ac581086b124190cb3dc81dd581a149d216fa4540ac34f9be1e3970b89"
+                "sha256:e5fbf3a0a3599f4e114f6e4a7af096f9413a8f24f975c2657ba2fac3c931434f",
+                "sha256:fe89e95fb2d8d06fd713eeae2938299941e0ec329db37afca758f5f9458ce169"
             ],
             "index": "pypi",
-            "version": "==1.2.0"
+            "version": "==1.2.1"
         },
         "prompt-toolkit": {
             "hashes": [
@@ -828,7 +828,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.7'",
             "version": "==2.0.1"
         },
         "typing-extensions": {
