@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "082f32e0844a2fb24679af1a6d7cf062f5573db13bea723b04392e41bf02fcc9"
+            "sha256": "782795d4fe89e52eef36b3b16b33d63f1266e17a20aab716f6a0a6df466d039f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -65,11 +65,11 @@
         },
         "flask-jwt-extended": {
             "hashes": [
-                "sha256:0d001564c80df8606cbf26e4fad9855de01d97734b8158d8ac7e4faac579f10c",
-                "sha256:3fe81504bdc91ad8f1cb975bd2d95ec601251f31bde184115e39fc7e6ed23ea6"
+                "sha256:09887fa372bdd4e9abb60d8a7155a966bf11b74999554410b20975802aec277e",
+                "sha256:9a3e93cc95f5639e95bb0e75a406cf314465e0601ff787f4aade724b065f2cba"
             ],
             "index": "pypi",
-            "version": "==4.4.0"
+            "version": "==4.4.1"
         },
         "flask-smorest": {
             "hashes": [
@@ -82,7 +82,7 @@
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "cf61e065b2ba86074dfb7a0d61d0ecd399ac9c07",
+            "ref": "3fedd13238c1fee6aa6d13ecf11d88063934f468",
             "subdirectory": "database"
         },
         "greenlet": {
@@ -293,11 +293,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:68e45d17c9281ba25dc0104eadd2647172b3472d9e01f911efa57965e8d51a36",
-                "sha256:a43bdedf853c670e5fed28e5623403bad2f73cf02f9a2774e91def6bda8265a7"
+                "sha256:d1746e7fd520e83bbe210d02fff1aa1a425ad671c7a9da7d246ec2401a087198",
+                "sha256:e7d11f3db616cda0751372244c2ba798e8e56a28e096ec4529010b803485f3fe"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==62.3.2"
+            "version": "==62.3.3"
         },
         "six": {
             "hashes": [
@@ -753,11 +753,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:68e45d17c9281ba25dc0104eadd2647172b3472d9e01f911efa57965e8d51a36",
-                "sha256:a43bdedf853c670e5fed28e5623403bad2f73cf02f9a2774e91def6bda8265a7"
+                "sha256:d1746e7fd520e83bbe210d02fff1aa1a425ad671c7a9da7d246ec2401a087198",
+                "sha256:e7d11f3db616cda0751372244c2ba798e8e56a28e096ec4529010b803485f3fe"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==62.3.2"
+            "version": "==62.3.3"
         },
         "six": {
             "hashes": [
