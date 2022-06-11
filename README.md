@@ -6,6 +6,12 @@ There is a set of environment variables that can be used to configure the applic
 
 There are SECRET variables and there are CONFIGURATION variables.
 
+To create random secret keys for env variables (eg. `FM_API_SECRET`), run the following command, and then copy and paste the output into the `.env` file:
+
+``` 
+$ openssl rand -hex 32
+```
+
 This file has a `FM_GENERAL_CONFIG` variable at the top that controls the general configuration of the different mono repos. Hint: change this variable between 'dev', 'prod', or 'test'.
 
 The majority of the docker commands use the `.env` file by default to configure the containers. Edit the `.env` file as needed for the specific environment (including setting SECRET and TOKEN variables).
