@@ -19,6 +19,13 @@ Each monorepo can have its own set of environment variables if applicable. This 
 # Production
 **Make sure to set the appropriate environment variables**
 
+## Installing Docker and Docker Compose
+
+To install Docker and Docker Compose, follow the steps from the [Docker Webpage](https://docs.docker.com/engine/install/ubuntu/#install-docker-engine)
+
+
+## Using Docker Compose
+
 To run the farm_monitor in production, execute the following docker-compose command from the root of the project:
 
 ```bash
