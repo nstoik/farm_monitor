@@ -130,7 +130,7 @@ The list of available variables are:
 - VUE_APP_API_HOSTNAME: The hostname of the API. Defaults to "localhost"
 - VUE_APP_API_PREFIX: defaults to "/api/"
 - VUE_APP_API_PORT: The port the frontend connects to. Defaults to "80"
-- VUE_APP_API_PROTOCOL: The protocol the API is exposed on. Defaults to "http"
+- VUE_APP_API_PROTOCOL: The protocol the API is exposed on. Defaults to "https"
 - VUE_APP_PUBLIC_PATH: The public path of the frontend. Defaults to "/frontend/"
 - FM_API_PORT: The port the container exposes the API on. Defaults to "8080"
 
