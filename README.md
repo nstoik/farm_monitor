@@ -135,5 +135,7 @@ The list of available variables are:
 - FM_API_PORT: The port the container exposes the API on. Defaults to "8080"
 
 A few additional comments on the `docker-bake.hcl` file:
-- print is optional and will print the configuration of the builder
-- push will push the built images to the registry
+- --print is optional and will print the configuration of the builder
+- --push will push the built images to the registry
+- --load is optional and will load the image into docker
+  - When using --load, only a sinle platform can be specified. An example of overriding the platform for 'linux/amd64' is `--set default.platform=linux/amd64`
