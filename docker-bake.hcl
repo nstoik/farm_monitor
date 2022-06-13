@@ -24,12 +24,11 @@ variable "FM_API_PORT" {
 }
 
 group "default" {
-    targets = ["fm_server", "fm_frontend", "fm_api"]
+    targets = ["fm_server", "fm_frontend", "fm_api", "fm_flower"]
 }
 
 target "default" {
     dockerfile = "Dockerfile"
-    // platforms = ["linux/amd64", "linux/arm64", "linux/arm/v7", "linux/arm/v6"]
     platforms = ["linux/amd64", "linux/arm64", "linux/arm/v7"]
     pull = true
 }
@@ -62,4 +61,10 @@ target "fm_api" {
     args = {
         FM_API_PORT = "${FM_API_PORT}"
     }
+}
+
+target "fm_flower" {
+    inherits = ["default"]
+    context = "flower"
+    tags = ["nstoik/fm_flower:${TAG}"]
 }

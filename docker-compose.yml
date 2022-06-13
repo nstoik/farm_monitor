@@ -163,8 +163,11 @@ services:
             - "traefik.tcp.routers.fm_rabbitmq-connect.service=fm_rabbitmq-connect"
 
     flower:
-        image: mher/flower:latest
+        image: nstoik/fm_flower:${FM_FLOWER_TAG}
         container_name: fm_flower
+        build:
+           context: ./flower
+           dockerfile: Dockerfile
         command: ["celery", "flower", "--url_prefix=flower"] 
         volumes:
             - "flower_data:/data"
