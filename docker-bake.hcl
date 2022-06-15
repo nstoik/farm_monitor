@@ -1,11 +1,14 @@
 variable "TAG" {
     default = "dev"
 }
+variable "TRAEFIK_DOMAIN" {
+    default = "localhost"
+}
 variable "MULTI_STAGE_TARGET" {
     default = "prod-stage"
 }
 variable "VUE_APP_API_HOSTNAME" {
-    default = "localhost"
+    default = "${TRAEFIK_DOMAIN}"
 }
 variable "VUE_APP_API_PREFIX" {
     default = "/api/"
@@ -43,7 +46,7 @@ target "fm_server" {
 target "fm_frontend" {
     inherits = ["default"]
     context = "frontend"
-    tags = ["nstoik/fm_frontend:${TAG}"]
+    tags = ["nstoik/fm_frontend:${TAG}", "nstoik/fm_frontend:${TAG}-${TRAEFIK_DOMAIN}"]
     args = {
         VUE_APP_API_HOSTNAME = "${VUE_APP_API_HOSTNAME}",
         VUE_APP_API_PREFIX = "${VUE_APP_API_PREFIX}",

@@ -122,11 +122,17 @@ Bake all the containers. In the example below, the TAG variable is set to the ta
 ```bash
 TAG=0.1 docker buildx bake --builder fm_buildx --file docker-bake.hcl --push
 ```
+
+To build the frontend container with a specific Traefik domain of `fm1.farmmonitor.ca`, execute the following command:
+```bash
+TAG=0.1 TRAEFIK_DOMAIN=fm1.farmmonitor.ca docker buildx bake --builder fm_buildx --file docker-bake.hcl fm_frontend --push
+```
 **Note** Overwrite variables defined in the `docker-bake.hcl` file by specifying them as arguments to the command. Any required `ARG` in the docker files need to be specified in the `docker-bake.hcl` file.
 
 The list of available variables are:
 - TAG: The tag of the docker image to build. Defaults to "dev"
 - MULTI_STAGE_TARGET: The target to build. Defaults to "prod-stage"
+- TRAEFIK_DOMAIN: The domain name of the traefik service. Defaults to "localhost"
 - VUE_APP_API_HOSTNAME: The hostname of the API. Defaults to "localhost"
 - VUE_APP_API_PREFIX: defaults to "/api/"
 - VUE_APP_API_PORT: The port the frontend connects to. Defaults to "80"
