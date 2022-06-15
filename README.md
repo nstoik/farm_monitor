@@ -132,7 +132,7 @@ The list of available variables are:
 - VUE_APP_API_PORT: The port the frontend connects to. Defaults to "80"
 - VUE_APP_API_PROTOCOL: The protocol the API is exposed on. Defaults to "https"
 - VUE_APP_PUBLIC_PATH: The public path of the frontend. Defaults to "/frontend/"
-- FM_API_PORT: The port the container exposes the API on. Defaults to "8080"
+- FM_API_PORT: The port the container exposes the API on. Defaults to "8000"
 
 A few additional comments on the `docker-bake.hcl` file:
 - --print is optional and will print the configuration of the builder
