@@ -69,8 +69,6 @@ services:
         build:
             context: ./api
             dockerfile: Dockerfile
-            args:
-                - FM_API_PORT=${FM_API_PORT}
         environment:
             - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
             - FM_API_PORT=${FM_API_PORT}

@@ -43,7 +43,6 @@ RUN pipenv run pip install -e .
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
 
-EXPOSE $FM_API_PORT
 CMD pipenv run fm_api flask-cli run --host=0.0.0.0 --port=$FM_API_PORT
 
 # prod stage steps below. Similiar as the dev stage, but we copy the venv from
@@ -93,5 +92,4 @@ RUN pipenv run pip install -e .
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
 
-EXPOSE $FM_API_PORT
 CMD pipenv run gunicorn fm_api.wsgi:app --access-logfile '-' --bind 0.0.0.0:$FM_API_PORT

@@ -22,9 +22,6 @@ variable "VUE_APP_API_PROTOCOL" {
 variable "VUE_APP_PUBLIC_PATH" {
     default = "/frontend/"
 }
-variable "FM_API_PORT" {
-    default = "8000"
-}
 
 group "default" {
     targets = ["fm_server", "fm_frontend", "fm_api", "fm_flower"]
@@ -61,9 +58,6 @@ target "fm_api" {
     context = "api"
     tags = ["nstoik/fm_api:${TAG}"]
     target = "${MULTI_STAGE_TARGET}"
-    args = {
-        FM_API_PORT = "${FM_API_PORT}"
-    }
 }
 
 target "fm_flower" {
