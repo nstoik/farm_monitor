@@ -20,7 +20,7 @@ class GrainbinSchema(BaseSchema):
 
     url = Method("get_url")
 
-    def get_url(self, obj):  # pylint: disable=no-self-use
+    def get_url(self, obj):
         """Return url for Grainbin."""
 
         return url_for("grainbin.GrainbinById", grainbin_id=obj.id)

@@ -20,7 +20,7 @@ class DeviceSchema(BaseSchema):
 
     url = Method("get_url")
 
-    def get_url(self, obj):  # pylint: disable=no-self-use
+    def get_url(self, obj):
         """For marshmallow Method field to get a url for the resource."""
 
         return url_for("device.DevicesById", device_id=obj.id)
