@@ -11,7 +11,7 @@ variable "VUE_APP_API_HOSTNAME" {
     default = "${TRAEFIK_DOMAIN}"
 }
 variable "VUE_APP_API_PREFIX" {
-    default = "/api/"
+    default = "/api"
 }
 variable "VUE_APP_API_PORT" {
     default = "443"

@@ -13,12 +13,12 @@ export class AuthService {
   constructor() {
     const apiHostname: string = process.env.VUE_APP_API_HOSTNAME; // eg. api.localhost
     const apiPort: string = process.env.VUE_APP_API_PORT; // eg. 80
-    const apiPrefix: string = process.env.VUE_APP_API_PREFIX; // eg. /api/
+    const apiPrefix: string = process.env.VUE_APP_API_PREFIX; // eg. /api
     const apiProtocol: string = process.env.VUE_APP_API_PROTOCOL || "http"; // eg. http
     const apiHTTPTimeout: number =
       Number(process.env.VUE_APP_API_HTTP_TIMEOUT) || 5000; // eg. 5000
 
-    this.baseURL = `${apiProtocol}://${apiHostname}:${apiPort}${apiPrefix}`;
+    this.baseURL = `${apiProtocol}://${apiHostname}:${apiPort}${apiPrefix}/`;
     this.newTokenURL = `${this.baseURL}auth/`;
     this.refreshTokenURL = `${this.baseURL}auth/refresh`;
 
