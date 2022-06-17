@@ -16,7 +16,7 @@ class Config:
     CORS_EXPOSE_HEADERS = ["X-Pagination"]
 
     # API prefix
-    API_PREFIX = os.environ.get("FM_API_PREFIX", "/api/")
+    API_PREFIX = os.environ.get("FM_API_PREFIX", "/api")
 
     # For Flask-Smorest
     API_TITLE = "FM API"

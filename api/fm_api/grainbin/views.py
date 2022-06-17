@@ -14,7 +14,7 @@ config = get_config()
 blueprint = Blueprint(
     "grainbin",
     "grainbin",
-    url_prefix=f"{config.API_PREFIX}grainbin",
+    url_prefix=f"{config.API_PREFIX}/grainbin",
     description="Operations on grainbins",
 )
 

@@ -22,7 +22,7 @@ config = get_config()
 blueprint = Blueprint(
     "auth",
     "auth",
-    url_prefix=f"{config.API_PREFIX}auth",
+    url_prefix=f"{config.API_PREFIX}/auth",
     description="Get and refresh auth tokens",
 )
 

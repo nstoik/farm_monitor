@@ -17,7 +17,7 @@ config = get_config()
 blueprint = Blueprint(
     "device",
     "device",
-    url_prefix=f"{config.API_PREFIX}device",
+    url_prefix=f"{config.API_PREFIX}/device",
     description="Operations on devices",
 )
 

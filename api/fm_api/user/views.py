@@ -15,7 +15,7 @@ config = get_config()
 blueprint = Blueprint(
     "user",
     "user",
-    url_prefix=f"{config.API_PREFIX}user",
+    url_prefix=f"{config.API_PREFIX}/user",
     description="Operations on users and roles",
 )
 
