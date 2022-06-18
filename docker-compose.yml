@@ -136,6 +136,8 @@ services:
             - api
             - database_management
             - server
+        labels:
+            - custom.label=farm_monitor
     
     
     # standard docker containers below
