@@ -18,6 +18,8 @@ services:
         depends_on:
            - "database"
         restart: on-failure
+        labels:
+            - custom.label=farm_monitor
     # couldn't get UDP presence service to work with traefik.
     # so, skipping it for now.
     #    labels:
@@ -44,6 +46,8 @@ services:
             - "database"
             - "rabbitmq"
         restart: on-failure
+        labels:
+            - custom.label=farm_monitor
 
     # in order to reduce the number of unique containers, we use the same container
     # as fm_server since the fm_database package and commands are included in
@@ -62,6 +66,8 @@ services:
         depends_on:
             - "database"
         restart: on-failure
+        labels:
+            - custom.label=farm_monitor
 
     api:
         image: nstoik/fm_api:${FM_API_TAG}
@@ -82,6 +88,7 @@ services:
             - farm_monitor
         restart: unless-stopped
         labels:
+          - custom.label=farm_monitor
           - "traefik.enable=true"
           - "traefik.http.services.fm_api.loadbalancer.server.port=${FM_API_PORT}"
           - "traefik.http.routers.fm_api.service=fm_api"
@@ -104,6 +111,7 @@ services:
             - farm_monitor
         restart: unless-stopped
         labels:
+          - custom.label=farm_monitor
           - "traefik.enable=true"
           - "traefik.http.middlewares.frontend_strip_prefix.stripprefix.prefixes=/frontend"
           - "traefik.http.routers.fm_frontend.middlewares=frontend_strip_prefix@docker"
@@ -144,6 +152,7 @@ services:
             - farm_monitor
         restart: unless-stopped
         labels:
+            - custom.label=farm_monitor
             - "traefik.enable=true"
             # RabbitMQ Management interface
             # this middleware redirects to a trailing slash if not present
@@ -177,6 +186,7 @@ services:
             - rabbitmq
         restart: unless-stopped
         labels:
+            - custom.label=farm_monitor
             - "traefik.enable=true"
             # this middleware redirects to a trailing slash if not present
             - "traefik.http.middlewares.fm_flower_redirect_slash.redirectregex.regex=^(https?://[^/]+/[a-z0-9_]+)$$"
@@ -198,6 +208,8 @@ services:
             - "dbdata:/var/lib/postgresql/data"
         networks:
             - farm_monitor
+        labels:
+          - custom.label=farm_monitor
 
     pgadmin:
         container_name: fm_pgadmin
@@ -216,6 +228,7 @@ services:
             - database
         restart: unless-stopped
         labels:
+            - custom.label=farm_monitor
             - "traefik.enable=true"
             # pgadmin
             - "traefik.http.services.fm_pgadmin.loadbalancer.server.port=80"
