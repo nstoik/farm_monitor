@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "168ea7ebaf97d37f657840340a9808fb4f6d924ca305baa63f4eb7a2f4321bf3"
+            "sha256": "f5f13f1f05fbbe513eb475b12bd1b4ec78deb87c8fc93033a0f8acb65e11bfb3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -84,7 +84,7 @@
         "fm-database": {
             "editable": true,
             "git": "https://github.com/nstoik/farm_monitor",
-            "ref": "f81e93dc83b0ea290c29f80d3eac3e5079875e5a",
+            "ref": "e6d803c2b269833608731578da5884b1b945ed9e",
             "subdirectory": "database"
         },
         "greenlet": {
@@ -261,11 +261,11 @@
         },
         "pika": {
             "hashes": [
-                "sha256:e5fbf3a0a3599f4e114f6e4a7af096f9413a8f24f975c2657ba2fac3c931434f",
-                "sha256:fe89e95fb2d8d06fd713eeae2938299941e0ec329db37afca758f5f9458ce169"
+                "sha256:15357ddc47a5c28f0b07d80e93d504cbbf7a1ad5e1cd129ecd27afe76472c529",
+                "sha256:9195f37aed089862b205fd8f8ce1cc6ea0a7ee3cd80f58e6eea6cb9d8411a647"
             ],
             "index": "pypi",
-            "version": "==1.2.1"
+            "version": "==1.3.0"
         },
         "prompt-toolkit": {
             "hashes": [
@@ -821,7 +821,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_full_version < '3.11.0a7'",
+            "markers": "python_version < '3.11'",
             "version": "==2.0.1"
         },
         "tomlkit": {
