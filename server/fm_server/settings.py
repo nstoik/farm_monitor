@@ -66,6 +66,7 @@ class ProdConfig(Config):
 
     DEBUG = False
     LOG_LEVEL = logging.WARNING
+    CELERY_MAIN_PROCESS_LOG_LEVEL = LOG_LEVEL
 
 
 class TestConfig(Config):
