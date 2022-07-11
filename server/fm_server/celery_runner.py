@@ -22,7 +22,7 @@ def setup_celery_logging(**kwargs):
 @signals.after_setup_logger.connect
 def after_celery_logging(logger, *args, **kwargs):
     """Sent after the setup of every global logger (not task loggers).
-    
+
     Used to augment logging configuration.
     """
     config = get_config()
@@ -47,7 +47,7 @@ def after_celery_logging(logger, *args, **kwargs):
 @signals.after_setup_task_logger.connect
 def after_celery_task_logging(logger, *args, **kwargs):
     """Sent after the setup of every single task logger.
-    
+
     Used to augment logging configuration.
     """
     config = get_config()
