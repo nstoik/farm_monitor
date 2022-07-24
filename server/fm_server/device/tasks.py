@@ -34,11 +34,11 @@ def device_update(info):
         device.hardware_version = hardware_version
         device.software_version = software_version
     device.grainbin_count = info["data"]["grainbin_count"]
-    device.last_update_received = info["created_at"]["datetime"]
+    device.last_update_received = info["created_at"]
     device.total_updates += 1
 
     new_device_update = DeviceUpdate(device.id)
-    new_device_update.timestamp = info["created_at"]["datetime"]
+    new_device_update.timestamp = info["created_at"]
     new_device_update.update_index = device.total_updates
     new_device_update.interior_temp = info["data"]["interior_temp"]
     new_device_update.exterior_temp = info["data"]["exterior_temp"]
