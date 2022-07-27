@@ -17,11 +17,11 @@ flake8-debugger = "~=4.1.2"
 flake8-docstrings = "~=1.6.0"
 flake8-isort = "~=4.1.1"
 isort = "~=5.10.1"
-pep8-naming = "~=0.13.0"
-pylint = "~=2.14.4"
+pep8-naming = "~=0.13.1"
+pylint = "~=2.14.5"
 
 # MyPy and stubs
-mypy = "~=0.961"
+mypy = "~=0.971"
 sqlalchemy-stubs = "~=0.4.0"
 
 [packages]
@@ -29,7 +29,7 @@ SQLAlchemy = "~=1.4.39"
 passlib = "~=1.7.1"
 click = "~=8.1.3"
 "e1839a8" = {path = ".", editable = true}
-alembic = "~=1.8.0"
+alembic = "~=1.8.1"
 # for Postgresql
 psycopg2 = "~=2.9.3"
 
