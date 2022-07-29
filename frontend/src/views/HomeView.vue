@@ -8,6 +8,6 @@
 </template>
 
 <script lang="ts" setup>
-import Device from "@/components/device/Device.vue";
-import Grainbin from "@/components/grainbin/Grainbin.vue";
+import Device from "@/components/device/DeviceMain.vue";
+import Grainbin from "@/components/grainbin/GrainbinMain.vue";
 </script>
