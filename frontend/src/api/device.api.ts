@@ -11,10 +11,11 @@ export class DeviceRequest extends Request {
   public async getDevices(): Promise<Array<Device>> {
     const url = `${this.resourceLocation}`;
     return this.client.get(url).then((response) => {
-      // convert any dates from strings to Date objects
+      // convert any dates from strings to Date objects.
+      // Add the timezone offset to the date to make it local time.
       response.data.forEach((device: Device) => {
-        device.lastUpdateReceived = new Date(device.lastUpdateReceived);
-        device.lastUpdated = new Date(device.lastUpdated);
+        device.lastUpdateReceived = new Date(device.lastUpdateReceived + "Z");
+        device.lastUpdated = new Date(device.lastUpdated + "Z");
       });
       return response.data;
     });
@@ -32,8 +33,9 @@ export class DeviceRequest extends Request {
       );
 
     // convert any dates from strings to Date objects
+    // Add the timezone offset to the date to make it local time.
     deviceUpdates.forEach((deviceUpdate: DeviceUpdate) => {
-      deviceUpdate.timestamp = new Date(deviceUpdate.timestamp);
+      deviceUpdate.timestamp = new Date(deviceUpdate.timestamp + "Z");
     });
     return [deviceUpdates, paginationHeader];
   }
