@@ -4,11 +4,6 @@
 import logging
 import os
 
-from environs import Env
-
-env = Env()
-env.read_env()
-
 
 class CeleryConfig:
     """Celery configuration."""
@@ -36,12 +31,10 @@ class Config:
 
     PRESENCE_PORT = 5554
 
-    LOG_LEVEL = env.log_level("FM_SERVER_LOG_LEVEL", default=logging.INFO)
+    LOG_LEVEL = logging.INFO
     LOG_FILE = "/logs/farm_monitor.log"
     CELERY_LOG_FILE = "/logs/fm_celery.log"
-    CELERY_MAIN_PROCESS_LOG_LEVEL = env.log_level(
-        "FM_SERVER_CELERY_LOG_LEVEL", default=logging.INFO
-    )
+    CELERY_MAIN_PROCESS_LOG_LEVEL = logging.INFO
 
     RRDTOOL_LOCATION = "/home/pi/farm_monitor/fd/rrd/"
 
@@ -65,17 +58,14 @@ class DevConfig(Config):
     """Development configuration."""
 
     DEBUG = True
-    LOG_LEVEL = env.log_level("FM_SERVER_LOG_LEVEL", default=logging.DEBUG)
+    LOG_LEVEL = logging.DEBUG
 
 
 class ProdConfig(Config):
     """Production configuration."""
 
     DEBUG = False
-    LOG_LEVEL = env.log_level("FM_SERVER_LOG_LEVEL", default=logging.WARNING)
-    CELERY_MAIN_PROCESS_LOG_LEVEL = env.log_level(
-        "FM_SERVER_CELERY_LOG_LEVEL", default=LOG_LEVEL
-    )
+    LOG_LEVEL = logging.WARNING
 
 
 class TestConfig(Config):

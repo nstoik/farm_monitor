@@ -11,7 +11,6 @@ app = Celery()
 
 app.config_from_object("fm_server.settings:CeleryConfig")
 
-# disabled for now
 # @signals.setup_logging.connect
 def setup_celery_logging(**kwargs):
     """Setup the logging for celery."""
@@ -21,10 +20,7 @@ def setup_celery_logging(**kwargs):
 
 @signals.after_setup_logger.connect
 def after_celery_logging(logger, *args, **kwargs):
-    """Sent after the setup of every global logger (not task loggers).
-
-    Used to augment logging configuration.
-    """
+    """Called after the celery logging."""
     config = get_config()
     celery_logger = logger
 
@@ -46,10 +42,7 @@ def after_celery_logging(logger, *args, **kwargs):
 
 @signals.after_setup_task_logger.connect
 def after_celery_task_logging(logger, *args, **kwargs):
-    """Sent after the setup of every single task logger.
-
-    Used to augment logging configuration.
-    """
+    """Called after a celery task for logging."""
     config = get_config()
 
     logfile_path = config.CELERY_LOG_FILE
