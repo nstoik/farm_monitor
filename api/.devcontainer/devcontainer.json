@@ -20,17 +20,20 @@
 		"eamodio.gitlens",
 		"ms-python.vscode-pylance",
 		"njpwerner.autodocstring",
-		"github.copilot"
+		"github.copilot",
 	],
 	"settings": {
 		"python.linting.enabled": true,
 		"python.linting.pylintEnabled": true,
-		"python.linting.pylintArgs": [],
+		"python.linting.pylintArgs": [
+			"--load-plugins",
+			"pylint-flask,pylint-flask-sqlalchemy",
+		],
 		"python.linting.flake8Enabled": true,
 		"python.linting.flake8Args": ["--config=/workspaces/api/setup.cfg"],
 		"python.linting.mypyEnabled": true,
 		"python.linting.mypyArgs": ["--config=/workspaces/api/setup.cfg"],
 		"python.formatting.provider": "black"
 		
-	}
+	},
 }

@@ -4,53 +4,43 @@ updates:
     - package-ecosystem: "github-actions"
       directory: "/"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
     # configuration for the database directory
     - package-ecosystem: "pip"
       directory: "/database"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
     - package-ecosystem: "docker"
       directory: "/database"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
     - package-ecosystem: "docker"
       directory: "/database/.devcontainer"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
     # configuration for the server directory
     - package-ecosystem: "pip"
       directory: "/server"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
     - package-ecosystem: "docker"
       directory: "/server"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
     - package-ecosystem: "docker"
       directory: "/server/.devcontainer"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
     # configuration for the api directory
     - package-ecosystem: "pip"
       directory: "/api"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
     - package-ecosystem: "docker"
       directory: "/api"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
     - package-ecosystem: "docker"
       directory: "/api/.devcontainer"
       schedule:
-            interval: "monthly"
-
+            interval: "weekly"
