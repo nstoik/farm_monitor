@@ -10,7 +10,7 @@ from fm_api.extensions import cors, jwt, smorest_api
 
 
 def create_app(config=None, testing=False):
-    """An application factory, explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
+    """An application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
 
     :param config_object: The configuration object to use.
     """

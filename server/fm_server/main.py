@@ -31,10 +31,10 @@ def configure_logging(config):
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
-    # Install a stream handler to send logs to stdout for docker logs
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+    if log_level == logging.DEBUG:
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
 
     install_mp_handler(logger=logger)
 

@@ -10,8 +10,6 @@ services:
         environment:
             - FM_SERVER_PRESENCE_PORT=${FM_SERVER_PRESENCE_PORT}
             - FM_SERVER_CONFIG=${FM_SERVER_CONFIG}
-            - FM_SERVER_LOG_LEVEL=${FM_SERVER_LOG_LEVEL}
-            - FM_SERVER_CELERY_LOG_LEVEL=${FM_SERVER_CELERY_LOG_LEVEL}
             - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
         networks:
             - farm_monitor
@@ -39,7 +37,6 @@ services:
             dockerfile: Dockerfile
         environment:
             - FM_SERVER_CONFIG=${FM_SERVER_CONFIG}
-            - FM_SERVER_LOG_LEVEL=${FM_SERVER_LOG_LEVEL}
             - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
         networks:
             - farm_monitor
