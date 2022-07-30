@@ -16,8 +16,9 @@ export class GrainbinRequest extends Request {
     const url = `${this.resourceLocation}`;
     return this.client.get(url).then((response) => {
       //convert any dates from string to Date objects
+      // Add the timezone offset to the date to make it local time.
       response.data.forEach((grainbin: Grainbin) => {
-        grainbin.lastUpdated = new Date(grainbin.lastUpdated);
+        grainbin.lastUpdated = new Date(grainbin.lastUpdated + "Z");
       });
       return response.data;
     });
@@ -36,8 +37,9 @@ export class GrainbinRequest extends Request {
     const url = `${this.resourceLocation}${id}/updates/latest`;
     return this.client.get(url).then((response) => {
       //convert any dates from string to Date objects
+      // Add the timezone offset to the date to make it local time.
       response.data.forEach((grainbinUpdate: GrainbinUpdate) => {
-        grainbinUpdate.timestamp = new Date(grainbinUpdate.timestamp);
+        grainbinUpdate.timestamp = new Date(grainbinUpdate.timestamp + "Z");
       });
       return response.data;
     });

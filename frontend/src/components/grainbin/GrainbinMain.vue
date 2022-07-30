@@ -14,6 +14,7 @@
     <div class="col-md-12 col-lg-8">
       <grainbin-update :grainbinID="grainbin.id" />
     </div>
+    <hr class="border border-primary border-4 border-top" />
   </div>
 </template>
 
