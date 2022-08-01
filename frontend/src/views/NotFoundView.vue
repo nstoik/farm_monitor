@@ -7,10 +7,18 @@
           <span class="text-danger">Opps!</span> Page not found.
         </p>
         <p class="lead">The page you're looking for doesn't exist.</p>
-        <a href="/" class="btn btn-primary">Go Home</a>
+        <button class="btn btn-primary" @click="goHome">Go Home</button>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const goHome = () => {
+  router.push({ name: "Home" });
+};
+</script>
