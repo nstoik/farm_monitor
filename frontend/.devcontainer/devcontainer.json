@@ -25,7 +25,7 @@
 	"extensions": [
 		"eamodio.gitlens",
 		"esbenp.prettier-vscode",
-		"johnsoncodehk.volar",
+		"vue.volar",
 		"github.copilot",
 	],
 
