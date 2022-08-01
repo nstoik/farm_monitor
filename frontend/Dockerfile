@@ -38,5 +38,4 @@ COPY --from=build-stage $WORKING_DIR/dist/ /usr/share/nginx/html
 
 # copy the nginx configuration files
 COPY --from=build-stage $WORKING_DIR/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build-stage $WORKING_DIR/nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
 COPY --from=build-stage $WORKING_DIR/nginx-default-farmmonitor-frontend.conf /etc/nginx/extra-conf.d/default-farmmonitor-frontend.conf
