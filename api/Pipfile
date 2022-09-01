@@ -29,7 +29,7 @@ Flask-Cors = "~=3.0.10"
 # API
 flask-smorest = "~=0.38.1"
 marshmallow-sqlalchemy = "~=0.28.1"
-Flask-JWT-Extended = "~=4.4.2"
+Flask-JWT-Extended = "~=4.4.4"
 
 # Production
 gunicorn = "~=20.1.0"
