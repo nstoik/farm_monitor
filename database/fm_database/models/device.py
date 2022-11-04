@@ -107,6 +107,23 @@ class DeviceUpdate(SurrogatePK):
 
         return f"DeviceUpdate for Device {self.device_id} taken on {self.timestamp}"
 
+    def save(self, session=None, commit=True):
+        """Save the record. Check for valid interior_temp and exterior_temp."""
+
+        if self.interior_temp is not None:
+            try:
+                float(self.interior_temp)
+            except ValueError:
+                self.interior_temp = None
+
+        if self.exterior_temp is not None:
+            try:
+                float(self.exterior_temp)
+            except ValueError:
+                self.exterior_temp = None
+
+        return super().save(session, commit)
+
 
 class Device(SurrogatePK):
     """A device."""
