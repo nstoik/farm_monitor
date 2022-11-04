@@ -8,6 +8,7 @@ name = "pypi"
 factory-boy = "~=3.2.1"
 pytest = "~=7.2"
 pytest-cov = "~=4.0.0"
+pytest-celery = "0.0.0"
 # Lint and code style
 black = "~=22.10"
 flake8 = "~=5.0.4"
@@ -21,18 +22,18 @@ pep8-naming = "~=0.13.2"
 pylint = "~=2.15.5"
 
 [packages]
-pydantic = "~=1.10.2"
-pika = "~=1.3.0"
 click = "~=8.1.3"
-psutil = "~=5.9.1"
-netifaces = "~=0.11.0"
 celery = "~=5.2.7"
-multiprocessing-logging = "~=0.3.3"
 # Environment and variable parsing
 environs = "~=9.5.0"
+"e1839a8" = {path = ".", editable = true}
 fm_database = {subdirectory = "database", ref = "v0.3", git = "https://github.com/nstoik/farm_monitor"}
 #fm_database = {editable = true, path = "./../database"}
-"e1839a8" = {path = ".", editable = true}
+multiprocessing-logging = "~=0.3.3"
+netifaces = "~=0.11.0"
+pika = "~=1.3.0"
+psutil = "~=5.9.1"
+pydantic = "~=1.10.2"
 
 [requires]
 python_version = "3.10"
