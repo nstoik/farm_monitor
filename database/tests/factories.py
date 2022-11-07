@@ -62,8 +62,8 @@ class DeviceFactory(BaseFactory):
 class GrainbinFactory(BaseFactory):
     """Grainbin factory."""
 
-    device = SubFactory(DeviceFactory)
-    device_id = SelfAttribute("device.device_id")
+    device = SubFactory(DeviceFactory, device_id=SelfAttribute("..device_id"))
+    device_id = Sequence(lambda n: f"Test Device {n}")
     bus_number = Sequence(int)
 
     class Meta:
