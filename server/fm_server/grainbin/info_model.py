@@ -3,15 +3,15 @@ Pydantic models for grainbin update messages.
 
 The update comes in as a dictionary that looks like this:
 info: {
-    created_at: "2020-01-01 00:00:00",
-    name: "my_device_id.01",
-    bus_number: "1",
-    bus_number_string: "1",
-    sensor_names: ["28.1234567890", "28.1234567891", "28.1234567892"],
-    sensor_data: [
-        {sensor_name: "28.1234567890", temperature: "20.0", temphigh: "50.0", templow: "10.0"},
-        {sensor_name: "28.1234567891", temperature: "21.0", temphigh: "50.0", templow: "10.0"},
-        {sensor_name: "28.1234567892", temperature: "22.0", temphigh: "50.0", templow: "10.0"},
+    "created_at": "2020-01-01 00:00:00",
+    "name": "my_device_id.01",
+    "bus_number": "1",
+    "bus_number_string": "bus.1",
+    "sensor_names": ["28.1234567890", "28.1234567891", "28.1234567892"],
+    "sensor_data": [
+        {"sensor_name": "28.1234567890", "temperature": "20.0", "temphigh": "50", "templow": "10"},
+        {"sensor_name": "28.1234567891", "temperature": "21.0", "temphigh": "50", "templow": "10"},
+        {"sensor_name": "28.1234567892", "temperature": "22.0", "temphigh": "50", "templow": "10"},
     ],
     average_temp: "21.0",
 }
@@ -56,7 +56,7 @@ class GrainbinUpdate(BaseModel):
     bus_number_string: str
     sensor_names: list[str]
     sensor_data: list[GrainbinUpdateSensorData]
-    average_temp: float
+    average_temp: str
 
     # pylint: disable=no-self-argument,unused-argument
     @validator("device_id", always=True)
