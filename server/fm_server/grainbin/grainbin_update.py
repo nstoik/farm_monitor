@@ -10,7 +10,7 @@ info: {
     created_at: "2020-01-01 00:00:00",
     name: "my_device_id.01",
     bus_number: "1",
-    bus_number_string: "1",
+    bus_number_string: "bus.1",
     sensor_names: ["28.1234567890", "28.1234567891", "28.1234567892"],
     sensor_data: [
         {sensor_name: "28.1234567890", temperature: "20.0", temphigh: "50.0", templow: "10.0"},
@@ -22,7 +22,7 @@ info: {
 """
 from celery.utils.log import get_task_logger
 from fm_database.base import get_session
-from fm_database.models.device import Grainbin, GrainbinUpdate
+from fm_database.models.device import Device, Grainbin, GrainbinUpdate
 from pydantic import NoneStr, ValidationError
 
 from .info_model import GrainbinUpdate as GrainbinUpdateModel
@@ -40,6 +40,16 @@ def process_grainbin_update(info: dict) -> bool:
         return False
 
     session = get_session()
+
+    # Confirm the device exists
+    device = (
+        session.query(Device).filter_by(device_id=update_data.device_id).one_or_none()
+    )
+    if device is None:
+        LOGGER.error(f"Device '{update_data.device_id}' not found.")
+        session.close()
+        return False
+
     grainbin = get_or_create_grainbin(
         update_data.device_id, update_data.bus_number, update_data.bus_number_string
     )
@@ -69,7 +79,7 @@ def get_or_create_grainbin(
     device_id: NoneStr, bus_number: int, bus_number_string: str
 ) -> Grainbin:
     """Get or create a grainbin."""
-    grainbin = Grainbin.filter_by(
+    grainbin = Grainbin.query.filter_by(
         device_id=device_id, bus_number=bus_number
     ).one_or_none()
 
@@ -77,6 +87,7 @@ def get_or_create_grainbin(
         grainbin = Grainbin(device_id, bus_number)
         grainbin.bus_number_string = bus_number_string
         LOGGER.debug(f"Creating new grainbin: {grainbin}")
+        grainbin.save()
     else:
         LOGGER.debug(f"Found existing grainbin: {grainbin}")
     return grainbin
