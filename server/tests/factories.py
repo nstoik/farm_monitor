@@ -1,12 +1,10 @@
-"""Factories to help in tests."""
-# pylint: disable=too-few-public-methods,no-self-argument,unused-argument
-from factory import PostGenerationMethodCall, Sequence
+"""Factories to use in tests."""
+# pylint: disable=too-few-public-methods
+from factory import Sequence
 from factory.alchemy import SQLAlchemyModelFactory
 from factory.declarations import SelfAttribute, SubFactory
-
 from fm_database.base import get_session
 from fm_database.models.device import Device, Grainbin
-from fm_database.models.user import User
 
 
 class BaseFactory(SQLAlchemyModelFactory):
@@ -26,48 +24,34 @@ class BaseFactory(SQLAlchemyModelFactory):
         return obj
 
     class Meta:
-        """Factory configuration."""
+        """Meta class."""
 
         abstract = True
         sqlalchemy_session = get_session()
 
 
-class UserFactory(BaseFactory):
-    """User factory."""
-
-    username = Sequence(lambda n: f"user{n}")
-    email = Sequence(lambda n: f"user{n}@example.com")
-    password = PostGenerationMethodCall("set_password", "example")
-    active = True
-
-    class Meta:
-        """Factory configuration."""
-
-        model = User
-
-
 class DeviceFactory(BaseFactory):
-    """Device factory."""
+    """Device Factory."""
 
     device_id = Sequence(lambda n: f"Test Device {n}")
     hardware_version = "v1"
     software_version = "v1"
 
     class Meta:
-        """Factory configuration."""
+        """Meta class."""
 
         model = Device
 
 
 class GrainbinFactory(BaseFactory):
-    """Grainbin factory."""
+    """Grainbin Factory."""
 
     device = SubFactory(DeviceFactory, device_id=SelfAttribute("..device_id"))
     device_id = Sequence(lambda n: f"Test Device {n}")
     bus_number = Sequence(int)
 
     class Meta:
-        """Factory Configuration."""
+        """Meta class."""
 
         model = Grainbin
         exclude = ("device",)

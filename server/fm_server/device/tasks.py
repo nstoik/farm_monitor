@@ -4,11 +4,12 @@ from datetime import timedelta
 
 from celery.utils.log import get_task_logger
 from fm_database.base import get_session
-from fm_database.models.device import Device, DeviceUpdate
 from fm_database.models.message import Message
 
 from fm_server.celery_runner import app
 from fm_server.device.rabbitmq_messages import get_device_status
+
+from .device_update import process_device_update
 
 LOGGER = get_task_logger("fm.device.tasks")
 
@@ -16,41 +17,21 @@ LOGGER = get_task_logger("fm.device.tasks")
 @app.task(name="device.update")
 def device_update(info):
     """Celery task for device update messages."""
-    session = get_session()
 
-    device_id = info["id"]
-    hardware_version = info["data"]["hardware_version"]
-    software_version = info["data"]["software_version"]
-    LOGGER.debug(f"Received device update from {device_id}")
-    device = session.query(Device).filter_by(device_id=device_id).one_or_none()
+    LOGGER.debug(f"Received device update from {info['id']}")
 
-    # check if the device is already in the database.
-    if device is None:
-        LOGGER.info(f"Adding new device to the database. {device_id}")
-        device = Device(device_id, hardware_version, software_version)
-        device.save(session=session)
-    # create a new device if not already in the database.
+    return_code = process_device_update(info)
+
+    if return_code is True:
+        LOGGER.debug(f"Processed device update from {info['id']}")
     else:
-        device.hardware_version = hardware_version
-        device.software_version = software_version
-    device.grainbin_count = info["data"]["grainbin_count"]
-    device.last_update_received = info["created_at"]
-    device.total_updates += 1
+        LOGGER.error(f"Failed to process device update from {info['id']}")
 
-    new_device_update = DeviceUpdate(device.id)
-    new_device_update.timestamp = info["created_at"]
-    new_device_update.update_index = device.total_updates
-    new_device_update.interior_temp = info["data"]["interior_temp"]
-    new_device_update.exterior_temp = info["data"]["exterior_temp"]
-
-    session.add(new_device_update)
-    session.commit()
-
-    LOGGER.debug(f"New update saved for device. {new_device_update}")
-
-    return True
+    return return_code
 
 
+# TODO: Refactor this to use Celery comms model instead of the pika one.
+# probably remove this completely as devices are created on first connect.
 @app.task(name="device.create")
 def device_create(info):
     """Celery task for device create messages.

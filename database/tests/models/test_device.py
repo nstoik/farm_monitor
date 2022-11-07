@@ -205,6 +205,27 @@ class TestDeviceUpdate:
         assert retrieved.exterior_temp == payload["data"]["exterior_temp"]
         assert retrieved.timestamp == payload["created_at"]
 
+    @staticmethod
+    def test_device_update_incorrect_temp():
+        """Test that an incorect interior or exterior temp value is handled correctly."""
+
+        device = DeviceFactory()
+        device.save()
+
+        device_update = DeviceUpdate(device_id=device.id)
+        device_update.timestamp = dt.datetime.now()
+        device_update.update_index = 0
+
+        device_update.interior_temp = "U"
+        device_update.exterior_temp = "U"
+
+        device_update.save()
+
+        retrieved = DeviceUpdate.get_by_id(device_update.id)
+
+        assert retrieved.interior_temp is None
+        assert retrieved.exterior_temp is None
+
 
 @pytest.mark.usefixtures("tables")
 class TestDevice:
