@@ -19,7 +19,7 @@ flake8-isort = "~=5.0"
 isort = "~=5.10.1"
 mypy = "~=0.961"
 pep8-naming = "~=0.13.2"
-pylint = "~=2.15.5"
+pylint = "~=2.15.7"
 
 [packages]
 click = "~=8.1.3"
