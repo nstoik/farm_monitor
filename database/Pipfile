@@ -18,7 +18,7 @@ flake8-docstrings = "~=1.6.0"
 flake8-isort = "~=5.0.0"
 isort = "~=5.10.1"
 pep8-naming = "~=0.13.2"
-pylint = "~=2.15.5"
+pylint = "~=2.15.9"
 
 # MyPy and stubs
 mypy = "~=0.982"
