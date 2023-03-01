@@ -1,5 +1,5 @@
 # Add the pyton parts
-FROM python:3.10 as build-stage
+FROM python:3.11 as build-stage
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -47,7 +47,7 @@ CMD pipenv run fm_api flask-cli run --host=0.0.0.0 --port=$FM_API_PORT
 
 # prod stage steps below. Similiar as the dev stage, but we copy the venv from
 # the build stage to the prod stage. (no git in the slim version of this docker base image)
-FROM python:3.10-slim AS prod-stage
+FROM python:3.11-slim AS prod-stage
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG C.UTF-8
