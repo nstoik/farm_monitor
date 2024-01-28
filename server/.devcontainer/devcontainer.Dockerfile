@@ -3,7 +3,7 @@
 # Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
 #-------------------------------------------------------------------------------------------------------------
 
-FROM python:3.10 as dev-stage
+FROM python:3.12 as dev-stage
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -56,7 +56,8 @@ COPY --chown=${USER_UID}:${USER_GID} Pipfile* setup.py $WORKING_DIR/
 WORKDIR $WORKING_DIR
 
 # Set up the dev environment
-RUN pipenv install --dev
+# (this is run manually inside the container instead for dev)
+# RUN pipenv install --dev
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
