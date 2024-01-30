@@ -1,4 +1,5 @@
 """Test the presence service."""
+
 import time
 from multiprocessing import Process
 

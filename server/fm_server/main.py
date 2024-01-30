@@ -1,4 +1,5 @@
 """Main starting point for fm_server."""
+
 import logging
 import time
 from logging.handlers import RotatingFileHandler

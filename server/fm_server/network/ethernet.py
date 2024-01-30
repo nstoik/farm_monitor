@@ -1,4 +1,5 @@
 """Ethernet module to set ethernet options."""
+
 import logging
 
 import netifaces

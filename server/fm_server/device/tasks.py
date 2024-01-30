@@ -1,4 +1,5 @@
 """Device tasks module."""
+
 import pickle
 from datetime import timedelta
 

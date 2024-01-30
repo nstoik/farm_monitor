@@ -20,10 +20,11 @@ info: {
     average_temp: "21.0",
 }
 """
+
 from celery.utils.log import get_task_logger
 from fm_database.base import get_session
 from fm_database.models.device import Device, Grainbin, GrainbinUpdate
-from pydantic import NoneStr, ValidationError
+from pydantic import ValidationError
 
 from .info_model import GrainbinUpdate as GrainbinUpdateModel
 
@@ -76,7 +77,7 @@ def process_grainbin_update(info: dict) -> bool:
 
 
 def get_or_create_grainbin(
-    device_id: NoneStr, bus_number: int, bus_number_string: str
+    device_id: None | str, bus_number: int, bus_number_string: str
 ) -> Grainbin:
     """Get or create a grainbin."""
     grainbin = Grainbin.query.filter_by(

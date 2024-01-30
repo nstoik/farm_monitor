@@ -30,8 +30,8 @@
 			"postCreateCommand": "git config --global core.autocrlf true && git config --global user.email 'nelsonstoik@gmail.com' && git config --global user.name 'Nelson'",
 			"settings": {
 				"pylint.args": ["--load-plugins"],
-				"flake8.args": ["--config=/workspaces/device/setup.cfg"],
-				"mypy.configFile": "/workspaces/device/setup.cfg",
+				"flake8.args": ["--config=/workspaces/server/setup.cfg"],
+				"mypy.configFile": "/workspaces/server/setup.cfg",
 				"mypy.runUsingActiveInterpreter": true
 			}
 		}

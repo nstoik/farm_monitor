@@ -1,4 +1,5 @@
 """Tests for the grainbin_update module."""
+
 import pytest
 from fm_database.models.device import Device, Grainbin
 

@@ -1,4 +1,5 @@
 """Test the setup_commands module."""
+
 from datetime import datetime
 
 import pytest

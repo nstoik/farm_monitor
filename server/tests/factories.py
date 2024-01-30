@@ -1,4 +1,5 @@
 """Factories to use in tests."""
+
 # pylint: disable=too-few-public-methods
 from factory import Sequence
 from factory.alchemy import SQLAlchemyModelFactory

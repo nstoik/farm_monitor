@@ -20,6 +20,8 @@ isort = "~=5.13"
 mypy = "~=1.8"
 pep8-naming = "~=0.13.2"
 pylint = "~=3.0"
+setuptools = "~=69.0"
+types-setuptools = "~=69.0"
 
 [packages]
 click = "~=8.1.3"

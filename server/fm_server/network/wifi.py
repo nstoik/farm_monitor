@@ -1,4 +1,5 @@
 """WiFi module to set WiFi options."""
+
 import logging
 import subprocess
 

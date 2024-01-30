@@ -1,4 +1,5 @@
 """Tests for the device_update file."""
+
 import pytest
 from fm_database.models.device import Device
 

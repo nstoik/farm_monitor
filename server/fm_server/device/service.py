@@ -1,4 +1,5 @@
 """Device service package."""
+
 import json
 import logging
 from typing import Dict

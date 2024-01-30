@@ -1,4 +1,5 @@
 """Connect to and receive messages from rabbitmq."""
+
 import pika
 
 from fm_server.settings import get_config

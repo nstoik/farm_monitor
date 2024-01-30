@@ -1,4 +1,5 @@
 """Run a service that responds to pings with the address of the rabbitmq broker."""
+
 import logging
 import socket
 import time

@@ -1,4 +1,5 @@
 """Main celery module."""
+
 # pylint: disable=unused-argument
 import logging
 from logging.handlers import RotatingFileHandler
@@ -10,6 +11,7 @@ from .settings import get_config
 app = Celery()
 
 app.config_from_object("fm_server.settings:CeleryConfig")
+
 
 # disabled for now
 # @signals.setup_logging.connect
