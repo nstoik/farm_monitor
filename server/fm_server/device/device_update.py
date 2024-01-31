@@ -36,7 +36,7 @@ def process_device_update(info: dict) -> bool:
     session = get_session()
 
     try:
-        update_data = DeviceUpdateModel.parse_obj(info)
+        update_data = DeviceUpdateModel.model_validate(info)
     except ValidationError as error:
         LOGGER.error(f"Invalid device update: {str(error)}")
         return False

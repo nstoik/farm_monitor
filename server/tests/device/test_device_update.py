@@ -36,7 +36,7 @@ class TestProcessDeviceUpdate:
 
         process_device_update(self.info)
 
-        update_data = DeviceUpdate.parse_obj(self.info)
+        update_data = DeviceUpdate.model_validate(self.info)
 
         device = Device.query.filter_by(device_id=update_data.id).first()
 

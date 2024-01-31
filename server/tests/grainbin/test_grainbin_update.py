@@ -61,7 +61,7 @@ class TestProcessGrainbinUpdate:
 
         process_grainbin_update(self.info)
 
-        update_data = GrainbinUpdate.parse_obj(self.info)
+        update_data = GrainbinUpdate.model_validate(self.info)
 
         grainbin = Grainbin.query.filter_by(device_id=update_data.device_id).first()
 

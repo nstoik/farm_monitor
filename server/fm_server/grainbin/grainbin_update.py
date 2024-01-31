@@ -35,7 +35,7 @@ def process_grainbin_update(info: dict) -> bool:
     """Process a grainbin update."""
 
     try:
-        update_data = GrainbinUpdateModel.parse_obj(info)
+        update_data = GrainbinUpdateModel.model_validate(info)
     except ValidationError as error:
         LOGGER.error(f"Invalid grainbin update: {str(error)}")
         return False
