@@ -4,7 +4,7 @@
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 
-from fm_database.base import create_all_tables, drop_all_tables, get_session
+from fm_database.database import create_all_tables, drop_all_tables, get_session
 
 
 @pytest.fixture(scope="session")

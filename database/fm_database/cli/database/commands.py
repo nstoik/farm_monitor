@@ -4,7 +4,7 @@ import click
 from alembic import command as al_command
 from alembic.config import Config as AlConfig
 
-from fm_database.base import create_all_tables, drop_all_tables, get_base, get_session
+from fm_database.database import Base, create_all_tables, drop_all_tables, get_session
 
 # import all models so they are available to the SqlAlchemy base
 # pylint: disable=unused-import
@@ -37,9 +37,8 @@ def delete_all_data(confirm):
     else:
         click.echo("deleting all data from the database.")
 
-        base = get_base()
         session = get_session()
-        for table in reversed(base.metadata.sorted_tables):
+        for table in reversed(Base.metadata.sorted_tables):
             session.execute(table.delete())
         session.commit()
 
