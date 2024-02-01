@@ -1,4 +1,5 @@
 """Test user models."""
+
 import datetime as dt
 
 import pytest

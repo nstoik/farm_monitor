@@ -1,4 +1,5 @@
 """Test the commands module."""
+
 import pytest
 from click.testing import CliRunner
 

@@ -1,4 +1,5 @@
 """Test message models."""
+
 import datetime as dt
 
 import pytest

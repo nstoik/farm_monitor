@@ -1,4 +1,5 @@
 """Factories to help in tests."""
+
 # pylint: disable=too-few-public-methods,no-self-argument,unused-argument
 from factory import PostGenerationMethodCall, Sequence
 from factory.alchemy import SQLAlchemyModelFactory

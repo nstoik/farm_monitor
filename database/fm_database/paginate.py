@@ -2,6 +2,7 @@
 
 Taken from https://github.com/pallets/flask-sqlalchemy/blob/main/src/flask_sqlalchemy/__init__.py#L342
 """
+
 from math import ceil
 
 from sqlalchemy.orm import Query

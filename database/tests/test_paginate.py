@@ -1,4 +1,5 @@
 """Tests for the paginate class and method."""
+
 import pytest
 
 from fm_database.models.user import User

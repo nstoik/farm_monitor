@@ -1,4 +1,5 @@
 """Test system models."""
+
 import pytest
 
 from fm_database.models.system import Hardware, Interface, Software, SystemSetup, Wifi

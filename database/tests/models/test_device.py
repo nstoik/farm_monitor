@@ -1,4 +1,5 @@
 """Test device models."""
+
 import datetime as dt
 
 import pytest
