@@ -19,6 +19,7 @@ flake8-isort = "~=6.1"
 isort = "~=5.13"
 pep8-naming = "~=0.13"
 pylint = "~=3.0"
+setuptools = "~=69.0"
 
 # MyPy and stubs
 mypy = "~=1.8"
