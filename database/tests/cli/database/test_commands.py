@@ -2,8 +2,10 @@
 
 import pytest
 from click.testing import CliRunner
+from sqlalchemy import select
 
 from fm_database.cli.database.commands import create_default_user
+from fm_database.database import get_session
 from fm_database.models.user import User
 
 
@@ -15,10 +17,12 @@ class TestSetupCommands:
     def test_create_default_user():
         """Test that a default user can be created with no options."""
 
+        session = get_session()
+
         runner = CliRunner()
         result = runner.invoke(create_default_user)
 
-        user = User.query.one()
+        user = session.scalars(select(User)).one()
         success_string = "Default user 'admin' created."
 
         assert not result.exception
@@ -37,7 +41,8 @@ class TestSetupCommands:
             create_default_user, ["--username", "Bob", "--password", "myprecious"]
         )
 
-        user = User.query.one()
+        session = get_session()
+        user = session.scalars(select(User)).one()
         success_string = "Default user 'Bob' created."
 
         assert not result.exception
