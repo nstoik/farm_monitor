@@ -9,12 +9,11 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
-from .paginate import PaginateQuery
 from .settings import get_config
 
 config = get_config()  # pylint: disable=invalid-name
 engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
-db_session = scoped_session(sessionmaker(bind=engine, query_cls=PaginateQuery))
+db_session = scoped_session(sessionmaker(bind=engine))
 
 
 def get_session():

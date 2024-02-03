@@ -1,159 +1,306 @@
 """Module to add pagination to the database.
 
-Taken from https://github.com/pallets/flask-sqlalchemy/blob/main/src/flask_sqlalchemy/__init__.py#L342
+Inspired/taken from https://github.com/pallets-eco/flask-sqlalchemy/blob/main/src/flask_sqlalchemy/pagination.py
 """
 
-from math import ceil
+from __future__ import annotations
 
-from sqlalchemy.orm import Query
+from math import ceil
+from typing import Any, Iterator
+
+import sqlalchemy as sa
+import sqlalchemy.orm as sa_orm
+
+
+def paginate(
+    session: sa_orm.Session,
+    select: sa.sql.Select[Any],
+    page: int | None = None,
+    per_page: int | None = None,
+    max_per_page: int | None = None,
+    count: bool = True,
+) -> Pagination:
+    """Apply an offset and limit to a select statment based on the current page and number of items per page.
+
+    Returning a :class:`Pagination` object.
+
+    The statement should select a model class, like ``select(User)``. This applies
+    ``unique()`` and ``scalars()`` modifiers to the result, so compound selects will
+    not return the expected results.
+
+    :param session: The ``session`` to use for the query.
+    :param select: The ``select`` statement to paginate.
+    :param page: The current page, used to calculate the offset. Defaults to 1.
+    :param per_page: The maximum number of items on a page, used to calculate the
+        offset and limit. Defaults to 20.
+    :param max_per_page: The maximum allowed value for ``per_page``, to limit a
+        user-provided value. Use ``None`` for no limit. Defaults to 100.
+    :param count: Calculate the total number of values by issuing an extra count
+        query. For very complex queries this may be inaccurate or slow, so it can be
+        disabled and set manually if necessary.
+    """
+    return Pagination(
+        select=select,
+        session=session,
+        page=page,
+        per_page=per_page,
+        max_per_page=max_per_page,
+        count=count,
+    )
 
 
 class Pagination:
-    """Internal helper class returned by :meth:`BaseQuery.paginate`.
+    """Apply an offset and limit to the query based on the current page and number of items per page.
 
-    You can also construct it from any other SQLAlchemy query object if you are
-    working with other libraries.  Additionally it is possible to pass `None`
-    as query object in which case the :meth:`prev` and :meth:`next` will
-    no longer work.
+    Returned by :meth:`paginate`.
+
+    :param session: The ``session`` to use for the query.
+    :param select: The ``select`` statement to paginate.
+    :param page: The current page, used to calculate the offset. Defaults to 1.
+    :param per_page: The maximum number of items on a page, used to calculate the
+        offset and limit. Defaults to 20.
+    :param max_per_page: The maximum allowed value for ``per_page``, to limit a
+        user-provided value. Use ``None`` for no limit. Defaults to 100.
+    :param count: Calculate the total number of values by issuing an extra count
+        query. For very complex queries this may be inaccurate or slow, so it can be
+        disabled and set manually if necessary.
     """
 
-    def __init__(self, query, page, per_page, total, items):
+    def __init__(
+        self,
+        session: sa_orm.Session,
+        select: sa.sql.Select[Any],
+        page: int | None = None,
+        per_page: int | None = None,
+        max_per_page: int | None = 100,
+        count: bool = True,
+    ) -> None:
         """Initiate the class."""
-        #: the unlimited query object that was used to create this
-        #: pagination object.
-        self.query = query
-        #: the current page number (1 indexed)
-        self.page = page
-        #: the number of items to be displayed on a page.
-        self.per_page = per_page
-        #: the total number of items matching the query
-        self.total = total
-        #: the items for the current page
-        self.items = items
 
-    @property
-    def pages(self):
-        """The total number of pages."""
-        if self.per_page == 0 or self.total is None:
-            pages = 0
+        page, per_page = self._prepare_page_args(
+            page=page,
+            per_page=per_page,
+            max_per_page=max_per_page,
+        )
+
+        self.session: sa_orm.Session = session
+
+        self.select: sa.sql.Select[Any] = select
+
+        self.page: int = page
+        """The current page."""
+
+        self.per_page: int = per_page
+        """The maximum number of items on a page."""
+
+        self.max_per_page: int | None = max_per_page
+        """The maximum allowed value for ``per_page``."""
+
+        items = self._query_items()
+
+        self.items: list[Any] = items
+        """The items on the current page. Iterating over the pagination object is
+        equivalent to iterating over the items.
+        """
+
+        if count:
+            total = self._query_count()
         else:
-            pages = int(ceil(self.total / float(self.per_page)))
-        return pages
+            total = None
 
-    def prev(self, error_out=False):
-        """Returns a :class:`Pagination` object for the previous page."""
-        assert (
-            self.query is not None
-        ), "a query object is required for this method to work"
-        return self.query.paginate(self.page - 1, self.per_page, error_out)
+        self.total: int | None = total
+        """The total number of items across all pages."""
 
-    @property
-    def prev_num(self):
-        """Number of the previous page."""
-        if not self.has_prev:
-            return None
-        return self.page - 1
-
-    @property
-    def has_prev(self):
-        """True if a previous page exists."""
-        return self.page > 1
-
-    def next(self, error_out=False):
-        """Returns a :class:`Pagination` object for the next page."""
-        assert (
-            self.query is not None
-        ), "a query object is required for this method to work"
-        return self.query.paginate(self.page + 1, self.per_page, error_out)
-
-    @property
-    def has_next(self):
-        """True if a next page exists."""
-        return self.page < self.pages
-
-    @property
-    def next_num(self):
-        """Number of the next page."""
-        if not self.has_next:
-            return None
-        return self.page + 1
-
-    def iter_pages(self, left_edge=2, left_current=2, right_current=5, right_edge=2):
-        """Iterates over the page numbers in the pagination.
-
-        The four parameters control the thresholds how many numbers should be produced
-        from the sides.  Skipped page numbers are represented as `None`.
-        This is how you could render such a pagination in the templates:
-        .. sourcecode:: html+jinja
-            {% macro render_pagination(pagination, endpoint) %}
-              <div class=pagination>
-              {%- for page in pagination.iter_pages() %}
-                {% if page %}
-                  {% if page != pagination.page %}
-                    <a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a>
-                  {% else %}
-                    <strong>{{ page }}</strong>
-                  {% endif %}
-                {% else %}
-                  <span class=ellipsis>…</span>
-                {% endif %}
-              {%- endfor %}
-              </div>
-            {% endmacro %}
-        """
-        last = 0
-        for num in range(1, self.pages + 1):
-            if (
-                num <= left_edge
-                or (
-                    num  # pylint: disable=chained-comparison
-                    > self.page - left_current - 1
-                    and num < self.page + right_current
-                )
-                or num > self.pages - right_edge
-            ):
-                if last + 1 != num:
-                    yield None
-                yield num
-                last = num
-
-
-class PaginateQuery(Query):  # pylint: disable=too-many-ancestors
-    """Custom Query class to add paginate method."""
-
-    def paginate(
-        self, page=None, per_page=None, error_out=True, max_per_page=None, count=True
-    ):  # pylint: disable=unused-argument
-        """Paginate method  returns ``per_page`` items from page ``page``.
-
-        If ``page`` and ``per_page`` are ``None``, they default to 1 and 20 respectively.
-        If ``max_per_page`` is specified, ``per_page`` will be limited to that value.
-        If ``count`` is ``False``, no query to help determine total page count will be run.
-
-        ``error_out`` is included in the method signature to be compatibale with the
-        Flask-Sqlalchemy extenssion where this idea is from.
-
-        Returns a :class:`Pagination` object.
-        """
-
+    @staticmethod
+    def _prepare_page_args(
+        *,
+        page: int | None = None,
+        per_page: int | None = None,
+        max_per_page: int | None = None,
+    ) -> tuple[int, int]:
         if page is None:
             page = 1
-
-        page = max(1, page)
 
         if per_page is None:
             per_page = 20
 
-        per_page = max(1, per_page)
-
         if max_per_page is not None:
             per_page = min(per_page, max_per_page)
 
-        items = self.limit(per_page).offset((page - 1) * per_page).all()
+        page = max(1, page)
 
-        if not count:
-            total = None
-        else:
-            total = self.order_by(None).count()
+        if per_page < 1:
+            per_page = 20
 
-        return Pagination(self, page, per_page, total, items)
+        return page, per_page
+
+    @property
+    def _query_offset(self) -> int:
+        """The index of the first item to query, passed to ``offset()``.
+
+        :meta private:
+        """
+        return (self.page - 1) * self.per_page
+
+    def _query_items(self) -> list[Any]:
+        """Execute the query to get the items on the current page.
+
+        :meta private:
+        """
+        select = self.select
+        select = select.limit(self.per_page).offset(self._query_offset)
+        return list(self.session.execute(select).unique().scalars())
+
+    def _query_count(self) -> int:
+        """Execute the query to get the total number of items.
+
+        :meta private:
+        """
+        select = self.select
+        sub = select.options(sa_orm.lazyload("*")).order_by(None).subquery()
+        # pylint: disable=not-callable
+        out = self.session.execute(sa.select(sa.func.count()).select_from(sub)).scalar()
+        return out  # type: ignore[no-any-return]
+
+    @property
+    def first(self) -> int:
+        """The number of the first item on the page, starting from 1, or 0 if there are no items."""
+        if len(self.items) == 0:
+            return 0
+
+        return (self.page - 1) * self.per_page + 1
+
+    @property
+    def last(self) -> int:
+        """The number of the last item on the page.
+
+        Starting from 1, inclusive, or 0 if there are no items.
+        """
+        first = self.first
+        return max(first, first + len(self.items) - 1)
+
+    @property
+    def pages(self) -> int:
+        """The total number of pages."""
+        if self.total == 0 or self.total is None:
+            return 0
+
+        return ceil(self.total / self.per_page)
+
+    @property
+    def has_prev(self) -> bool:
+        """``True`` if this is not the first page."""
+        return self.page > 1
+
+    @property
+    def prev_num(self) -> int | None:
+        """The previous page number, or ``None`` if this is the first page."""
+        if not self.has_prev:
+            return None
+
+        return self.page - 1
+
+    def prev(self) -> Pagination:
+        """Query the :class:`Pagination` object for the previous page."""
+        p = type(self)(
+            session=self.session,
+            select=self.select,
+            page=self.page - 1,
+            per_page=self.per_page,
+            count=False,
+        )
+        p.total = self.total
+        return p
+
+    @property
+    def has_next(self) -> bool:
+        """``True`` if this is not the last page."""
+        return self.page < self.pages
+
+    @property
+    def next_num(self) -> int | None:
+        """The next page number, or ``None`` if this is the last page."""
+        if not self.has_next:
+            return None
+
+        return self.page + 1
+
+    def next(self) -> Pagination:
+        """Query the :class:`Pagination` object for the next page."""
+        p = type(self)(
+            session=self.session,
+            select=self.select,
+            page=self.page + 1,
+            per_page=self.per_page,
+            max_per_page=self.max_per_page,
+            count=False,
+        )
+        p.total = self.total
+        return p
+
+    def iter_pages(
+        self,
+        *,
+        left_edge: int = 2,
+        left_current: int = 2,
+        right_current: int = 4,
+        right_edge: int = 2,
+    ) -> Iterator[int | None]:
+        """Yield page numbers for a pagination widget.
+
+        Skipped pages between the edges and middle are represented by a ``None``.
+
+        For example, if there are 20 pages and the current page is 7, the following
+        values are yielded.
+
+        .. code-block:: python
+
+            1, 2, None, 5, 6, 7, 8, 9, 10, 11, None, 19, 20
+
+        :param left_edge: How many pages to show from the first page.
+        :param left_current: How many pages to show left of the current page.
+        :param right_current: How many pages to show right of the current page.
+        :param right_edge: How many pages to show from the last page.
+
+        .. versionchanged:: 3.0
+            Improved efficiency of calculating what to yield.
+
+        .. versionchanged:: 3.0
+            ``right_current`` boundary is inclusive.
+
+        .. versionchanged:: 3.0
+            All parameters are keyword-only.
+        """
+        pages_end = self.pages + 1
+
+        if pages_end == 1:
+            return
+
+        left_end = min(1 + left_edge, pages_end)
+        yield from range(1, left_end)
+
+        if left_end == pages_end:
+            return
+
+        mid_start = max(left_end, self.page - left_current)
+        mid_end = min(self.page + right_current + 1, pages_end)
+
+        if mid_start - left_end > 0:
+            yield None
+
+        yield from range(mid_start, mid_end)
+
+        if mid_end == pages_end:
+            return
+
+        right_start = max(mid_end, pages_end - right_edge)
+
+        if right_start - mid_end > 0:
+            yield None
+
+        yield from range(right_start, pages_end)
+
+    def __iter__(self) -> Iterator[Any]:
+        """Iterate over the items on the current page."""
+
+        yield from self.items
