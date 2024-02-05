@@ -5,7 +5,7 @@
 import pytest
 from flask import url_for
 from flask.testing import FlaskClient
-from fm_database.base import create_all_tables, drop_all_tables, get_session
+from fm_database.database import create_all_tables, drop_all_tables, get_session
 from fm_database.models.user import User
 
 from fm_api.app import create_app

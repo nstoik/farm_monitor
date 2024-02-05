@@ -4,7 +4,7 @@ from flask import current_app
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.user import User
 
 from fm_api.settings import get_config
@@ -68,7 +68,7 @@ class UsersById(MethodView):
         """Update existing User."""
 
         dbsession = get_session()
-        item = User.get_by_id(user_id, session=dbsession)
+        item = User.get_by_id(user_id)
         if item is None:
             abort(404, message="User not found.")
         # pass in update_data dict as named variables
@@ -81,7 +81,7 @@ class UsersById(MethodView):
     def delete(user_id):
         """Delete a User by ID."""
         dbsession = get_session()
-        item = User.get_by_id(user_id, session=dbsession)
+        item = User.get_by_id(user_id)
         if item is None:
             abort(404, message="User not found.")
-        item.delete(session=dbsession)
+        item.delete(dbsession)

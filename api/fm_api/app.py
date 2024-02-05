@@ -3,7 +3,7 @@
 import os
 
 from flask import Flask
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.user import User
 
 from fm_api import auth, device, grainbin, user
