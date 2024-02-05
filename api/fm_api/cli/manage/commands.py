@@ -1,4 +1,5 @@
 """Click commands for managing the app."""
+
 import os
 
 import click

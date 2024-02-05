@@ -1,4 +1,5 @@
 """Schema for Device."""
+
 from flask import url_for
 from fm_database.models.device import Device, DeviceUpdate
 from marshmallow.fields import Method

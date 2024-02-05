@@ -1,4 +1,5 @@
 """Views for User and Role API."""
+
 from flask import current_app
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required

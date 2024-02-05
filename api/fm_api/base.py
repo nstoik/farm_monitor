@@ -1,8 +1,10 @@
 """Base Schema setup for api."""
 from fm_database.base import get_session
+
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, SQLAlchemyAutoSchemaOpts
 
 session = get_session()
+
 
 # pylint: disable=too-few-public-methods
 class BaseOpts(SQLAlchemyAutoSchemaOpts):

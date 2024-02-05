@@ -1,4 +1,5 @@
 """Main command line interface entry point."""
+
 import click
 
 from .manage import commands as manage_commands

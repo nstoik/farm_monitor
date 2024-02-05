@@ -1,4 +1,5 @@
 """Defines fixtures available to all tests."""
+
 # pylint: disable=redefined-outer-name, unused-argument
 
 import pytest
@@ -99,5 +100,5 @@ def auth_headers(admin_user, flaskclient, tables):
     tokens = rep.get_json()
     return {
         "content-type": "application/json",
-        "authorization": f"Bearer { tokens['access_token'] }",
+        "authorization": f"Bearer {tokens['access_token']}",
     }

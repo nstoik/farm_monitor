@@ -1,4 +1,5 @@
 """Views for Device API."""
+
 from flask import current_app
 from flask.views import MethodView
 

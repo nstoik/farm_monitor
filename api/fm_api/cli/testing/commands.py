@@ -1,4 +1,5 @@
 """Command line interface for testing and linting."""
+
 import os
 import sys
 from glob import glob

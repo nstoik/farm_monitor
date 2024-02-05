@@ -1,4 +1,5 @@
 """Test the API Device views."""
+
 import datetime as dt
 import json
 

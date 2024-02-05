@@ -1,4 +1,5 @@
 """Test the API Auth views."""
+
 import pytest
 from flask import url_for
 

@@ -1,4 +1,5 @@
 """Views for Auth API."""
+
 from datetime import datetime
 
 from flask.views import MethodView
