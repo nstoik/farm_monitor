@@ -123,7 +123,7 @@ class TestGetOrCreateGrainbin:
 
         assert grainbin.device_id == device.device_id
         assert grainbin.bus_number == 1
-        assert len(device.bins) == 1
+        assert len(device.grainbins) == 1
 
     def test_get_or_create_grainbin_existing(self):
         """Test the get_or_create_grainbin function properly returns an existing grainbin."""
