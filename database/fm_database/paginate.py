@@ -160,7 +160,9 @@ class Pagination:
         sub = select.options(sa_orm.lazyload("*")).order_by(None).subquery()
         # pylint: disable=not-callable
         out = self.session.execute(sa.select(sa.func.count()).select_from(sub)).scalar()
-        return out  # type: ignore[no-any-return]
+        if out is None:
+            return 0
+        return out
 
     @property
     def first(self) -> int:

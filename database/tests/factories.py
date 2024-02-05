@@ -1,6 +1,6 @@
 """Factories to help in tests."""
 
-# pylint: disable=too-few-public-methods,no-self-argument,unused-argument
+# pylint: disable=too-few-public-methods
 from factory import PostGenerationMethodCall, Sequence
 from factory.alchemy import SQLAlchemyModelFactory
 from factory.declarations import SelfAttribute, SubFactory
@@ -12,19 +12,6 @@ from fm_database.models.user import User
 
 class BaseFactory(SQLAlchemyModelFactory):
     """Base factory."""
-
-    @classmethod
-    def _create(cls, model_class, *args, **kwargs):
-        """Override the _create classmethod.
-
-        Does not actually change from the default, but
-        for some reason it needs to be specified otherwise
-        SubFactory elements do not get the primary key created
-        correctly.
-        """
-        obj = model_class(*args, **kwargs)
-        obj.save()
-        return obj
 
     class Meta:
         """Factory configuration."""

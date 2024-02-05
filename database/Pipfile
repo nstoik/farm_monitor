@@ -17,22 +17,22 @@ flake8-debugger = "~=4.1.2"
 flake8-docstrings = "~=1.7.0"
 flake8-isort = "~=6.1"
 isort = "~=5.13"
+mypy = "~=1.8"
 pep8-naming = "~=0.13"
 pylint = "~=3.0"
 setuptools = "~=69.0"
-
-# MyPy and stubs
-mypy = "~=1.8"
-sqlalchemy-stubs = "~=0.4.0"
+# type hints
+types-passlib = "~=1.7.7"
+types-setuptools = "~=69.0"
 
 [packages]
 SQLAlchemy = "~=2.0"
+# for Postgresql
+psycopg2 = "~=2.9.3"
+alembic = "~=1.13"
 passlib = "~=1.7.1"
 click = "~=8.1"
 fm-database = {file = ".", editable = true}
-alembic = "~=1.13"
-# for Postgresql
-psycopg2 = "~=2.9.3"
 
 [requires]
 python_version = "3.12"
