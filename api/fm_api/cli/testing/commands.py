@@ -131,7 +131,7 @@ def lint(fix_imports, check):
 
     isort_args = ["--profile", "black"]
     black_args = ["--diff"]
-    mypy_args = ["--warn-unused-ignores", "--show-error-codes"]
+    mypy_args = ["--warn-unused-ignores", "--show-error-codes", "--check-untyped-defs"]
     pylint_args = ["--load-plugins", ""]
     if check:
         isort_args.append("--check")
