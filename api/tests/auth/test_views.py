@@ -93,7 +93,7 @@ class TestAPIAuthRefresh:
 
         auth_headers = {
             "content-type": "application/json",
-            "authorization": f"Bearer { tokens['refresh_token'] }",
+            "authorization": f"Bearer {tokens['refresh_token']}",
         }
         url_refresh = url_for("auth.AuthRefresh")
         rep = flaskclient.post(url_refresh, headers=auth_headers)
@@ -111,7 +111,7 @@ class TestAPIAuthRefresh:
 
         auth_headers = {
             "content-type": "application/json",
-            "authorization": f"Bearer { tokens['access_token'] }",
+            "authorization": f"Bearer {tokens['access_token']}",
         }
         url_refresh = url_for("auth.AuthRefresh")
         rep = flaskclient.post(url_refresh, headers=auth_headers)

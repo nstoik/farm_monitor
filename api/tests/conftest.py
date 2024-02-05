@@ -24,7 +24,7 @@ class HtmlTestClient(FlaskClient):
     def login_with_creds(self, username, password):
         """Send the login data to the login url."""
         return self.post(
-            url_for("public.home"), data=dict(username=username, password=password)
+            url_for("public.home"), data={"username": username, "password": password}
         )
 
     def logout(self):
