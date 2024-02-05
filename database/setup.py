@@ -11,10 +11,10 @@ setup(
     packages=find_packages(exclude=["tests"]),
     install_requires=[
         "click>=8",
-        "sqlalchemy>=1.4",
+        "sqlalchemy>=2.0",
         "passlib",
         "psycopg2",
-        "alembic>=1.8",
+        "alembic>=1.13",
     ],
     entry_points={"console_scripts": ["fm_database = fm_database.cli.cli:entry_point"]},
 )
