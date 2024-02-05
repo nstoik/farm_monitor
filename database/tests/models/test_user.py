@@ -20,6 +20,7 @@ class TestUser:
         user.save()
 
         retrieved = User.get_by_id(user.id)
+        assert isinstance(retrieved, User)
         assert retrieved.id == user.id
 
     @staticmethod
