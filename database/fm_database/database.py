@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Database module, including the SQLAlchemy database object and DB-related utilities."""
-from sqlalchemy import ForeignKey, create_engine
+from typing import Any, Self
+
+from sqlalchemy import ForeignKey, String, create_engine
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -8,6 +10,7 @@ from sqlalchemy.orm import (
     scoped_session,
     sessionmaker,
 )
+from typing_extensions import Annotated
 
 from .settings import get_config
 
@@ -32,41 +35,62 @@ def drop_all_tables():
     Base.metadata.drop_all(bind=engine)
 
 
+# special types for SQLAlchemy
+str128 = Annotated[str, 128]  # pylint: disable=invalid-name
+str80 = Annotated[str, 80]  # pylint: disable=invalid-name
+str50 = Annotated[str, 50]  # pylint: disable=invalid-name
+str30 = Annotated[str, 30]  # pylint: disable=invalid-name
+str20 = Annotated[str, 20]  # pylint: disable=invalid-name
+str10 = Annotated[str, 10]  # pylint: disable=invalid-name
+str7 = Annotated[str, 7]  # pylint: disable=invalid-name
+str5 = Annotated[str, 5]  # pylint: disable=invalid-name
+
+
 class Base(DeclarativeBase):  # pylint: disable=too-few-public-methods
     """Base class for all SQLAlchemy models."""
 
-    type_annotation_map = {}
+    type_annotation_map = {
+        str128: String(128),
+        str80: String(80),
+        str50: String(50),
+        str30: String(30),
+        str20: String(20),
+        str10: String(10),
+        str7: String(7),
+        str5: String(5),
+    }
 
 
 class CRUDMixin:
     """Mixin that adds convenience methods for CRUD (create, read, update, delete) operations."""
 
     @classmethod
-    def create(cls, **kwargs):
+    def create(cls, **kwargs) -> Self:
         """Create a new record and save it the database."""
         instance = cls(**kwargs)
         return instance.save()
 
-    def update(self, commit=True, **kwargs):
+    def update(self, commit=True, **kwargs) -> Self:
         """Update specific fields of a record."""
         for attr, value in kwargs.items():
             setattr(self, attr, value)
         return self.save() if commit else self
 
-    def save(self, commit=True):
+    def save(self, commit=True) -> Self:
         """Save the record."""
         db_session.add(self)
         if commit:
             db_session.commit()
         return self
 
-    def delete(self, commit=True):
+    def delete(self, commit=True) -> None:
         """Remove the record from the database."""
         db_session.delete(self)
-        return commit and db_session.commit()
+        if commit:
+            db_session.commit()
 
 
-class Model(CRUDMixin, Base):  # type: ignore[valid-type, misc]
+class Model(CRUDMixin, Base):
     """Base model class that includes CRUD convenience methods."""
 
     __abstract__ = True
@@ -83,7 +107,7 @@ class SurrogatePK(Model):  # pylint: disable=too-few-public-methods
     id: Mapped[int] = mapped_column(primary_key=True)
 
     @classmethod
-    def get_by_id(cls, record_id):
+    def get_by_id(cls, record_id: str | bytes | int | float) -> Self | None:
         """Get record by ID."""
         if any(
             (
@@ -95,13 +119,34 @@ class SurrogatePK(Model):  # pylint: disable=too-few-public-methods
         return None
 
 
-def reference_col(tablename, nullable=False, pk_name="id", **kwargs) -> Mapped[int]:
+def reference_col(tablename, nullable=False, pk_name="id", **kwargs) -> Mapped[Any]:
     """Column that adds primary key foreign key reference.
+
+    The returned column type will be either `int` or `str`
 
     Usage: ::
 
-        category_id: Mapped[ForeignKey] = reference_col('category')
-        categorys: Mapped[List["Category"]] = relationship(backref='categories')
+    For a bi-directional one to many relationship
+
+    Parent:
+        children: Mapped[List["Child"]] = relationship(back_populates="parent")
+
+    Child:
+        parent_id: Mapped[int] = reference_col('parent')
+        parent: Mapped["Parent"] = relationship(back_populates='children')
+
+
+    For a bi-directional many to one relationship
+
+    Parent:
+        child_id: Mapped[int] = reference_col('child')
+        child: Mapped["Child"] = relationship(back_populates='parents')
+
+    Child:
+        parents: Mapped[List["Parent"]] = relationship(back_populates='child')
+
+    For a many to many relationship see:
+    https://docs.sqlalchemy.org/en/20/orm/basic_relationships.html#many-to-many
     """
     return mapped_column(
         ForeignKey(f"{tablename}.{pk_name}"), nullable=nullable, **kwargs

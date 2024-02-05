@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 """Device models."""
-from sqlalchemy import Boolean, Column, DateTime, Float, Integer, Interval, String
-from sqlalchemy.orm import relationship
+from datetime import datetime, timedelta
+
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
-from ..database import SurrogatePK, reference_col
+from ..database import SurrogatePK, reference_col, str7, str10, str20, str50
+
+# https://github.com/pylint-dev/pylint/issues/8138
+# can be removed once upstream issue in pylint is fixed
+# pylint: disable=not-callable
 
 
 class GrainbinUpdate(SurrogatePK):
@@ -12,17 +17,18 @@ class GrainbinUpdate(SurrogatePK):
 
     __tablename__ = "grainbin_update"
 
-    timestamp = Column(DateTime, nullable=False, index=True)
-    update_index = Column(Integer, nullable=False, index=True)
+    timestamp: Mapped[datetime] = mapped_column(index=True)
+    update_index: Mapped[int] = mapped_column(index=True)
 
-    temperature = Column(Float(), nullable=True, default=None)
-    temphigh = Column(Integer(), nullable=True, default=None)  # cable number
-    templow = Column(Integer(), nullable=True, default=None)  # sensor number
-    sensor_name = Column(String(20), nullable=True, default=None)
+    temperature: Mapped[float | None]
+    temphigh: Mapped[int | None]  # cable number
+    templow: Mapped[int | None]  # sensor number
+    sensor_name: Mapped[str20 | None]
 
-    grainbin_id = reference_col("grainbin")
+    grainbin_id: Mapped[int] = reference_col("grainbin")
+    grainbin: Mapped["Grainbin"] = relationship(back_populates="updates")
 
-    def __init__(self, grainbin_id) -> None:
+    def __init__(self, grainbin_id: int) -> None:
         """Create an instance."""
 
         self.grainbin_id = grainbin_id
@@ -40,33 +46,36 @@ class Grainbin(SurrogatePK):
 
     __tablename__ = "grainbin"
 
-    creation_time = Column(DateTime, default=func.now())
-    last_updated = Column(DateTime, default=func.now(), onupdate=func.now())
-    name = Column(String(20), nullable=False, unique=False)
-    grainbin_type = Column(String(20), nullable=True, default="standard")
-    sensor_type = Column(String(20), nullable=True, default="temperature")
-    location = Column(String(20))
-    description = Column(String(50))
-    total_updates = Column(Integer, nullable=False, default=0)
-    average_temp = Column(String(7))
-    bus_number = Column(Integer, nullable=False)
-    bus_number_string = Column(String(10), nullable=False)
-    user_configured = Column(Boolean, default=False)
+    creation_time: Mapped[datetime] = mapped_column(default=func.now())
+    last_updated: Mapped[datetime] = mapped_column(
+        default=func.now(), onupdate=func.now()
+    )
+    name: Mapped[str20] = mapped_column(unique=False)
+    grainbin_type: Mapped[str20 | None] = mapped_column(default="standard")
+    sensor_type: Mapped[str20 | None] = mapped_column(default="temperature")
+    location: Mapped[str20]
+    description: Mapped[str50]
+    total_updates: Mapped[int] = mapped_column(default=0)
+    average_temp: Mapped[str7 | None]
+    bus_number: Mapped[int]
+    bus_number_string: Mapped[str10]
+    user_configured: Mapped[bool] = mapped_column(default=False)
 
-    updates = relationship("GrainbinUpdate", backref="grainbin")
-    device_id = reference_col("device", pk_name="device_id")
+    updates: Mapped[list["GrainbinUpdate"]] = relationship(back_populates="grainbin")
+    device_id_str: Mapped[str] = reference_col("device", pk_name="device_id")
+    device: Mapped["Device"] = relationship(back_populates="grainbins")
 
     def __init__(
         self,
-        device_id,
-        bus_number,
-        name="New",
-        location="Not Set",
-        description="Not Set",
+        device_id_str: str,
+        bus_number: int,
+        name: str = "New",
+        location: str = "Not Set",
+        description: str = "Not Set",
     ):
         """Create an instance."""
         self.name = name
-        self.device_id = device_id
+        self.device_id_str = device_id_str
         self.bus_number = bus_number
         self.bus_number_string = f"bus.{bus_number}"
         self.location = location
@@ -83,21 +92,22 @@ class DeviceUpdate(SurrogatePK):
 
     __tablename__ = "device_update"
 
-    timestamp = Column(DateTime, nullable=False, index=True)
-    update_index = Column(Integer, nullable=False, index=True)
+    timestamp: Mapped[datetime] = mapped_column(index=True)
+    update_index: Mapped[int] = mapped_column(index=True)
 
-    interior_temp = Column(Float(), nullable=True, default=None)
-    exterior_temp = Column(Float(), nullable=True, default=None)
-    device_temp = Column(Float(), nullable=True, default=None)
-    uptime = Column(Interval, nullable=True, default=None)
-    load_avg = Column(Integer(), nullable=True, default=None)
-    disk_total = Column(Integer(), nullable=True, default=None)
-    disk_used = Column(Integer(), nullable=True, default=None)
-    disk_free = Column(Integer(), nullable=True, default=None)
+    interior_temp: Mapped[float | None]
+    exterior_temp: Mapped[float | None]
+    device_temp: Mapped[float | None]
+    uptime: Mapped[timedelta | None]
+    load_avg: Mapped[int | None]
+    disk_total: Mapped[int | None]
+    disk_used: Mapped[int | None]
+    disk_free: Mapped[int | None]
 
-    device_id = reference_col("device")
+    device_id: Mapped[int] = reference_col("device")
+    device: Mapped["Device"] = relationship(back_populates="updates")
 
-    def __init__(self, device_id) -> None:
+    def __init__(self, device_id: int) -> None:
         """Create an instance."""
 
         self.device_id = device_id
@@ -129,34 +139,36 @@ class Device(SurrogatePK):
     """A device."""
 
     __tablename__ = "device"
-    device_id = Column(String(20), unique=True)
-    hardware_version = Column(String(20))
-    software_version = Column(String(20))
+    device_id: Mapped[str20] = mapped_column(unique=True)
+    hardware_version: Mapped[str20]
+    software_version: Mapped[str20]
 
-    creation_time = Column(DateTime, default=func.now())
-    last_updated = Column(DateTime, default=func.now(), onupdate=func.now())
-    total_updates = Column(Integer, nullable=False, default=0)
-    name = Column(String(20), nullable=False, unique=False)
-    location = Column(String(20))
-    description = Column(String(50))
-    connected = Column(Boolean, default=False)
-    user_configured = Column(Boolean, default=False)
-    last_update_received = Column(DateTime, nullable=True, default=None)
+    creation_time: Mapped[datetime] = mapped_column(default=func.now())
+    last_updated: Mapped[datetime] = mapped_column(
+        default=func.now(), onupdate=func.now()
+    )
+    total_updates: Mapped[int] = mapped_column(default=0)
+    name: Mapped[str20] = mapped_column(unique=False)
+    location: Mapped[str20]
+    description: Mapped[str50]
+    connected: Mapped[bool] = mapped_column(default=False)
+    user_configured: Mapped[bool] = mapped_column(default=False)
+    last_update_received: Mapped[datetime | None]
 
-    updates = relationship("DeviceUpdate", backref="device")
+    updates = relationship("DeviceUpdate", back_populates="device")
 
     # grainbin related data
-    grainbin_count = Column(Integer, default=0)
-    bins = relationship("Grainbin", backref="device")
+    grainbin_count: Mapped[int] = mapped_column(default=0)
+    grainbins: Mapped[list["Grainbin"]] = relationship(back_populates="device")
 
     def __init__(
         self,
-        device_id,
-        hardware_version,
-        software_version,
-        name="not set",
-        location="not set",
-        description="not set",
+        device_id: str,
+        hardware_version: str,
+        software_version: str,
+        name: str = "not set",
+        location: str = "not set",
+        description: str = "not set",
     ):
         """Create the instance."""
         self.device_id = device_id
