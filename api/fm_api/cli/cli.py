@@ -13,7 +13,6 @@ def entry_point():
 
 
 entry_point.add_command(manage_commands.clean)
-entry_point.add_command(manage_commands.urls)
 
 entry_point.add_command(flask_commands.flask_cli)
 
