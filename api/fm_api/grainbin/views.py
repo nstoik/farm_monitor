@@ -3,8 +3,10 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask_smorest.pagination import PaginationParameters
+from fm_database.database import get_session
 from fm_database.models.device import Grainbin, GrainbinUpdate
 from fm_database.paginate import Pagination
+from sqlalchemy import select
 
 from fm_api.settings import get_config
 
@@ -28,7 +30,8 @@ class Grainbins(MethodView):
     @blueprint.response(200, GrainbinSchema(many=True))
     def get():
         """List all Grainbins."""
-        return Grainbin.query.all()
+        session = get_session()
+        return session.scalars(select(Grainbin)).all()
 
     # TODO: Add POST method
 
@@ -62,10 +65,17 @@ class GrainbinUpdates(MethodView):
         Ordered by most recent updates first.
         """
 
-        grainbin_updates: Pagination = (
-            GrainbinUpdate.query.filter_by(grainbin_id=grainbin_id)
+        session = get_session()
+        select_stm = (
+            select(GrainbinUpdate)
+            .where(GrainbinUpdate.grainbin_id == grainbin_id)
             .order_by(GrainbinUpdate.update_index.desc())
-            .paginate(pagination_parameters.page, pagination_parameters.page_size)
+        )
+        grainbin_updates = Pagination(
+            session,
+            select_stm,
+            page=pagination_parameters.page,
+            per_page=pagination_parameters.page_size,
         )
 
         pagination_parameters.item_count = grainbin_updates.total
@@ -95,12 +105,12 @@ class GrainbinUpdatesLatest(MethodView):
 
         # get all updates for grainbin_id with update_index equalling the grainbin total_update count.
         # Sort by templow which is the sensor number
-        grainbin_updates = (
-            GrainbinUpdate.query.filter_by(
-                grainbin_id=grainbin_id, update_index=grainbin.total_updates
-            )
+        session = get_session()
+        grainbin_updates = session.scalars(
+            select(GrainbinUpdate)
+            .where(GrainbinUpdate.grainbin_id == grainbin_id)
+            .where(GrainbinUpdate.update_index == grainbin.total_updates)
             .order_by(GrainbinUpdate.templow.desc())
-            .all()
-        )
+        ).all()
 
         return grainbin_updates

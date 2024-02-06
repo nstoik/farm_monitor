@@ -12,24 +12,12 @@ from fm_database.models.user import User
 class BaseFactory(SQLAlchemyModelFactory):
     """Base factory."""
 
-    @classmethod
-    def _create(cls, model_class, *args, **kwargs):
-        """Override the _create classmethod.
-
-        Does not actually change from the default, but
-        for some reason it needs to be specified otherwise
-        SubFactory elements do not get the primary key created
-        correctly.
-        """
-        obj = model_class(*args, **kwargs)
-        obj.save()
-        return obj
-
     class Meta:
         """Factory configuration."""
 
         abstract = True
         sqlalchemy_session = get_session()
+        sqlalchemy_session_persistence = "flush"
 
 
 class UserFactory(BaseFactory):
@@ -63,7 +51,7 @@ class GrainbinFactory(BaseFactory):
     """Grainbin factory."""
 
     device = SubFactory(DeviceFactory)
-    device_id = SelfAttribute("device.device_id")
+    device_id_str = SelfAttribute("device.device_id")
     bus_number = Sequence(int)
 
     class Meta:

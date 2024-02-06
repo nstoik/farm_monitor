@@ -6,8 +6,10 @@ from flask.views import MethodView
 # from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 from flask_smorest.pagination import PaginationParameters
+from fm_database.database import get_session
 from fm_database.models.device import Device, DeviceUpdate
 from fm_database.paginate import Pagination
+from sqlalchemy import select
 
 from fm_api.settings import get_config
 
@@ -33,7 +35,8 @@ class Devices(MethodView):
     @blueprint.response(200, DeviceSchema(many=True))
     def get():
         """List all Devices."""
-        return Device.query.all()
+        session = get_session()
+        return session.scalars(select(Device)).all()
 
     @staticmethod
     @blueprint.arguments(DeviceSchema)
@@ -72,17 +75,23 @@ class DeviceUpdates(MethodView):
     @staticmethod
     @blueprint.response(200, DeviceUpdateSchema(many=True))
     @blueprint.paginate()
-    def get(device_id, pagination_parameters: PaginationParameters):
+    def get(device_id: int, pagination_parameters: PaginationParameters):
         """Get DeviceUpdates for a given Device ID with Pagination.
 
         Default pagination parameters are 10 per page starting at page 1.
         Ordered by most recent updates first.
         """
-
-        device_updates: Pagination = (
-            DeviceUpdate.query.filter_by(device_id=device_id)
+        session = get_session()
+        select_stm = (
+            select(DeviceUpdate)
+            .where(DeviceUpdate.device_id == device_id)
             .order_by(DeviceUpdate.update_index.desc())
-            .paginate(pagination_parameters.page, pagination_parameters.page_size)
+        )
+        device_updates = Pagination(
+            session,
+            select_stm,
+            page=pagination_parameters.page,
+            per_page=pagination_parameters.page_size,
         )
 
         pagination_parameters.item_count = device_updates.total
@@ -100,11 +109,13 @@ class DeviceUpdatesLatest(MethodView):
     def get(device_id):
         """Get the latest DeviceUpdate for a given Device ID."""
 
-        device_update = (
-            DeviceUpdate.query.filter_by(device_id=device_id)
+        session = get_session()
+        device_update = session.scalars(
+            select(DeviceUpdate)
+            .where(DeviceUpdate.device_id == device_id)
             .order_by(DeviceUpdate.update_index.desc())
-            .first()
-        )
+            .limit(1)
+        ).one_or_none()
 
         if device_update is None:
             abort(404, message=f"Device with device id: {device_id} not found.")

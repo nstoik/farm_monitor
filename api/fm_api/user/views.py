@@ -6,6 +6,7 @@ from flask_jwt_extended import jwt_required
 from flask_smorest import Blueprint, abort
 from fm_database.database import get_session
 from fm_database.models.user import User
+from sqlalchemy import select
 
 from fm_api.settings import get_config
 
@@ -31,7 +32,8 @@ class Users(MethodView):
     @blueprint.response(200, UserSchema(many=True))
     def get():
         """List all Users."""
-        return User.query.all()
+        session = get_session()
+        return session.scalars(select(User)).all()
 
     @staticmethod
     @blueprint.arguments(UserSchema)
@@ -39,8 +41,7 @@ class Users(MethodView):
     def post(new_user):
         """Add a User."""
 
-        dbsession = get_session()
-        new_user.save(dbsession)
+        new_user.save()
         current_app.logger.info(f"API user POST returns {new_user}")
         return new_user
 
@@ -67,12 +68,11 @@ class UsersById(MethodView):
     def put(update_data, user_id):
         """Update existing User."""
 
-        dbsession = get_session()
         item = User.get_by_id(user_id)
         if item is None:
             abort(404, message="User not found.")
         # pass in update_data dict as named variables
-        item.update(dbsession, **update_data)
+        item.update(**update_data)
         current_app.logger.info(f"API user PUT returns {item}")
         return item
 
@@ -80,8 +80,8 @@ class UsersById(MethodView):
     @blueprint.response(204)
     def delete(user_id):
         """Delete a User by ID."""
-        dbsession = get_session()
+
         item = User.get_by_id(user_id)
         if item is None:
             abort(404, message="User not found.")
-        item.delete(dbsession)
+        item.delete()
