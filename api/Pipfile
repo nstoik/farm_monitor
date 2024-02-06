@@ -20,6 +20,7 @@ isort = "~=5.13"
 mypy = "~=1.8"
 pep8-naming = "~=0.13.1"
 pylint = "~=3.0"
+setuptools = "~=69.0"
 
 [packages]
 # Flask
