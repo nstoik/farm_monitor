@@ -122,4 +122,4 @@ def user_identity_lookup(user: User) -> int:
     A callback function that takes whatever object is passed in as the
     identity when creating JWTs and converts it to a JSON serializable format.
     """
-    return user.id
+    return user.id  # type: ignore[no-any-return]
