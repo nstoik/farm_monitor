@@ -5,6 +5,7 @@ from datetime import datetime
 import pytest
 from click.testing import CliRunner
 from fm_database.models.system import Hardware, Software, SystemSetup
+from sqlalchemy import select
 
 from fm_server.cli.manage.setup_commands import first_setup
 
@@ -43,7 +44,7 @@ class TestSetupCommands:
         assert "Setup has already been run\n" in result.output
 
     @staticmethod
-    def test_first_setup_no_to_all():
+    def test_first_setup_no_to_all(dbsession):
         """Test that first_setup works when all questions are anserwed no.
 
         Answer NO to changing device name, setting hardware information,
@@ -53,7 +54,7 @@ class TestSetupCommands:
         runner = CliRunner()
         result = runner.invoke(first_setup, input="N\nN\nN\nN")
 
-        system = SystemSetup.query.one()
+        system = dbsession.query(SystemSetup).one()
 
         assert not result.exception
         assert "First time setup is complete\n" in result.output
@@ -61,7 +62,7 @@ class TestSetupCommands:
         assert isinstance(system.first_setup_time, datetime)
 
     @staticmethod
-    def test_first_setup_hardware_info():
+    def test_first_setup_hardware_info(dbsession):
         """Test setting hardware_info.
 
         Answer NO to changing device name, YES to setting hardware information,
@@ -71,14 +72,14 @@ class TestSetupCommands:
         runner = CliRunner()
         result = runner.invoke(first_setup, input="N\nY\n\n\nN\nN")
 
-        hardware = Hardware.query.one()
+        hardware = dbsession.scalars(select(Hardware)).one()
 
         assert not result.exception
         assert "First time setup is complete\n" in result.output
         assert hardware.hardware_version == "pi3_0001"
 
     @staticmethod
-    def test_first_setup_hardware_info_custom_input():
+    def test_first_setup_hardware_info_custom_input(dbsession):
         """Test setting hardware_info with custom input.
 
         Answer NO to changing device name, YES to setting hardware information,
@@ -88,14 +89,14 @@ class TestSetupCommands:
         runner = CliRunner()
         result = runner.invoke(first_setup, input="N\nY\nTEST VERSION\nN\nN")
 
-        hardware = Hardware.query.one()
+        hardware = dbsession.scalars(select(Hardware)).one()
 
         assert not result.exception
         assert "First time setup is complete\n" in result.output
         assert hardware.hardware_version == "TEST VERSION"
 
     @staticmethod
-    def test_first_setup_software_version():
+    def test_first_setup_software_version(dbsession):
         """Test setting software_info.
 
         Answer NO to changing device name, NO to setting hardware information,
@@ -105,7 +106,7 @@ class TestSetupCommands:
         runner = CliRunner()
         result = runner.invoke(first_setup, input="N\nN\nY\nTEST SOFTWARE VERSION\nN")
 
-        software = Software.query.one()
+        software = dbsession.scalars(select(Software)).one()
 
         assert not result.exception
         assert "First time setup is complete\n" in result.output

@@ -25,6 +25,7 @@ from celery.utils.log import get_task_logger
 from fm_database.database import get_session
 from fm_database.models.device import Device, Grainbin, GrainbinUpdate
 from pydantic import ValidationError
+from sqlalchemy import select
 
 from .info_model import GrainbinUpdate as GrainbinUpdateModel
 
@@ -80,12 +81,16 @@ def get_or_create_grainbin(
     device_id: None | str, bus_number: int, bus_number_string: str
 ) -> Grainbin:
     """Get or create a grainbin."""
-    grainbin = Grainbin.query.filter_by(
-        device_id=device_id, bus_number=bus_number
+
+    session = get_session()
+    grainbin = session.scalars(
+        select(Grainbin)
+        .where(Grainbin.device_id_str == device_id)
+        .where(Grainbin.bus_number == bus_number)
     ).one_or_none()
 
     if grainbin is None:
-        grainbin = Grainbin(device_id, bus_number)
+        grainbin = Grainbin(device_id_str=device_id, bus_number=bus_number)
         grainbin.bus_number_string = bus_number_string
         LOGGER.debug(f"Creating new grainbin: {grainbin}")
         grainbin.save()

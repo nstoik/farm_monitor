@@ -2,6 +2,7 @@
 
 import pytest
 from fm_database.models.device import Device
+from sqlalchemy import select
 
 from fm_server.device.device_update import get_or_create_device, process_device_update
 from fm_server.device.info_model import DeviceUpdate
@@ -31,15 +32,18 @@ class TestProcessDeviceUpdate:
 
         assert return_code is True
 
-    def test_process_device_update_new_device(self):
+    def test_process_device_update_new_device(self, dbsession):
         """Test the process_device_update function correctly creates a new device."""
 
         process_device_update(self.info)
 
         update_data = DeviceUpdate.model_validate(self.info)
 
-        device = Device.query.filter_by(device_id=update_data.id).first()
+        device = dbsession.scalars(
+            select(Device).where(Device.device_id == update_data.id)
+        ).one_or_none()
 
+        assert isinstance(device, Device)
         assert device.device_id == update_data.id
         assert device.hardware_version == update_data.data.hardware_version
         assert device.software_version == update_data.data.software_version
@@ -47,19 +51,22 @@ class TestProcessDeviceUpdate:
         assert device.last_update_received == update_data.data.last_updated
         assert device.total_updates == 1
 
-    def test_process_device_update_existing_device(self):
+    def test_process_device_update_existing_device(self, dbsession):
         """Test the process_device_update function correctly updates an existing device."""
 
         process_device_update(self.info)
 
-        device = Device.query.filter_by(device_id="device_id").first()
+        device = dbsession.scalars(
+            select(Device).where(Device.device_id == "device_id")
+        ).one_or_none()
+        assert isinstance(device, Device)
         assert device.total_updates == 1
 
         process_device_update(self.info)
 
         assert device.total_updates == 2
 
-    def test_process_device_update_invalid_temperatures(self):
+    def test_process_device_update_invalid_temperatures(self, dbsession):
         """Test the process_device_update function correctly handles invalid temperatures.
 
         The invalid temperature that can occur is the string 'U' which indicates
@@ -72,8 +79,11 @@ class TestProcessDeviceUpdate:
 
         return_code = process_device_update(self.info)
 
-        device = Device.query.filter_by(device_id="device_id").first()
+        device = dbsession.scalars(
+            select(Device).where(Device.device_id == "device_id")
+        ).one_or_none()
 
+        assert isinstance(device, Device)
         assert return_code is True
         assert device.updates[0].interior_temp is None
         assert device.updates[0].exterior_temp is None

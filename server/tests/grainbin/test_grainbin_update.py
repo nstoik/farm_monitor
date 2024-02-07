@@ -2,6 +2,7 @@
 
 import pytest
 from fm_database.models.device import Device, Grainbin
+from sqlalchemy import select
 
 from fm_server.grainbin.grainbin_update import (
     get_or_create_grainbin,
@@ -54,7 +55,7 @@ class TestProcessGrainbinUpdate:
 
         assert return_value is True
 
-    def test_process_grainbin_update_new_grainbin(self):
+    def test_process_grainbin_update_new_grainbin(self, dbsession):
         """Test the process_grainbin_update function correctly creates a new grainbin."""
 
         DeviceFactory(device_id="my_device_id")
@@ -63,22 +64,28 @@ class TestProcessGrainbinUpdate:
 
         update_data = GrainbinUpdate.model_validate(self.info)
 
-        grainbin = Grainbin.query.filter_by(device_id=update_data.device_id).first()
+        grainbin = dbsession.scalars(
+            select(Grainbin).where(Grainbin.device_id_str == "my_device_id")
+        ).one_or_none()
 
-        assert grainbin.device_id == update_data.device_id
+        assert isinstance(grainbin, Grainbin)
+        assert grainbin.device_id_str == update_data.device_id
         assert grainbin.bus_number == update_data.bus_number
         assert grainbin.bus_number_string == update_data.bus_number_string
         assert grainbin.average_temp == update_data.average_temp
         assert grainbin.total_updates == 1
 
-    def test_process_grainbin_update_existing_grainbin(self):
+    def test_process_grainbin_update_existing_grainbin(self, dbsession):
         """Test the process_grainbin_update function correctly updates an existing grainbin."""
 
         DeviceFactory(device_id="my_device_id")
 
         process_grainbin_update(self.info)
 
-        grainbin = Grainbin.query.filter_by(device_id="my_device_id").first()
+        grainbin = dbsession.scalars(
+            select(Grainbin).where(Grainbin.device_id_str == "my_device_id")
+        ).one_or_none()
+        assert isinstance(grainbin, Grainbin)
         assert grainbin.total_updates == 1
 
         process_grainbin_update(self.info)
@@ -93,7 +100,7 @@ class TestProcessGrainbinUpdate:
         assert return_value is False
         assert "Device 'my_device_id' not found" in caplog.text
 
-    def test_process_grainbin_update_invalid_temperature(self):
+    def test_process_grainbin_update_invalid_temperature(self, dbsession):
         """Test the process_grainbin_update function correctly handles invalid temperature data."""
 
         self.info["sensor_data"][0]["temperature"] = "U"
@@ -102,9 +109,12 @@ class TestProcessGrainbinUpdate:
 
         return_value = process_grainbin_update(self.info)
 
-        grainbin = Grainbin.query.filter_by(device_id="my_device_id").first()
+        grainbin = dbsession.scalars(
+            select(Grainbin).where(Grainbin.device_id_str == "my_device_id")
+        ).one_or_none()
 
         assert return_value is True
+        assert isinstance(grainbin, Grainbin)
         assert grainbin.updates[0].temperature is None
         assert grainbin.updates[1].temperature == 21.0
         assert grainbin.updates[2].temperature == 22.0
@@ -121,7 +131,7 @@ class TestGetOrCreateGrainbin:
 
         grainbin = get_or_create_grainbin(device.device_id, 1, "bus.1")
 
-        assert grainbin.device_id == device.device_id
+        assert grainbin.device_id_str == device.device_id
         assert grainbin.bus_number == 1
         assert len(device.grainbins) == 1
 
@@ -135,5 +145,5 @@ class TestGetOrCreateGrainbin:
             device.device_id, grainbin.bus_number, grainbin.bus_number_string
         )
 
-        assert device.device_id == grainbin.device_id
+        assert device.device_id == grainbin.device_id_str
         assert retrieved.id == grainbin.id

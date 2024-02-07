@@ -24,6 +24,7 @@ from celery.utils.log import get_task_logger
 from fm_database.database import get_session
 from fm_database.models.device import Device, DeviceUpdate
 from pydantic import ValidationError
+from sqlalchemy import select
 
 from .info_model import DeviceUpdate as DeviceUpdateModel
 
@@ -73,7 +74,11 @@ def get_or_create_device(
 ) -> Device:
     """Get or create a device."""
 
-    device = Device.query.filter_by(device_id=device_id).one_or_none()
+    session = get_session()
+
+    device = session.scalars(
+        select(Device).where(Device.device_id == device_id)
+    ).one_or_none()
 
     if device is None:
         LOGGER.debug(f"Creating new device {device_id}")
