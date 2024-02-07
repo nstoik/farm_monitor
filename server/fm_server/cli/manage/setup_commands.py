@@ -3,7 +3,7 @@
 from datetime import datetime
 
 import click
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.system import SystemSetup
 from sqlalchemy.orm.exc import NoResultFound
 

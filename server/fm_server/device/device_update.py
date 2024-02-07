@@ -21,7 +21,7 @@ info: {
 """
 
 from celery.utils.log import get_task_logger
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.device import Device, DeviceUpdate
 from pydantic import ValidationError
 

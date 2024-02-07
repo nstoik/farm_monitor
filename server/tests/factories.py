@@ -4,7 +4,7 @@
 from factory import Sequence
 from factory.alchemy import SQLAlchemyModelFactory
 from factory.declarations import SelfAttribute, SubFactory
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.device import Device, Grainbin
 
 

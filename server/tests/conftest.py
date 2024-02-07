@@ -2,7 +2,7 @@
 
 # pylint: disable=redefined-outer-name
 import pytest
-from fm_database.base import create_all_tables, drop_all_tables, get_session
+from fm_database.database import create_all_tables, drop_all_tables, get_session
 from fm_database.models.system import SystemSetup
 from fm_database.models.user import User
 
