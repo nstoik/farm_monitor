@@ -29,8 +29,8 @@ celery = "~=5.3.6"
 # Environment and variable parsing
 environs = "~=10.3.0"
 fm-server = {file = ".", editable = true}
-fm_database = {subdirectory = "database", ref = "v0.3", git = "https://github.com/nstoik/farm_monitor"}
-#fm_database = {editable = true, path = "./../database"}
+# fm_database = {subdirectory = "database", ref = "v0.3", git = "https://github.com/nstoik/farm_monitor"}
+fm_database = {editable = true, path = "./../database"}
 multiprocessing-logging = "~=0.3.3"
 netifaces = "~=0.11.0"
 pika = "~=1.3.0"
