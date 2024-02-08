@@ -20,12 +20,11 @@ fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from fm_database.base import get_base
+from fm_database.database import Base
 from fm_database.models.device import Device, Grainbin, DeviceUpdate, GrainbinUpdate
 from fm_database.models.message import Message
 from fm_database.models.system import Hardware, SystemSetup, Wifi, Interface, Software
 from fm_database.models.user import User, Role
-Base = get_base()
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

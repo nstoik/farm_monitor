@@ -1,4 +1,5 @@
 """Click commands for the database update commands."""
+
 import click
 from alembic import command as al_command
 from alembic.config import Config as AlConfig

@@ -1,4 +1,5 @@
 """Device RabbitMQ messages module."""
+
 import json
 import logging
 import time
@@ -87,7 +88,7 @@ def get_device_status(device_id):
         properties=properties,
     )
 
-    LOGGER.info(f"Sent request for {device_id } status to {exchange_name} exchange")
+    LOGGER.info(f"Sent request for {device_id} status to {exchange_name} exchange")
 
     attempts = 0
     while attempts < 5:

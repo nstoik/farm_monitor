@@ -1,49 +1,96 @@
 # -*- coding: utf-8 -*-
 """Database module, including the SQLAlchemy database object and DB-related utilities."""
-from sqlalchemy import Column, ForeignKey, Integer
+from typing import Any, Self
 
-from fm_database.base import get_base, get_session
+from sqlalchemy import ForeignKey, String, create_engine
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column,
+    scoped_session,
+    sessionmaker,
+)
+from typing_extensions import Annotated
 
-Base = get_base(with_query=True)
+from .settings import get_config
+
+config = get_config()  # pylint: disable=invalid-name
+engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
+db_session = scoped_session(sessionmaker(bind=engine))
+
+
+def get_session():
+    """Return the sqlalchemy db_session."""
+
+    return db_session
+
+
+def create_all_tables():
+    """Create all tables."""
+    Base.metadata.create_all(bind=engine)
+
+
+def drop_all_tables():
+    """Drop all tables."""
+    Base.metadata.drop_all(bind=engine)
+
+
+# special types for SQLAlchemy
+str128 = Annotated[str, 128]  # pylint: disable=invalid-name
+str80 = Annotated[str, 80]  # pylint: disable=invalid-name
+str50 = Annotated[str, 50]  # pylint: disable=invalid-name
+str30 = Annotated[str, 30]  # pylint: disable=invalid-name
+str20 = Annotated[str, 20]  # pylint: disable=invalid-name
+str10 = Annotated[str, 10]  # pylint: disable=invalid-name
+str7 = Annotated[str, 7]  # pylint: disable=invalid-name
+str5 = Annotated[str, 5]  # pylint: disable=invalid-name
+
+
+class Base(DeclarativeBase):  # pylint: disable=too-few-public-methods
+    """Base class for all SQLAlchemy models."""
+
+    type_annotation_map = {
+        str128: String(128),
+        str80: String(80),
+        str50: String(50),
+        str30: String(30),
+        str20: String(20),
+        str10: String(10),
+        str7: String(7),
+        str5: String(5),
+    }
 
 
 class CRUDMixin:
     """Mixin that adds convenience methods for CRUD (create, read, update, delete) operations."""
 
     @classmethod
-    def create(cls, session=None, **kwargs):
+    def create(cls, **kwargs) -> Self:
         """Create a new record and save it the database."""
-        if session is None:
-            session = get_session()
         instance = cls(**kwargs)
-        return instance.save(session)
+        return instance.save()
 
-    def update(self, session=None, commit=True, **kwargs):
+    def update(self, commit=True, **kwargs) -> Self:
         """Update specific fields of a record."""
-        if session is None:
-            session = get_session()
         for attr, value in kwargs.items():
             setattr(self, attr, value)
-        return self.save(session) if commit else self
+        return self.save() if commit else self
 
-    def save(self, session=None, commit=True):
+    def save(self, commit=True) -> Self:
         """Save the record."""
-        if session is None:
-            session = get_session()
-        session.add(self)
+        db_session.add(self)
         if commit:
-            session.commit()
+            db_session.commit()
         return self
 
-    def delete(self, session=None, commit=True):
+    def delete(self, commit=True) -> None:
         """Remove the record from the database."""
-        if session is None:
-            session = get_session()
-        session.delete(self)
-        return commit and session.commit()
+        db_session.delete(self)
+        if commit:
+            db_session.commit()
 
 
-class Model(CRUDMixin, Base):  # type: ignore[valid-type, misc]
+class Model(CRUDMixin, Base):
     """Base model class that includes CRUD convenience methods."""
 
     __abstract__ = True
@@ -57,10 +104,10 @@ class SurrogatePK(Model):  # pylint: disable=too-few-public-methods
     __table_args__ = {"extend_existing": True}
     __abstract__ = True
 
-    id = Column(Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
     @classmethod
-    def get_by_id(cls, record_id, session=None):
+    def get_by_id(cls, record_id: str | bytes | int | float) -> Self | None:
         """Get record by ID."""
         if any(
             (
@@ -68,18 +115,39 @@ class SurrogatePK(Model):  # pylint: disable=too-few-public-methods
                 isinstance(record_id, (int, float)),
             ),
         ):
-            if session:
-                return session.query(cls).get(int(record_id))
-            return cls.query.get(int(record_id))
+            return db_session.get(cls, int(record_id))
         return None
 
 
-def reference_col(tablename, nullable=False, pk_name="id", **kwargs):
+def reference_col(tablename, nullable=False, pk_name="id", **kwargs) -> Mapped[Any]:
     """Column that adds primary key foreign key reference.
+
+    The returned column type will be either `int` or `str`
 
     Usage: ::
 
-        category_id = reference_col('category')
-        category = relationship('Category', backref='categories')
+    For a bi-directional one to many relationship
+
+    Parent:
+        children: Mapped[List["Child"]] = relationship(back_populates="parent")
+
+    Child:
+        parent_id: Mapped[int] = reference_col('parent')
+        parent: Mapped["Parent"] = relationship(back_populates='children')
+
+
+    For a bi-directional many to one relationship
+
+    Parent:
+        child_id: Mapped[int] = reference_col('child')
+        child: Mapped["Child"] = relationship(back_populates='parents')
+
+    Child:
+        parents: Mapped[List["Parent"]] = relationship(back_populates='child')
+
+    For a many to many relationship see:
+    https://docs.sqlalchemy.org/en/20/orm/basic_relationships.html#many-to-many
     """
-    return Column(ForeignKey(f"{tablename}.{pk_name}"), nullable=nullable, **kwargs)
+    return mapped_column(
+        ForeignKey(f"{tablename}.{pk_name}"), nullable=nullable, **kwargs
+    )

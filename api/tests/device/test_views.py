@@ -1,4 +1,5 @@
 """Test the API Device views."""
+
 import datetime as dt
 import json
 
@@ -37,12 +38,13 @@ class TestAPIDevices:
             "name": "my-device-name",
             "hardware_version": "v0.1",
             "software_version": "v0.2",
+            "description": "my-device-description",
+            "location": "my-device-location",
         }
         url = url_for("device.Devices")
         rep = flaskclient.post(url, json=custom_json, headers=auth_headers)
 
         returned_device = rep.get_json()
-        print(returned_device)
         assert returned_device["device_id"] == "my-device-id"
         assert rep.status_code == 201
 
@@ -117,6 +119,40 @@ class TestAPIDeviceUpdates:
 
         assert rep.status_code == 200
         assert len(fetched_device_update) == 10
+
+    @staticmethod
+    def test_api_device_updates_get_multiple_devices(
+        flaskclient, auth_headers, dbsession
+    ):
+        """Test that a device update is returned by ID. when there are multiple devices."""
+
+        device_1 = DeviceFactory()
+        device_1.save()
+        device_2 = DeviceFactory()
+        device_2.save()
+
+        # create a bunch of DeviceUpdates
+        for x in range(25):
+            device_update_1 = DeviceUpdate(device_1.id)
+            device_update_1.timestamp = dt.datetime.now()
+            device_update_1.update_index = x
+            device_update_2 = DeviceUpdate(device_2.id)
+            device_update_2.timestamp = dt.datetime.now()
+            device_update_2.update_index = x
+            dbsession.add(device_update_1, device_update_2)
+
+        dbsession.commit()
+
+        url = url_for("device.DeviceUpdates", device_id=device_1.id)
+        rep = flaskclient.get(url, headers=auth_headers)
+        fetched_device_update = rep.get_json()
+
+        returned_header = json.loads(rep.headers.get("X-Pagination"))
+
+        assert rep.status_code == 200
+        assert len(fetched_device_update) == 10
+        assert fetched_device_update[0]["device"] == device_1.id
+        assert returned_header["total"] == 25
 
     @staticmethod
     def test_api_device_updates_empty_for_no_device(flaskclient, auth_headers):

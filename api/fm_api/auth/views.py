@@ -1,5 +1,6 @@
 """Views for Auth API."""
-from datetime import datetime
+
+from datetime import datetime, timezone
 
 from flask.views import MethodView
 from flask_jwt_extended import (
@@ -10,7 +11,9 @@ from flask_jwt_extended import (
     jwt_required,
 )
 from flask_smorest import Blueprint, abort
+from fm_database.database import get_session
 from fm_database.models.user import User
+from sqlalchemy import select
 
 from fm_api.extensions import jwt
 from fm_api.settings import get_config
@@ -39,7 +42,11 @@ class AuthLogin(MethodView):
 
         username = login_args["username"]
         password = login_args["password"]
-        user = User.query.filter_by(username=username).first()
+
+        session = get_session()
+        user = session.scalars(
+            select(User).where(User.username == username)
+        ).one_or_none()
 
         if user is None or not user.check_password(password):
             abort(400, message="User not found or bad password.")
@@ -47,7 +54,7 @@ class AuthLogin(MethodView):
         access_token = create_access_token(identity=user, fresh=True)
         refresh_token = create_refresh_token(identity=user)
 
-        local_timezone = datetime.utcnow().astimezone().tzinfo
+        local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
 
         access_decoded = decode_token(access_token)
         access_expires = datetime.fromtimestamp(
@@ -77,11 +84,14 @@ class AuthRefresh(MethodView):
         """Return a new access token using the refresh token."""
 
         current_user_id = get_jwt_identity()
-        current_user = User.query.filter_by(id=current_user_id).one_or_none()
+        session = get_session()
+        current_user = session.scalars(
+            select(User).where(User.id == current_user_id)
+        ).one_or_none()
 
         access_token = create_access_token(identity=current_user)
 
-        local_timezone = datetime.utcnow().astimezone().tzinfo
+        local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
         access_decoded = decode_token(access_token)
         access_expires = datetime.fromtimestamp(
             access_decoded["exp"], local_timezone
@@ -93,21 +103,23 @@ class AuthRefresh(MethodView):
 
 
 @jwt.user_lookup_loader
-def user_loader_callback(_jwt_header, jwt_data):
+def user_loader_callback(_jwt_header, jwt_data) -> User | None:
     """Load the user given JWT.
 
     A callback function that loades a user from the database whenever
     a protected route is accessed. This returns a User or else None
     """
     identity = jwt_data["sub"]
-    return User.query.filter_by(id=identity).one_or_none()
+
+    session = get_session()
+    return session.scalars(select(User).where(User.id == identity)).one_or_none()
 
 
 @jwt.user_identity_loader
-def user_identity_lookup(user: User):
+def user_identity_lookup(user: User) -> int:
     """Return the user identity.
 
     A callback function that takes whatever object is passed in as the
     identity when creating JWTs and converts it to a JSON serializable format.
     """
-    return user.id
+    return user.id  # type: ignore[no-any-return]

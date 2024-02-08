@@ -1,4 +1,5 @@
 """Command line interface for testing and linting."""
+
 import os
 import sys
 from glob import glob
@@ -50,8 +51,8 @@ def test(coverage, filename, function):
         pytest_args.extend(["--cov-report", "term-missing:skip-covered"])
 
     # Get the virtual environment to the path for subprocess calls
-    pipenv_path = run(["pipenv", "--venv"], check=True, stdout=PIPE)
-    pipenv_path = pipenv_path.stdout.decode().replace("\n", "")
+    pipenv_find_path = run(["pipenv", "--venv"], check=True, stdout=PIPE)
+    pipenv_path = pipenv_find_path.stdout.decode().replace("\n", "")
     pipenv_path = os.path.join(pipenv_path, "bin")
 
     def execute_tool(description, *args):
@@ -114,8 +115,8 @@ def lint(fix_imports, check):
     ]
 
     # Get the virtual environment to the path for subprocess calls
-    pipenv_path = run(["pipenv", "--venv"], check=True, stdout=PIPE)
-    pipenv_path = pipenv_path.stdout.decode().replace("\n", "")
+    pipenv_find_path = run(["pipenv", "--venv"], check=True, stdout=PIPE)
+    pipenv_path = pipenv_find_path.stdout.decode().replace("\n", "")
     pipenv_path = os.path.join(pipenv_path, "bin")
     my_env = os.environ.copy()
     my_env["PATH"] = os.pathsep.join([pipenv_path, my_env["PATH"]])
@@ -130,7 +131,7 @@ def lint(fix_imports, check):
 
     isort_args = ["--profile", "black"]
     black_args = ["--diff"]
-    mypy_args = ["--warn-unused-ignores", "--show-error-codes"]
+    mypy_args = ["--warn-unused-ignores", "--show-error-codes", "--check-untyped-defs"]
     pylint_args = ["--load-plugins", ""]
     if check:
         isort_args.append("--check")

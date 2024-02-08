@@ -1,13 +1,17 @@
 """Define fixtures available to all tests."""
+
 # pylint: disable=redefined-outer-name
+from typing import Iterator
+
 import pytest
-from fm_database.base import create_all_tables, drop_all_tables, get_session
+from fm_database.database import create_all_tables, drop_all_tables, get_session
 from fm_database.models.system import SystemSetup
 from fm_database.models.user import User
+from sqlalchemy.orm import Session
 
 
 @pytest.fixture(scope="session")
-def dbsession():
+def dbsession() -> Iterator[Session]:
     """Returns an sqlalchemy session."""
 
     yield get_session()

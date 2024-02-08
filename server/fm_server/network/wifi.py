@@ -1,9 +1,10 @@
 """WiFi module to set WiFi options."""
+
 import logging
 import subprocess
 
 import netifaces
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.system import Interface, Wifi
 from sqlalchemy.orm.exc import NoResultFound
 

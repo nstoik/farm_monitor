@@ -1,4 +1,5 @@
 """Test message models."""
+
 import datetime as dt
 
 import pytest
@@ -11,12 +12,12 @@ class TestMessage:
     """Message model tests."""
 
     @staticmethod
-    def test_create_message(dbsession):
+    def test_create_message():
         """Create a Message instance."""
         message = Message(
             source="Source", destination="Destination", classification="Test"
         )
-        message.save(dbsession)
+        message.save()
 
         assert message.source == "Source"
         assert message.destination == "Destination"
@@ -24,30 +25,31 @@ class TestMessage:
         assert isinstance(message.created_at, dt.datetime)
 
     @staticmethod
-    def test_message_get_by_id(dbsession):
+    def test_message_get_by_id():
         """Retrieve a Message by ID."""
         message = Message(
             source="Source", destination="Destination", classification="Test"
         )
-        message.save(dbsession)
+        message.save()
 
         retrieved = Message.get_by_id(message.id)
+        assert isinstance(retrieved, Message)
         assert retrieved.id == message.id
 
     @staticmethod
-    def test_message_set_datetime_default(dbsession):
+    def test_message_set_datetime_default():
         """Test the default validity time of a message."""
         message = Message(
             source="Source", destination="Destination", classification="Test"
         )
         message.set_datetime()
-        message.save(dbsession)
+        message.save()
 
         assert isinstance(message.valid_from, dt.datetime)
         assert isinstance(message.valid_to, dt.datetime)
 
     @staticmethod
-    def test_message_set_datetime(dbsession):
+    def test_message_set_datetime():
         """Test setting the validity time of a message."""
         message = Message(
             source="Source", destination="Destination", classification="Test"
@@ -55,7 +57,7 @@ class TestMessage:
         message.set_datetime(
             valid_from=dt.timedelta(days=1), valid_to=dt.timedelta(days=3)
         )
-        message.save(dbsession)
+        message.save()
 
         assert isinstance(message.valid_from, dt.datetime)
         assert isinstance(message.valid_to, dt.datetime)
@@ -63,3 +65,18 @@ class TestMessage:
             message.valid_from.hour == (dt.datetime.now() + dt.timedelta(days=1)).hour
         )
         assert message.valid_to.hour == (dt.datetime.now() + dt.timedelta(days=3)).hour
+
+    @staticmethod
+    def test_message_pickle():
+        """Test pickling a message."""
+        message = Message(
+            source="Source", destination="Destination", classification="Test"
+        )
+        message.payload = {"test": "test"}
+        message.save()
+
+        retrieved = Message.get_by_id(message.id)
+
+        assert isinstance(retrieved, Message)
+        assert retrieved.id == message.id
+        assert retrieved.payload == {"test": "test"}
