@@ -1,10 +1,11 @@
 """Defines fixtures available to all tests."""
+
 # pylint: disable=redefined-outer-name, unused-argument
 
 import pytest
 from flask import url_for
 from flask.testing import FlaskClient
-from fm_database.base import create_all_tables, drop_all_tables, get_session
+from fm_database.database import create_all_tables, drop_all_tables, get_session
 from fm_database.models.user import User
 
 from fm_api.app import create_app
@@ -23,7 +24,7 @@ class HtmlTestClient(FlaskClient):
     def login_with_creds(self, username, password):
         """Send the login data to the login url."""
         return self.post(
-            url_for("public.home"), data=dict(username=username, password=password)
+            url_for("public.home"), data={"username": username, "password": password}
         )
 
     def logout(self):
@@ -99,5 +100,5 @@ def auth_headers(admin_user, flaskclient, tables):
     tokens = rep.get_json()
     return {
         "content-type": "application/json",
-        "authorization": f"Bearer { tokens['access_token'] }",
+        "authorization": f"Bearer {tokens['access_token']}",
     }

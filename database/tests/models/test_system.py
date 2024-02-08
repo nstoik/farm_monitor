@@ -1,4 +1,5 @@
 """Test system models."""
+
 import pytest
 
 from fm_database.models.system import Hardware, Interface, Software, SystemSetup, Wifi
@@ -26,6 +27,7 @@ class TestSystemSetup:
         system_setup.save(dbsession)
 
         retrieved = SystemSetup.get_by_id(system_setup.id)
+        assert isinstance(retrieved, SystemSetup)
         assert retrieved.id == system_setup.id
 
 
@@ -53,6 +55,7 @@ class TestInterface:
         interface.save(dbsession)
 
         retrieved = Interface.get_by_id(interface.id)
+        assert isinstance(retrieved, Interface)
         assert retrieved.id == interface.id
 
 
@@ -70,7 +73,7 @@ class TestWifi:
         assert wifi.password == "raspberry"
         assert wifi.mode == "wpa"
         assert wifi.interface_id is None
-        assert wifi.interface is None
+        assert wifi.interface_details is None
 
     @staticmethod
     def test_create_wifi_with_interface(dbsession):
@@ -79,10 +82,10 @@ class TestWifi:
         interface.save(dbsession)
 
         wifi = Wifi()
-        wifi.interface = interface
+        wifi.interface_details = interface
         wifi.save(dbsession)
 
-        assert wifi.interface == interface
+        assert wifi.interface_details == interface
         assert wifi.interface_id == interface.id
 
     @staticmethod
@@ -93,6 +96,7 @@ class TestWifi:
 
         retrieved = Wifi.get_by_id(wifi.id)
 
+        assert isinstance(retrieved, Wifi)
         assert retrieved.id == wifi.id
 
 
@@ -117,6 +121,7 @@ class TestHardware:
         hardware.save(dbsession)
 
         retrieved = Hardware.get_by_id(hardware.id)
+        assert isinstance(retrieved, Hardware)
         assert retrieved.id == hardware.id
 
 
@@ -140,4 +145,5 @@ class TestSoftware:
         software.save(dbsession)
 
         retrieved = Software.get_by_id(software.id)
+        assert isinstance(retrieved, Software)
         assert retrieved.id == software.id

@@ -3,7 +3,7 @@
 import logging
 import subprocess
 
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.system import Hardware, Software
 from sqlalchemy.orm.exc import NoResultFound
 

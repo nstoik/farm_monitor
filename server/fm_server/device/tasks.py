@@ -1,9 +1,10 @@
 """Device tasks module."""
+
 import pickle
 from datetime import timedelta
 
 from celery.utils.log import get_task_logger
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.message import Message
 
 from fm_server.celery_runner import app

@@ -4,6 +4,7 @@ from fm_database.models.system import SystemSetup
 from fm_database.models.user import User
 from fm_database.settings import TestConfig as DBTestConfig
 from fm_database.settings import get_config as db_get_config
+from sqlalchemy import select
 
 from fm_server.settings import TestConfig, get_config
 
@@ -26,15 +27,17 @@ def test_database_env():
 def test_database_setup_for_testing(database_base_seed, dbsession):
     """Test that the database base seed is correctly added to the database."""
 
-    system_setup = SystemSetup.query.first()
+    system_setup = dbsession.scalars(select(SystemSetup)).one_or_none()
 
+    assert isinstance(system_setup, SystemSetup)
     assert not bool(system_setup.first_setup_complete)
     assert not bool(system_setup.update_in_progress)
     assert not bool(system_setup.new_update_installed)
     assert system_setup.first_setup_time is None
 
-    user = User.query.filter_by(username="admin").first()
+    user = dbsession.scalars(select(User)).one_or_none()
 
+    assert isinstance(user, User)
     assert user.username == "admin"
     assert user.email == "admin@mail.com"
     assert user.check_password("admin")

@@ -1,4 +1,4 @@
-FROM python:3.10 as build-stage
+FROM python:3.12 as build-stage
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive

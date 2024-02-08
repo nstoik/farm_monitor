@@ -5,40 +5,41 @@ name = "pypi"
 
 [dev-packages]
 # testing packages
-factory-boy = "~=3.2.0"
-pytest = "~=7.2"
-pytest-cov = "~=4.0.0"
+factory-boy = "~=3.3.0"
+pytest = "~=8.0"
+pytest-cov = "~=4.1.0"
 
 # Lint and code style
-black = "~=22.10"
-flake8 = "~=5.0.4"
+black = "~=24.1"
+flake8 = "~=7.0"
 flake8-blind-except = "~=0.2.1"
 flake8-debugger = "~=4.1.2"
-flake8-docstrings = "~=1.6.0"
-flake8-isort = "~=5.0.0"
-isort = "~=5.10.1"
-mypy = "~=0.971"
+flake8-docstrings = "~=1.7.0"
+flake8-isort = "~=6.1"
+isort = "~=5.13"
+mypy = "~=1.8"
 pep8-naming = "~=0.13.1"
-pylint = "~=2.15.5"
+pylint = "~=3.0"
+setuptools = "~=69.0"
 
 [packages]
 # Flask
-Flask = "~=2.2"
-Flask-Cors = "~=3.0.10"
+Flask = "~=3.0"
+Flask-Cors = "~=4.0"
 
 # API
-flask-smorest = "~=0.40"
-marshmallow-sqlalchemy = "~=0.28.1"
+flask-smorest = "~=0.42"
+marshmallow-sqlalchemy = "~=1.0"
 Flask-JWT-Extended = "~=4.4"
 
 # Production
-gunicorn = "~=20.1.0"
+gunicorn = "~=21.2.0"
 
-fm_database = {subdirectory = "database", ref = "v0.3", git = "https://github.com/nstoik/farm_monitor"}
-# fm_database = {editable = true, path = "./../database"}
+# fm_database = {subdirectory = "database", ref = "v0.3", git = "https://github.com/nstoik/farm_monitor"}
+fm_database = {editable = true, path = "./../database"}
 
 # self
-e1839a8 = {path = ".",editable = true}
+fm-api = {file = ".", editable = true}
 
 [requires]
-python_version = "3.10"
+python_version = "3.12"

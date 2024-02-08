@@ -1,4 +1,5 @@
 """Schema for Auth."""
+
 from marshmallow.fields import Str
 from marshmallow.validate import Length
 

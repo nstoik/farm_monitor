@@ -16,10 +16,11 @@ info: {
     average_temp: "21.0",
 }
 """
+
 import logging
 from datetime import datetime
 
-from pydantic import BaseModel, NoneStr, validator
+from pydantic import BaseModel, ValidationInfo, computed_field, field_validator
 
 LOGGER = logging.getLogger("fm.grainbin.info_model")
 
@@ -32,16 +33,18 @@ class GrainbinUpdateSensorData(BaseModel):
     temphigh: int
     templow: int
 
-    # pylint: disable=no-self-argument,unused-argument
-    @validator("temperature", pre=True)
-    def temp_validator(cls, value, field):
+    # pylint: disable=unused-argument
+    @field_validator("temperature", mode="before")
+    @classmethod
+    def temp_validator(cls, value: str, info: ValidationInfo) -> str | None:
         """
         Validate temperature.
 
         If the value is "U" then set is as None.
+        Because the mode is "before" the value is a string (it hasn't been converted to a float yet)
         """
         if value == "U":
-            LOGGER.warning("{field.name} value is 'U'. Setting to None.")
+            LOGGER.warning("{info.field_name} value is 'U'. Setting to None.")
             return None
         return value
 
@@ -51,20 +54,14 @@ class GrainbinUpdate(BaseModel):
 
     created_at: datetime
     name: str
-    device_id: NoneStr = None
     bus_number: int
     bus_number_string: str
     sensor_names: list[str]
     sensor_data: list[GrainbinUpdateSensorData]
     average_temp: str
 
-    # pylint: disable=no-self-argument,unused-argument
-    @validator("device_id", always=True)
-    def device_id_validator(cls, value, values):
-        """
-        Validate device_id.
-
-        The device_id is the first part of the name.
-        """
-
-        return values["name"].split(".")[0]
+    @computed_field  # type: ignore[misc]
+    @property
+    def device_id(self) -> str:
+        """Return the device_id."""
+        return self.name.split(".")[0]

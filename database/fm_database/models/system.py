@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """Models for the system representations."""
-from sqlalchemy import Boolean, Column, DateTime, String
-from sqlalchemy.orm import relationship
+from datetime import datetime
 
-from ..database import SurrogatePK, reference_col
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from ..database import SurrogatePK, reference_col, str5, str20
 
 
 class SystemSetup(SurrogatePK):
@@ -11,10 +12,10 @@ class SystemSetup(SurrogatePK):
 
     __tablename__ = "system_setup"
 
-    first_setup_complete = Column(Boolean, default=False)
-    first_setup_time = Column(DateTime)
-    update_in_progress = Column(Boolean, default=False)
-    new_update_installed = Column(Boolean, default=False)
+    first_setup_complete: Mapped[bool] = mapped_column(default=False)
+    first_setup_time: Mapped[datetime | None]
+    update_in_progress: Mapped[bool] = mapped_column(default=False)
+    new_update_installed: Mapped[bool] = mapped_column(default=False)
 
     def __init__(self):
         """Create an instance."""
@@ -26,12 +27,12 @@ class Wifi(SurrogatePK):
 
     __tablename__ = "system_wifi"
 
-    name = Column(String(20), default="FarmMonitor")
-    password = Column(String(20), default="raspberry")
-    mode = Column(String(20), default="wpa")
+    name: Mapped[str20] = mapped_column(default="FarmMonitor")
+    password: Mapped[str20] = mapped_column(default="raspberry")
+    mode: Mapped[str20] = mapped_column(default="wpa")
 
-    interface_id = reference_col("system_interface", nullable=True)
-    interface = relationship("Interface", backref="credentials")
+    interface_id: Mapped[int] = reference_col("system_interface", nullable=True)
+    interface_details: Mapped["Interface"] = relationship(back_populates="credentials")
 
     def __init__(self):
         """Create an instance."""
@@ -43,11 +44,13 @@ class Interface(SurrogatePK):
 
     __tablename__ = "system_interface"
 
-    interface = Column(String(5), nullable=False)
-    is_active = Column(Boolean, default=True)
-    is_for_fm = Column(Boolean, default=False)
-    is_external = Column(Boolean, default=False)
-    state = Column(String(20))
+    interface: Mapped[str5]
+    is_active: Mapped[bool] = mapped_column(default=True)
+    is_for_fm: Mapped[bool] = mapped_column(default=False)
+    is_external: Mapped[bool] = mapped_column(default=False)
+    state: Mapped[str20 | None]
+
+    credentials: Mapped[list["Wifi"]] = relationship(back_populates="interface_details")
 
     def __init__(self, interface, **kwargs):
         """Create an instance."""
@@ -59,9 +62,9 @@ class Hardware(SurrogatePK):
 
     __tablename__ = "system_hardware"
 
-    device_name = Column(String(20))
-    hardware_version = Column(String(20))
-    serial_number = Column(String(20))
+    device_name: Mapped[str20 | None]
+    hardware_version: Mapped[str20 | None]
+    serial_number: Mapped[str20 | None]
 
     def __init__(self):
         """Create an instance."""
@@ -73,8 +76,8 @@ class Software(SurrogatePK):
 
     __tablename__ = "system_software"
 
-    software_version = Column(String(20))
-    software_version_last = Column(String(20))
+    software_version: Mapped[str20 | None]
+    software_version_last: Mapped[str20 | None]
 
     def __init__(self):
         """Create an instance."""
