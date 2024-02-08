@@ -1,4 +1,5 @@
 """Schema for Grainbin."""
+
 from flask import url_for
 from fm_database.models.device import Grainbin, GrainbinUpdate
 from marshmallow.fields import Method

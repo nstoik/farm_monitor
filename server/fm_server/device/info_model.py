@@ -15,10 +15,11 @@ info: {
     },
 }
 """
+
 import logging
 from datetime import datetime
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, ValidationInfo, field_validator
 
 LOGGER = logging.getLogger("fm.device.info_model")
 
@@ -33,16 +34,17 @@ class DeviceUpdateData(BaseModel):
     exterior_temp: float | None
     last_updated: datetime
 
-    # pylint: disable=no-self-argument,unused-argument
-    @validator("interior_temp", "exterior_temp", pre=True)
-    def temp_validator(cls, value, field):
+    # pylint: disable=unused-argument
+    @field_validator("interior_temp", "exterior_temp", mode="before")
+    @classmethod
+    def temp_validator(cls, value: float | None, info: ValidationInfo) -> float | None:
         """
         Validate interior_temp or exterior_temp.
 
         If the value is "U" then set is as None.
         """
         if value == "U":
-            LOGGER.warning("{field.name} value is 'U'. Setting to None.")
+            LOGGER.warning("{info.field_name} value is 'U'. Setting to None.")
             return None
         return value
 

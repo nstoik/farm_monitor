@@ -166,7 +166,7 @@ class TestAPIUserById:
         url = url_for("user.UsersById", user_id=user.id)
         rep = flaskclient.delete(url, headers=auth_headers)
 
-        deleted_user = User.query.filter_by(id=user.id).first()
+        deleted_user = User.get_by_id(user.id)
 
         assert rep.status_code == 204
         assert deleted_user is None

@@ -1,4 +1,5 @@
 """Test device models."""
+
 import datetime as dt
 
 import pytest
@@ -33,54 +34,26 @@ class TestGrainbinUpdate:
     def test_grainbin_update_properties():
         """Add all the properties to a GrainbinUpdate instance."""
 
-        payload = {
-            "created_at": dt.datetime.now(),
-            "name": "10000000255c26b4.01",
-            "bus_number": 1,
-            "bus_number_string": "bus.1",
-            "sensor_names": ["28.CC9A290D0000", "28.BC9A290D0000", "28.BBE5290D0000"],
-            "sensor_data": [
-                {
-                    "temperature": 23.5,
-                    "temphigh": 75,
-                    "templow": 70,
-                    "sensor_name": "28.CC9A290D0000",
-                },
-                {
-                    "temperature": 23.5,
-                    "temphigh": 75,
-                    "templow": 70,
-                    "sensor_name": "28.BC9A290D0000",
-                },
-                {
-                    "temperature": 23.5,
-                    "temphigh": 75,
-                    "templow": 70,
-                    "sensor_name": "28.BBE5290D0000",
-                },
-            ],
-            "average_temp": 23.5,
-        }
-
         grainbin = GrainbinFactory()
         grainbin.save()
 
         grainbin_update = GrainbinUpdate(grainbin_id=grainbin.id)
-        grainbin_update.timestamp = payload["created_at"]
+        grainbin_update.timestamp = dt.datetime.now()
         grainbin_update.update_index = 0
-        grainbin_update.temperature = payload["sensor_data"][0]["temperature"]
-        grainbin_update.temphigh = payload["sensor_data"][0]["temphigh"]
-        grainbin_update.templow = payload["sensor_data"][0]["templow"]
-        grainbin_update.sensor_name = payload["sensor_data"][0]["sensor_name"]
+        grainbin_update.temperature = 23.5
+        grainbin_update.temphigh = 75
+        grainbin_update.templow = 70
+        grainbin_update.sensor_name = "28.CC9A290D0000"
         grainbin_update.save()
 
-        retrieved: GrainbinUpdate = GrainbinUpdate.get_by_id(grainbin_update.id)
+        retrieved = GrainbinUpdate.get_by_id(grainbin_update.id)
 
-        assert retrieved.temperature == payload["sensor_data"][0]["temperature"]
-        assert retrieved.temphigh == payload["sensor_data"][0]["temphigh"]
-        assert retrieved.templow == payload["sensor_data"][0]["templow"]
-        assert retrieved.sensor_name == payload["sensor_data"][0]["sensor_name"]
-        assert retrieved.timestamp == payload["created_at"]
+        assert isinstance(retrieved, GrainbinUpdate)
+        assert retrieved.temperature == 23.5
+        assert retrieved.temphigh == 75
+        assert retrieved.templow == 70
+        assert retrieved.sensor_name == "28.CC9A290D0000"
+        assert isinstance(retrieved.timestamp, dt.datetime)
 
 
 @pytest.mark.usefixtures("tables")
@@ -92,10 +65,10 @@ class TestGrainbin:
         """Create a grainbin instance."""
         device = DeviceFactory()
         device.save()
-        grainbin = Grainbin(device_id=device.device_id, bus_number=1)
+        grainbin = Grainbin(device_id_str=device.device_id, bus_number=1)
         grainbin.save()
 
-        assert grainbin.device_id == device.device_id
+        assert grainbin.device_id_str == device.device_id
         assert grainbin.bus_number == 1
         assert grainbin.bus_number_string == "bus.1"
 
@@ -104,11 +77,12 @@ class TestGrainbin:
         """Test retrieving a grainbin by its ID."""
         device = DeviceFactory()
         device.save()
-        grainbin = Grainbin(device_id=device.id, bus_number=1)
+        grainbin = Grainbin(device_id_str=device.id, bus_number=1)
         grainbin.save()
 
         retrieved = Grainbin.get_by_id(grainbin.id)
 
+        assert isinstance(retrieved, Grainbin)
         assert grainbin.id == retrieved.id
 
     @staticmethod
@@ -121,8 +95,9 @@ class TestGrainbin:
         retrieved = Grainbin.get_by_id(grainbin.id)
         device = Device.get_by_id(grainbin.device.id)
 
+        assert isinstance(retrieved, Grainbin)
         assert grainbin.id == retrieved.id
-        assert isinstance(grainbin.device_id, str)
+        assert isinstance(grainbin.device_id_str, str)
         assert isinstance(device, Device)
 
     @staticmethod
@@ -162,6 +137,7 @@ class TestDeviceUpdate:
 
         retrieved = DeviceUpdate.get_by_id(device_update.id)
 
+        assert isinstance(retrieved, DeviceUpdate)
         assert retrieved.interior_temp is None
         assert retrieved.exterior_temp is None
         assert retrieved.device_temp is None
@@ -175,35 +151,22 @@ class TestDeviceUpdate:
     def test_device_update_properties():
         """Add all the properties to a DeviceUpdate instance."""
 
-        payload = {
-            "created_at": dt.datetime.now(),
-            "id": "10000000255c26b4",
-            "data": {
-                "device_id": "10000000255c26b4",
-                "hardware_version": "pi3_0001",
-                "software_version": "0.1",
-                "interior_temp": 21.06,
-                "exterior_temp": 20.85,
-                "grainbin_count": 2,
-                "last_updated": "2021-10-21T00:16:00.104077",
-            },
-        }
-
         device = DeviceFactory()
         device.save()
 
         device_update = DeviceUpdate(device_id=device.id)
-        device_update.timestamp = payload["created_at"]
+        device_update.timestamp = dt.datetime.now()
         device_update.update_index = 0
-        device_update.interior_temp = payload["data"]["interior_temp"]
-        device_update.exterior_temp = payload["data"]["exterior_temp"]
+        device_update.interior_temp = 21.06
+        device_update.exterior_temp = 20.85
         device_update.save()
 
         retrieved = DeviceUpdate.get_by_id(device_update.id)
 
-        assert retrieved.interior_temp == payload["data"]["interior_temp"]
-        assert retrieved.exterior_temp == payload["data"]["exterior_temp"]
-        assert retrieved.timestamp == payload["created_at"]
+        assert isinstance(retrieved, DeviceUpdate)
+        assert retrieved.interior_temp == 21.06
+        assert retrieved.exterior_temp == 20.85
+        assert isinstance(retrieved.timestamp, dt.datetime)
 
     @staticmethod
     def test_device_update_incorrect_temp():
@@ -216,13 +179,14 @@ class TestDeviceUpdate:
         device_update.timestamp = dt.datetime.now()
         device_update.update_index = 0
 
-        device_update.interior_temp = "U"
-        device_update.exterior_temp = "U"
+        device_update.interior_temp = "U"  # type: ignore[assignment]
+        device_update.exterior_temp = "U"  # type: ignore[assignment]
 
         device_update.save()
 
         retrieved = DeviceUpdate.get_by_id(device_update.id)
 
+        assert isinstance(retrieved, DeviceUpdate)
         assert retrieved.interior_temp is None
         assert retrieved.exterior_temp is None
 
@@ -255,6 +219,7 @@ class TestDevice:
 
         retrieved = Device.get_by_id(device.id)
 
+        assert isinstance(retrieved, Device)
         assert device.id == retrieved.id
 
     @staticmethod
@@ -266,6 +231,7 @@ class TestDevice:
 
         retrieved = Device.get_by_id(device.id)
 
+        assert isinstance(retrieved, Device)
         assert device.id == retrieved.id
 
     @staticmethod

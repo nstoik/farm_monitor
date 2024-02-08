@@ -1,9 +1,10 @@
 """Run a service that responds to pings with the address of the rabbitmq broker."""
+
 import logging
 import socket
 import time
 
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.system import Interface
 
 from fm_server.settings import get_config

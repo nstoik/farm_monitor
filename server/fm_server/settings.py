@@ -1,4 +1,5 @@
 """Application configuration."""
+
 # pylint: disable=too-few-public-methods
 
 import logging

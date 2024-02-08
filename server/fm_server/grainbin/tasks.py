@@ -1,4 +1,5 @@
 """Grainbin tasks module."""
+
 from celery.utils.log import get_task_logger
 
 from fm_server.celery_runner import app

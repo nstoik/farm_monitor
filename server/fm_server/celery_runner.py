@@ -1,4 +1,5 @@
 """Main celery module."""
+
 # pylint: disable=unused-argument
 import logging
 from logging.handlers import RotatingFileHandler
@@ -11,12 +12,13 @@ app = Celery()
 
 app.config_from_object("fm_server.settings:CeleryConfig")
 
+
 # disabled for now
 # @signals.setup_logging.connect
 def setup_celery_logging(**kwargs):
     """Setup the logging for celery."""
-    for key in kwargs.items():
-        print(f"keyword arg: {key}: {kwargs[key]}")
+    for key, value in kwargs.items():
+        print(f"keyword arg: {key}: {value}")
 
 
 @signals.after_setup_logger.connect
