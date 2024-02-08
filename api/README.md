@@ -6,8 +6,8 @@ To see all available commands type: `fm_api`
 
 ```bash
 > cd api
-> pipenv install --dev
 > pipenv shell
+> pipenv install --dev
 > fm_api
 Usage: fm_api [OPTIONS] COMMAND [ARGS]...
 

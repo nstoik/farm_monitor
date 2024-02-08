@@ -6,8 +6,8 @@ To see all available commands type: `fm_database`
 
 ```bash
 > cd database
-> pipenv install --dev
 > pipenv shell
+> pipenv install --dev
 > fm_database
 Usage: fm_database [OPTIONS] COMMAND [ARGS]...
 
