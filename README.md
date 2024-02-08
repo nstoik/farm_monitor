@@ -64,7 +64,16 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env -
 ```
 
 # VS Code Development
-VS Code automatically builds the required contaibers when you launch into a remote container. This uses the `docker-compose.devcontainer.yml` overrides. 
+VS Code automatically builds the required containers when you launch into a remote container. This uses the `docker-compose.devcontainer.yml` overrides.
+
+In order to speed up the container build time, python dependencies are not installed in the containers during the build process. Instead, they need to
+be installed manually. To do this, open a terminal in VS Code and run the following command inside the container as needed:
+
+```bash
+  cd [module] (eg. 'api', 'server', 'database')
+  pipenv install --dev
+  pipenv shell
+```
 
 To bring the farm_monitor docker stack down in VS Code run the following command:
 

@@ -1,8 +1,9 @@
 """Ethernet module to set ethernet options."""
+
 import logging
 
 import netifaces
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.system import Interface
 from netifaces import AF_INET
 

@@ -1,4 +1,5 @@
 """Controller manager module."""
+
 import time
 
 import pika

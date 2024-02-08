@@ -1,4 +1,5 @@
 """Schema for User and Roles."""
+
 from fm_database.models.user import Role, User
 
 from ..base import BaseSchema
