@@ -1,5 +1,7 @@
 """Connect to and receive messages from rabbitmq."""
 
+# mypy: disable-error-code="union-attr"
+
 import pika
 
 from fm_server.settings import get_config

@@ -17,8 +17,8 @@ app.config_from_object("fm_server.settings:CeleryConfig")
 # @signals.setup_logging.connect
 def setup_celery_logging(**kwargs):
     """Setup the logging for celery."""
-    for key in kwargs.items():
-        print(f"keyword arg: {key}: {kwargs[key]}")
+    for key, value in kwargs.items():
+        print(f"keyword arg: {key}: {value}")
 
 
 @signals.after_setup_logger.connect

@@ -74,8 +74,8 @@ class TestProcessDeviceUpdate:
         should be set to None.
         """
 
-        self.info["data"]["interior_temp"] = "U"
-        self.info["data"]["exterior_temp"] = "U"
+        self.info["data"]["interior_temp"] = "U"  # type: ignore[index]
+        self.info["data"]["exterior_temp"] = "U"  # type: ignore[index]
 
         return_code = process_device_update(self.info)
 

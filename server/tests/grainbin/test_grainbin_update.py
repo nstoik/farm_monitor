@@ -103,7 +103,7 @@ class TestProcessGrainbinUpdate:
     def test_process_grainbin_update_invalid_temperature(self, dbsession):
         """Test the process_grainbin_update function correctly handles invalid temperature data."""
 
-        self.info["sensor_data"][0]["temperature"] = "U"
+        self.info["sensor_data"][0]["temperature"] = "U"  # type: ignore[index]
 
         DeviceFactory(device_id="my_device_id")
 

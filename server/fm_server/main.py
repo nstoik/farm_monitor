@@ -42,7 +42,7 @@ def configure_logging(config):
     return logger
 
 
-def main():  # sourcery skip: extract-method
+def main():
     """Main starting point for program."""
 
     config = get_config()
@@ -50,15 +50,14 @@ def main():  # sourcery skip: extract-method
     # pika_test()
 
     presence_controller = Process(target=presence_service)
-    # presence_controller.start()
+    presence_controller.start()
 
     device_controller = Process(target=run_device)
-    # device_controller.start()
+    device_controller.start()
 
     try:
-        # presence_controller.join()
-        # device_controller.join()
-        print("skip")
+        presence_controller.join()
+        device_controller.join()
     except KeyboardInterrupt:
         logger.warning("Keyboard interrupt in main")
 

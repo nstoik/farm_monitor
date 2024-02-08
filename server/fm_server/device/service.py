@@ -1,5 +1,7 @@
 """Device service package."""
 
+# mypy: disable-error-code="union-attr"
+
 import json
 import logging
 from typing import Dict
