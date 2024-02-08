@@ -11,7 +11,13 @@ updates:
       directory: "/database"
       schedule:
             interval: "monthly"
-
+      # group updates into a single PR
+      groups:
+        python-updates:
+          update-types:
+            - "major"
+            - "minor"
+            - "patch"
     - package-ecosystem: "docker"
       directory: "/database"
       schedule:
@@ -27,6 +33,13 @@ updates:
       directory: "/server"
       schedule:
             interval: "monthly"
+      # group updates into a single PR
+      groups:
+        python-updates:
+          update-types:
+            - "major"
+            - "minor"
+            - "patch"
 
     - package-ecosystem: "docker"
       directory: "/server"
@@ -43,6 +56,13 @@ updates:
       directory: "/api"
       schedule:
             interval: "monthly"
+      # group updates into a single PR
+      groups:
+        python-updates:
+          update-types:
+            - "major"
+            - "minor"
+            - "patch"
 
     - package-ecosystem: "docker"
       directory: "/api"

@@ -1,10 +1,13 @@
 """Device service package."""
+
+# mypy: disable-error-code="union-attr"
+
 import json
 import logging
 from typing import Dict
 
 import pika
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.device import Device
 from pika.adapters.utils.connection_workflow import AMQPConnectionWorkflowFailed
 

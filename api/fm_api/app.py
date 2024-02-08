@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
+import os
+
 from flask import Flask
-from flask.helpers import get_env
-from fm_database.base import get_session
+from fm_database.database import get_session
 from fm_database.models.user import User
 
 from fm_api import auth, device, grainbin, user
@@ -29,6 +30,8 @@ def create_app(config=None, testing=False):
 def configure_app(app, config=None, testing=False):
     """Set configuration for application."""
 
+    flask_env = os.environ.get("FLASK_ENV", "development")
+
     if config:
         app.config.from_object(config)
         return
@@ -39,7 +42,8 @@ def configure_app(app, config=None, testing=False):
     if testing is True:
         # override with testing config
         app.config.from_object("fm_api.settings.TestConfig")
-    elif get_env() == "production":
+
+    elif flask_env == "production":
         # override with production config
         app.config.from_object("fm_api.settings.ProdConfig")
 

@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 """A user model."""
-import datetime as dt
+from datetime import datetime, timezone
+from typing import List
 
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String, Table
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from ..database import SurrogatePK
+from ..database import SurrogatePK, str30, str80, str128
 from ..extensions import pwd_context
 
 user_roles = Table(
     "user_roles",
     SurrogatePK.metadata,
-    Column("role_id", Integer, ForeignKey("roles.id")),
-    Column("user_id", Integer, ForeignKey("users.id")),
+    Column("role_id", ForeignKey("roles.id"), primary_key=True),
+    Column("user_id", ForeignKey("users.id"), primary_key=True),
 )
 
 
@@ -20,8 +21,10 @@ class Role(SurrogatePK):
     """A role for a user."""
 
     __tablename__ = "roles"
-    name = Column(String(80), unique=True, nullable=False)
-    users = relationship("User", secondary=user_roles, backref="roles")
+    name: Mapped[str80] = mapped_column(unique=True)
+    users: Mapped[List["User"]] = relationship(
+        secondary=user_roles, back_populates="roles"
+    )
 
     def __init__(self, name, **kwargs):
         """Create instance."""
@@ -36,15 +39,19 @@ class User(SurrogatePK):
     """A user of the app."""
 
     __tablename__ = "users"
-    username = Column(String(80), unique=True, nullable=False)
-    email = Column(String(80), unique=True, nullable=False)
+    username: Mapped[str80] = mapped_column(unique=True)
+    email: Mapped[str80] = mapped_column(unique=True)
     #: The hashed password
-    password = Column(String(128), nullable=True)
-    created_at = Column(DateTime, nullable=False, default=dt.datetime.utcnow)
-    first_name = Column(String(30), nullable=True)
-    last_name = Column(String(30), nullable=True)
-    active = Column(Boolean(), nullable=False, default=True)
-    is_admin = Column(Boolean(), nullable=False, default=False)
+    password: Mapped[str128 | None]
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
+    first_name: Mapped[str30 | None]
+    last_name: Mapped[str30 | None]
+    active: Mapped[bool] = mapped_column(default=True)
+    is_admin: Mapped[bool] = mapped_column(default=False)
+
+    roles: Mapped[List[Role]] = relationship(
+        secondary=user_roles, back_populates="users"
+    )
 
     def __init__(self, username, email, password=None, **kwargs):
         """Create instance."""
@@ -54,37 +61,37 @@ class User(SurrogatePK):
         else:
             self.password = None
 
-    def set_password(self, password):
+    def set_password(self, password) -> None:
         """Set password."""
         self.password = pwd_context.hash(password)
 
-    def check_password(self, value):
+    def check_password(self, value) -> bool:
         """Check password."""
         return pwd_context.verify(value, self.password)
 
     @property
-    def full_name(self):
+    def full_name(self) -> str:
         """Full user name."""
         if self.first_name and self.last_name:
             return f"{self.first_name} {self.last_name}"
         return "First and Last name not set"
 
     @property
-    def is_active(self):
+    def is_active(self) -> bool:
         """Return if the user is active."""
         return self.active
 
     @property
-    def is_authenticated(self):
+    def is_authenticated(self) -> bool:
         """Return if the user is authenticated."""
         return True
 
     @property
-    def is_anonymous(self):
+    def is_anonymous(self) -> bool:
         """Return if the user is anonymous."""
         return False
 
-    def get_id(self):
+    def get_id(self) -> str:
         """Return the id of the user.
 
         Required by Flask-Login.
@@ -93,6 +100,6 @@ class User(SurrogatePK):
 
         return str(self.id)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Represent instance as a unique string."""
         return f"<User({self.username})>"

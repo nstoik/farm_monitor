@@ -1,5 +1,9 @@
 """Tests for the info_model module."""
 
+# ignore arg-type and list-item mypy errors in this file.
+# This is test data to confirm validation works as expected.
+# mypy: disable-error-code="arg-type,list-item"
+
 import pytest
 
 from fm_server.grainbin.info_model import GrainbinUpdate, GrainbinUpdateSensorData
