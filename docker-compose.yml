@@ -90,6 +90,8 @@ services:
         networks:
             - farm_monitor
         restart: unless-stopped
+        healthcheck:
+            test: wget -O - http://localhost:${FM_API_PORT}/healthcheck || exit 1
         labels:
           - custom.label=farm_monitor
           - "traefik.enable=true"
@@ -134,6 +136,11 @@ services:
             - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
             - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
         restart: unless-stopped
+        healthcheck:
+            test: traefik healthcheck
+            interval: 30s
+            timeout: 10s
+            retries: 3
         depends_on:
             - frontend
             - api
@@ -156,6 +163,8 @@ services:
         networks:
             - farm_monitor
         restart: unless-stopped
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
         labels:
             - custom.label=farm_monitor
             - "traefik.enable=true"
@@ -190,6 +199,8 @@ services:
         depends_on:
             - rabbitmq
         restart: unless-stopped
+        healthcheck:
+            test: wget -O - http://localhost:${FLOWER_PORT}/flower/healthcheck || exit 1
         labels:
             - custom.label=farm_monitor
             - "traefik.enable=true"
@@ -204,7 +215,6 @@ services:
     database:
         image: postgres:14
         container_name: fm_database
-        restart: unless-stopped
         environment:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_USER: ${POSTGRES_USER}
@@ -213,12 +223,15 @@ services:
             - "dbdata:/var/lib/postgresql/data"
         networks:
             - farm_monitor
+        restart: unless-stopped
+        healthcheck:
+            test: pg_isready -U ${POSTGRES_USER}
         labels:
           - custom.label=farm_monitor
 
     pgadmin:
-        container_name: fm_pgadmin
         image: dpage/pgadmin4:latest
+        container_name: fm_pgadmin
         environment:
             PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
             PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -232,6 +245,9 @@ services:
         depends_on:
             - database
         restart: unless-stopped
+        healthcheck:
+            test: wget -O - http://localhost:80/pgadmin/misc/ping || exit 1
+            start_period: 140s
         labels:
             - custom.label=farm_monitor
             - "traefik.enable=true"
