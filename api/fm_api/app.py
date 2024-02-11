@@ -6,7 +6,7 @@ from flask import Flask
 from fm_database.database import get_session
 from fm_database.models.user import User
 
-from fm_api import auth, device, grainbin, user
+from fm_api import auth, device, grainbin, health, user
 from fm_api.extensions import cors, jwt, smorest_api
 
 
@@ -60,6 +60,7 @@ def register_blueprints():
     smorest_api.register_blueprint(auth.views.blueprint)
     smorest_api.register_blueprint(device.views.blueprint)
     smorest_api.register_blueprint(grainbin.views.blueprint)
+    smorest_api.register_blueprint(health.views.blueprint)
     smorest_api.register_blueprint(user.views.blueprint)
 
 

@@ -1,5 +1,12 @@
 # FM SERVER 
 
+This is the server component of the FM project. It has two main components: the server and the worker.
+
+To run the server set the `FM_SERVER_RUN=true` environment variable that is checked in the [`start.sh`](start.sh) script.
+
+To run the worker set the `FM_SERVER_RUN_WORKER=true` environment variable that is checked in the [`start.sh`](start.sh) script.
+
+
 ## Commands
 
 To see all available commands type: `fm_server`

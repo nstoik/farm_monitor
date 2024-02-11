@@ -16,10 +16,20 @@ services:
 
     database_management:
         image: nstoik/fm_database:devcontainer
+        container_name: fm_database_management
         build:
             context: ./database
             dockerfile: .devcontainer/devcontainer.Dockerfile
             target: dev-stage
+        environment:
+            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
+        networks:
+            - farm_monitor
+        depends_on:
+            - "database"
+        restart: on-failure
+        labels:
+            - custom.label=farm_monitor
         volumes:
             # this is for vs code file editing inside the container
             - .:/workspaces:cached

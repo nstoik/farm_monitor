@@ -13,6 +13,11 @@ entryPoints:
   # presence:
   #  address: ':5554/udp'
 
+# for health checks
+ping:
+  entryPoint: web
+
+
 # Traefik dashboard over http
 api:
   dashboard: true

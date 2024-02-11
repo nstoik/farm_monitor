@@ -8,6 +8,8 @@ services:
            context: ./server
            dockerfile: Dockerfile
         environment:
+            # Specify which application to run in the start.sh script
+            - FM_SERVER_RUN=true
             - FM_SERVER_PRESENCE_PORT=${FM_SERVER_PRESENCE_PORT}
             - FM_SERVER_CONFIG=${FM_SERVER_CONFIG}
             - FM_SERVER_LOG_LEVEL=${FM_SERVER_LOG_LEVEL}
@@ -29,48 +31,6 @@ services:
     #        - "traefik.udp.routers.fm_server.entrypoints=presence"
     #        - "traefik.udp.routers.fm_server.service=fm_server"
     #        - "traefik.udp.services.fm_server.loadbalancer.server.port=5554"
-    server_worker:
-        image: nstoik/fm_server:${FM_SERVER_TAG}
-        container_name: fm_server_worker
-        # specifically run the celery worker, not the normal run command.
-        command: ["pipenv", "run", "fm_server", "run-worker"]
-        build:
-            context: ./server
-            dockerfile: Dockerfile
-        environment:
-            - FM_SERVER_CONFIG=${FM_SERVER_CONFIG}
-            - FM_SERVER_LOG_LEVEL=${FM_SERVER_LOG_LEVEL}
-            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
-        networks:
-            - farm_monitor
-        volumes:
-            - "logs:/logs"
-        depends_on:
-            - "database"
-            - "rabbitmq"
-        restart: on-failure
-        labels:
-            - custom.label=farm_monitor
-
-    # in order to reduce the number of unique containers, we use the same container
-    # as fm_server since the fm_database package and commands are included in
-    # that container.
-    database_management:
-        image: nstoik/fm_server:${FM_SERVER_TAG}
-        container_name: fm_database_management
-        command: ["pipenv", "run", "fm_database", "update", "database-upgrade", "--revision", "head"]
-        build:
-            context: ./server
-            dockerfile: Dockerfile
-        environment:
-            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
-        networks:
-            - farm_monitor
-        depends_on:
-            - "database"
-        restart: on-failure
-        labels:
-            - custom.label=farm_monitor
 
     api:
         image: nstoik/fm_api:${FM_API_TAG}
@@ -90,6 +50,8 @@ services:
         networks:
             - farm_monitor
         restart: unless-stopped
+        healthcheck:
+            test: wget -O - http://localhost:${FM_API_PORT}/healthcheck || exit 1
         labels:
           - custom.label=farm_monitor
           - "traefik.enable=true"
@@ -134,6 +96,11 @@ services:
             - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
             - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
         restart: unless-stopped
+        healthcheck:
+            test: traefik healthcheck
+            interval: 30s
+            timeout: 10s
+            retries: 3
         depends_on:
             - frontend
             - api
@@ -156,6 +123,8 @@ services:
         networks:
             - farm_monitor
         restart: unless-stopped
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
         labels:
             - custom.label=farm_monitor
             - "traefik.enable=true"
@@ -190,6 +159,8 @@ services:
         depends_on:
             - rabbitmq
         restart: unless-stopped
+        healthcheck:
+            test: wget -O - http://localhost:${FLOWER_PORT}/flower/healthcheck || exit 1
         labels:
             - custom.label=farm_monitor
             - "traefik.enable=true"
@@ -204,7 +175,6 @@ services:
     database:
         image: postgres:14
         container_name: fm_database
-        restart: unless-stopped
         environment:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_USER: ${POSTGRES_USER}
@@ -213,12 +183,15 @@ services:
             - "dbdata:/var/lib/postgresql/data"
         networks:
             - farm_monitor
+        restart: unless-stopped
+        healthcheck:
+            test: pg_isready -U ${POSTGRES_USER}
         labels:
           - custom.label=farm_monitor
 
     pgadmin:
-        container_name: fm_pgadmin
         image: dpage/pgadmin4:latest
+        container_name: fm_pgadmin
         environment:
             PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
             PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -232,6 +205,9 @@ services:
         depends_on:
             - database
         restart: unless-stopped
+        healthcheck:
+            test: wget -O - http://localhost:80/pgadmin/misc/ping || exit 1
+            start_period: 140s
         labels:
             - custom.label=farm_monitor
             - "traefik.enable=true"

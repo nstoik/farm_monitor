@@ -6,13 +6,26 @@ services:
         build:
             target: prod-stage
 
+    # Run the worker application as a separate container in production
     server_worker:
-        build:
-            target: prod-stage
-
-    database_management:
-        build:
-            target: prod-stage
+        image: nstoik/fm_server:${FM_SERVER_TAG}
+        container_name: fm_server_worker
+        environment:
+            # Specify which application to run in the start.sh script
+            - FM_SERVER_WORKKER_RUN=true
+            - FM_SERVER_CONFIG=${FM_SERVER_CONFIG}
+            - FM_SERVER_LOG_LEVEL=${FM_SERVER_LOG_LEVEL}
+            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
+        networks:
+            - farm_monitor
+        volumes:
+            - "logs:/logs"
+        depends_on:
+            - "database"
+            - "rabbitmq"
+        restart: on-failure
+        labels:
+            - custom.label=farm_monitor
 
     api:
         build:

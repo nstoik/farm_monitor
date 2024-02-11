@@ -58,8 +58,11 @@ def main():
     try:
         presence_controller.join()
         device_controller.join()
-    except KeyboardInterrupt:
-        logger.warning("Keyboard interrupt in main")
+    except (KeyboardInterrupt, SystemExit) as exception:
+        if type(exception).__name__ == "KeyboardInterrupt":
+            logger.warning("Keyboard interrupt in main")
+        elif type(exception).__name__ == "SystemExit":
+            logger.warning("System exit in main")
 
         time.sleep(1)
 
