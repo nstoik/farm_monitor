@@ -8,6 +8,8 @@ services:
            context: ./server
            dockerfile: Dockerfile
         environment:
+            # Specify which application to run in the start.sh script
+            - FM_SERVER_RUN=true
             - FM_SERVER_PRESENCE_PORT=${FM_SERVER_PRESENCE_PORT}
             - FM_SERVER_CONFIG=${FM_SERVER_CONFIG}
             - FM_SERVER_LOG_LEVEL=${FM_SERVER_LOG_LEVEL}
@@ -29,48 +31,6 @@ services:
     #        - "traefik.udp.routers.fm_server.entrypoints=presence"
     #        - "traefik.udp.routers.fm_server.service=fm_server"
     #        - "traefik.udp.services.fm_server.loadbalancer.server.port=5554"
-    server_worker:
-        image: nstoik/fm_server:${FM_SERVER_TAG}
-        container_name: fm_server_worker
-        # specifically run the celery worker, not the normal run command.
-        command: ["pipenv", "run", "fm_server", "run-worker"]
-        build:
-            context: ./server
-            dockerfile: Dockerfile
-        environment:
-            - FM_SERVER_CONFIG=${FM_SERVER_CONFIG}
-            - FM_SERVER_LOG_LEVEL=${FM_SERVER_LOG_LEVEL}
-            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
-        networks:
-            - farm_monitor
-        volumes:
-            - "logs:/logs"
-        depends_on:
-            - "database"
-            - "rabbitmq"
-        restart: on-failure
-        labels:
-            - custom.label=farm_monitor
-
-    # in order to reduce the number of unique containers, we use the same container
-    # as fm_server since the fm_database package and commands are included in
-    # that container.
-    database_management:
-        image: nstoik/fm_server:${FM_SERVER_TAG}
-        container_name: fm_database_management
-        command: ["pipenv", "run", "fm_database", "update", "database-upgrade", "--revision", "head"]
-        build:
-            context: ./server
-            dockerfile: Dockerfile
-        environment:
-            - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
-        networks:
-            - farm_monitor
-        depends_on:
-            - "database"
-        restart: on-failure
-        labels:
-            - custom.label=farm_monitor
 
     api:
         image: nstoik/fm_api:${FM_API_TAG}
