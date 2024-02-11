@@ -57,7 +57,7 @@ ARG WORKING_DIR=/workspaces/server
 
 # install libpq-dev for python postgres support
 RUN apt-get update && apt-get install -y \
-    libpq-dev \
+    libpq-dev netcat-traditional \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install -U pip && pip install pipenv && \
@@ -84,7 +84,11 @@ COPY --from=build-stage /home/${USERNAME}/.local/share /home/${USERNAME}/.local/
 WORKDIR $WORKING_DIR
 RUN pipenv run pip install -e .
 
+ENV SCRIPT_WORKING_DIR=$WORKING_DIR
+
+COPY --chown=${USER_UID}:${USER_GID} --chmod=+x start.sh $WORKING_DIR/start.sh
+
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
 
-CMD ["pipenv", "run", "fm_server", "run"]
+ENTRYPOINT $SCRIPT_WORKING_DIR/start.sh
