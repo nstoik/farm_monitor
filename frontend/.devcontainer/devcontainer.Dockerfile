@@ -1,4 +1,4 @@
-FROM node:16 AS build-stage
+FROM node:lts AS build-stage
 
 # the node image already has a node user created with uid and gid 1000
 
@@ -19,8 +19,6 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
     && touch /commandhistory/.bash_history \
     && chown -R $USERNAME /commandhistory \
     && echo $SNIPPET >> "/home/$USERNAME/.bashrc"
-
-RUN npm install -g @vue/cli
 
 # make working directory and change owner
 RUN mkdir -p ${WORKING_DIR}/ && \
