@@ -47,17 +47,17 @@ export class AuthService {
       // Request made and server responded
       if (error.response.status === 422) {
         const usernameError: string =
-          error.response.data?.errors?.json?.username?.[0];
+          (error.response.data as { errors: { json: { username: string[] } } })?.errors?.json?.username?.[0];
         if (usernameError) {
           throw "Username: " + usernameError;
         }
         const passwordError: string =
-          error.response.data?.errors?.json?.password?.[0];
+          (error.response.data as { errors: { json: { password: string[] } } })?.errors?.json?.password?.[0];
         if (passwordError) {
           throw "Password: " + passwordError;
         }
       }
-      throw error.response.data.message;
+      throw (error.response.data as { message: string })?.message;
     } else if (error.request) {
       throw error.message;
     } // The request was made but no response was received
