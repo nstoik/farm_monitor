@@ -11,12 +11,12 @@ export class AuthService {
   private axiosClient: AxiosInstance;
 
   constructor() {
-    const apiHostname: string = process.env.VUE_APP_API_HOSTNAME; // eg. api.localhost
-    const apiPort: string = process.env.VUE_APP_API_PORT; // eg. 80
-    const apiPrefix: string = process.env.VUE_APP_API_PREFIX; // eg. /api
-    const apiProtocol: string = process.env.VUE_APP_API_PROTOCOL || "http"; // eg. http
+    const apiHostname: string = import.meta.env.VITE_API_HOSTNAME; // eg. api.localhost
+    const apiPort: string = import.meta.env.VITE_API_PORT; // eg. 80
+    const apiPrefix: string = import.meta.env.VITE_API_PREFIX; // eg. /api
+    const apiProtocol: string = import.meta.env.VITE_API_PROTOCOL || "http"; // eg. http
     const apiHTTPTimeout: number =
-      Number(process.env.VUE_APP_API_HTTP_TIMEOUT) || 5000; // eg. 5000
+      Number(import.meta.env.VITE_API_HTTP_TIMEOUT) || 5000; // eg. 5000
 
     this.baseURL = `${apiProtocol}://${apiHostname}:${apiPort}${apiPrefix}/`;
     this.newTokenURL = `${this.baseURL}auth/`;

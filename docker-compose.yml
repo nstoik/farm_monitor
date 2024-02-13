@@ -65,11 +65,11 @@ services:
             context: ./frontend
             dockerfile: Dockerfile
             args:
-                VUE_APP_API_HOSTNAME: ${VUE_APP_API_HOSTNAME}
-                VUE_APP_API_PREFIX: ${VUE_APP_API_PREFIX}
-                VUE_APP_API_PORT: ${VUE_APP_API_PORT}
-                VUE_APP_API_PROTOCOL: ${VUE_APP_API_PROTOCOL}
-                VUE_APP_PUBLIC_PATH: ${VUE_APP_PUBLIC_PATH}
+                VITE_API_HOSTNAME: ${VITE_API_HOSTNAME}
+                VITE_API_PREFIX: ${VITE_API_PREFIX}
+                VITE_API_PORT: ${VITE_API_PORT}
+                VITE_API_PROTOCOL: ${VITE_API_PROTOCOL}
+                VITE_PUBLIC_PATH: ${VITE_PUBLIC_PATH}
         depends_on:
             - api
         networks:

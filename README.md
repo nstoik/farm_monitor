@@ -91,7 +91,7 @@ docker build {PATH} --file {PATH}/Dockerfile --no-cache --pull --build-arg {ENV 
 ```
 An example command for building the fm_frontend container version 1.0.0-rc is:
 ```bash
-docker build frontend --file frontend/Dockerfile --no-cache --pull --build-arg VUE_APP_API_HOSTNAME=localhost --build-arg VUE_APP_PUBLIC_PATH=/frontend/ --tag nstoik/fm_frontend:1.0.0-rc
+docker build frontend --file frontend/Dockerfile --no-cache --pull --build-arg VITE_API_HOSTNAME=localhost --build-arg VITE_PUBLIC_PATH=/frontend/ --tag nstoik/fm_frontend:1.0.0-rc
 ```
 - {PATH} is the submodule path
 - --build-arg is optional and can pass in environment variables to docker build. It can be repeated for multiple variables.
@@ -142,11 +142,11 @@ The list of available variables are:
 - TAG: The tag of the docker image to build. Defaults to "dev"
 - MULTI_STAGE_TARGET: The target to build. Defaults to "prod-stage"
 - TRAEFIK_DOMAIN: The domain name of the traefik service. Defaults to "localhost"
-- VUE_APP_API_HOSTNAME: The hostname of the API. Defaults to "${TRAEFIK_DOMAIN}"
-- VUE_APP_API_PREFIX: defaults to "/api"
-- VUE_APP_API_PORT: The port the frontend connects to. Defaults to "443"
-- VUE_APP_API_PROTOCOL: The protocol the API is exposed on. Defaults to "https"
-- VUE_APP_PUBLIC_PATH: The public path of the frontend. Defaults to "/frontend/"
+- VITE_API_HOSTNAME: The hostname of the API. Defaults to "${TRAEFIK_DOMAIN}"
+- VITE_API_PREFIX: defaults to "/api"
+- VITE_API_PORT: The port the frontend connects to. Defaults to "443"
+- VITE_API_PROTOCOL: The protocol the API is exposed on. Defaults to "https"
+- VITE_PUBLIC_PATH: The public path of the frontend. Defaults to "/frontend/"
 
 A few additional comments on the `docker-bake.hcl` file:
 - --print is optional and will print the configuration of the builder
