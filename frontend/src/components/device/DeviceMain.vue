@@ -21,7 +21,7 @@
 import { onMounted, ref } from "vue";
 
 import { DeviceRequest } from "@/api/device.api";
-import { Device } from "@/interfaces/device.interface";
+import { type Device } from "@/interfaces/device.interface";
 import DeviceCard from "@/components/device/DeviceCard.vue";
 import DeviceUpdate from "@/components/device/DeviceUpdate.vue";
 

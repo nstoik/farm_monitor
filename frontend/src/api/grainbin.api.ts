@@ -1,5 +1,5 @@
 import Request from "@/api/fetch";
-import { Grainbin, GrainbinUpdate } from "@/interfaces/grainbin.interface";
+import { type Grainbin, type GrainbinUpdate } from "@/interfaces/grainbin.interface";
 
 export class GrainbinRequest extends Request {
   constructor() {

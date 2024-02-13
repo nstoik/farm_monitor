@@ -1,13 +1,13 @@
 import axios, {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
+  type AxiosError,
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
 } from "axios";
 import { camelizeKeys, decamelizeKeys } from "humps";
 
 import { AuthService } from "./auth.api";
-import { PaginationHeader } from "@/interfaces/fetch.interface";
+import type { PaginationHeader } from "@/interfaces/fetch.interface";
 
 export default abstract class Request {
   protected baseURL: string;

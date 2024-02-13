@@ -1,6 +1,6 @@
 import Request from "@/api/fetch";
-import { Device, DeviceUpdate } from "@/interfaces/device.interface";
-import { PaginationHeader } from "@/interfaces/fetch.interface";
+import { type Device, type DeviceUpdate } from "@/interfaces/device.interface";
+import { type PaginationHeader } from "@/interfaces/fetch.interface";
 
 export class DeviceRequest extends Request {
   constructor() {

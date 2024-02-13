@@ -22,7 +22,7 @@
 import { onMounted, ref } from "vue";
 
 import { GrainbinRequest } from "@/api/grainbin.api";
-import { Grainbin } from "@/interfaces/grainbin.interface";
+import { type Grainbin } from "@/interfaces/grainbin.interface";
 import GrainbinCard from "@/components/grainbin/GrainbinCard.vue";
 import GrainbinUpdate from "@/components/grainbin/GrainbinUpdate.vue";
 

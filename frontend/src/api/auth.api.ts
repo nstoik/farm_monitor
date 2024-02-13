@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance } from "axios";
+import axios, { AxiosError, type AxiosInstance } from "axios";
 
 /**
  * AuthService is used to get delete and retrieve access and refresh
