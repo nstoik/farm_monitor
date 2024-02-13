@@ -1,10 +1,19 @@
 import "bootstrap/dist/css/bootstrap.css";
+import './assets/main.css'
+
+import "@popperjs/core";
+import "bootstrap";
+
 import { createApp } from "vue";
+import { createPinia } from 'pinia'
+
 import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";
 
-createApp(App).use(router).mount("#app");
+const app = createApp(App);
 
-import "@popperjs/core";
-import "bootstrap";
+app.use(createPinia());
+app.use(router);
+
+app.mount("#app");

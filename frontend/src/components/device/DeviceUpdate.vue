@@ -20,8 +20,8 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, onMounted, ref } from "vue";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { onMounted, ref } from "vue";
 
 import { DeviceRequest } from "@/api/device.api";
 import { DeviceUpdate } from "@/interfaces/device.interface";

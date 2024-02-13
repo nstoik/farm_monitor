@@ -22,8 +22,8 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, onMounted, ref } from "vue";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { onMounted, ref } from "vue";
 
 import { GrainbinRequest } from "@/api/grainbin.api";
 import { GrainbinUpdate } from "@/interfaces/grainbin.interface";
