@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-import NavbarSWStatusVue from "./NavbarSWStatus.vue";
+
 </script>
 
 <style>
