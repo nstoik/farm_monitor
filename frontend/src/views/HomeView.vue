@@ -7,5 +7,5 @@
 </template>
 
 <script lang="ts" setup>
-import Grainbin from "@/components/grainbin/GrainbinMain.vue";
+import Grainbin from '@/components/grainbin/GrainbinMain.vue'
 </script>

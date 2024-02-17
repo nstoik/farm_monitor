@@ -25,15 +25,15 @@
 </template>
 
 <script lang="ts" setup>
-import { type PropType } from "vue";
-import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { type PropType } from 'vue'
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 
-import { type Device } from "@/interfaces/device.interface";
+import { type Device } from '@/interfaces/device.interface'
 
 defineProps({
   device: {
     type: Object as PropType<Device>,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 </script>

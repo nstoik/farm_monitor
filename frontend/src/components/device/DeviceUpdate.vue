@@ -20,30 +20,28 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { onMounted, ref } from 'vue'
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 
-import { DeviceRequest } from "@/api/device.api";
-import { type DeviceUpdate } from "@/interfaces/device.interface";
+import { DeviceRequest } from '@/api/device.api'
+import { type DeviceUpdate } from '@/interfaces/device.interface'
 
 const props = defineProps({
   deviceID: {
     type: Number,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const startingPage = 1;
-const pageSize = 4;
+const startingPage = 1
+const pageSize = 4
 
-const deviceAPI = new DeviceRequest();
-const deviceUpdates = ref<Array<DeviceUpdate>>([]);
+const deviceAPI = new DeviceRequest()
+const deviceUpdates = ref<Array<DeviceUpdate>>([])
 
 onMounted(() => {
-  deviceAPI
-    .getDeviceUpdates(props.deviceID, startingPage, pageSize)
-    .then((response) => {
-      deviceUpdates.value = response[0];
-    });
-});
+  deviceAPI.getDeviceUpdates(props.deviceID, startingPage, pageSize).then((response) => {
+    deviceUpdates.value = response[0]
+  })
+})
 </script>

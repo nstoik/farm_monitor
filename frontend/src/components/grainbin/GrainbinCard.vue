@@ -33,15 +33,15 @@
 </template>
 
 <script lang="ts" setup>
-import { type PropType } from "vue";
-import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { type PropType } from 'vue'
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 
-import { type Grainbin } from "@/interfaces/grainbin.interface";
+import { type Grainbin } from '@/interfaces/grainbin.interface'
 
 defineProps({
   grainbin: {
     type: Object as PropType<Grainbin>,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 </script>

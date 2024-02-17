@@ -22,25 +22,25 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { onMounted, ref } from 'vue'
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 
-import { GrainbinRequest } from "@/api/grainbin.api";
-import { type GrainbinUpdate } from "@/interfaces/grainbin.interface";
+import { GrainbinRequest } from '@/api/grainbin.api'
+import { type GrainbinUpdate } from '@/interfaces/grainbin.interface'
 
 const props = defineProps({
   grainbinID: {
     type: Number,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const grainbinAPI = new GrainbinRequest();
-const grainbinUpdates = ref<Array<GrainbinUpdate>>([]);
+const grainbinAPI = new GrainbinRequest()
+const grainbinUpdates = ref<Array<GrainbinUpdate>>([])
 
 onMounted(() => {
   grainbinAPI.getGrainbinLatestUpdates(props.grainbinID).then((response) => {
-    grainbinUpdates.value = response;
-  });
-});
+    grainbinUpdates.value = response
+  })
+})
 </script>
