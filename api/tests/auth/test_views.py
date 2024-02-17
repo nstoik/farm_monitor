@@ -32,7 +32,7 @@ class TestAPIAuthLogin:
         rep = flaskclient.post(url, json=data)
         reply = rep.get_json()
 
-        assert rep.status_code == 400
+        assert rep.status_code == 401
         assert reply["message"] == "User not found or bad password."
 
     @staticmethod
@@ -44,7 +44,7 @@ class TestAPIAuthLogin:
         rep = flaskclient.post(url, json=data)
         reply = rep.get_json()
 
-        assert rep.status_code == 400
+        assert rep.status_code == 401
         assert reply["message"] == "User not found or bad password."
 
     @staticmethod
@@ -60,7 +60,7 @@ class TestAPIAuthLogin:
 
     @staticmethod
     def test_api_auth_get(flaskclient):
-        """Test bad login with no input."""
+        """Test bad login with get."""
 
         url = url_for("auth.AuthLogin")
         rep = flaskclient.get(url)

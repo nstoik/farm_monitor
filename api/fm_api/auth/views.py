@@ -49,7 +49,7 @@ class AuthLogin(MethodView):
         ).one_or_none()
 
         if user is None or not user.check_password(password):
-            abort(400, message="User not found or bad password.")
+            abort(401, message="User not found or bad password.")
 
         access_token = create_access_token(identity=user, fresh=True)
         refresh_token = create_refresh_token(identity=user)
