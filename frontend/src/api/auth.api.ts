@@ -1,187 +1,187 @@
-import axios, { AxiosError, type AxiosInstance } from "axios";
+import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios'
+import { camelizeKeys } from 'humps'
+
+import { useAuthStore } from '@/stores/auth.store'
 
 /**
- * AuthService is used to get delete and retrieve access and refresh
- * tokens from the server.
+ * Represents an authentication service.
  */
-export class AuthService {
-  private baseURL: string;
-  private newTokenURL: string;
-  private refreshTokenURL: string;
-  private axiosClient: AxiosInstance;
+export class AuthAPI {
+  private baseURL: string
+  private newTokenURL: string
+  private refreshTokenURL: string
+  private axiosClient: AxiosInstance
+  private refreshTokenTimerTimeout: number | null
 
+  /**
+   * Constructs a new instance of the AuthApi class.
+   * @constructor
+   */
   constructor() {
-    const apiHostname: string = import.meta.env.VITE_API_HOSTNAME; // eg. api.localhost
-    const apiPort: string = import.meta.env.VITE_API_PORT; // eg. 80
-    const apiPrefix: string = import.meta.env.VITE_API_PREFIX; // eg. /api
-    const apiProtocol: string = import.meta.env.VITE_API_PROTOCOL || "http"; // eg. http
-    const apiHTTPTimeout: number =
-      Number(import.meta.env.VITE_API_HTTP_TIMEOUT) || 5000; // eg. 5000
+    const apiHostname: string = import.meta.env.VITE_API_HOSTNAME // eg. api.localhost
+    const apiPort: string = import.meta.env.VITE_API_PORT // eg. 80
+    const apiPrefix: string = import.meta.env.VITE_API_PREFIX // eg. /api
+    const apiProtocol: string = import.meta.env.VITE_API_PROTOCOL || 'http' // eg. http
+    const apiHTTPTimeout: number = Number(import.meta.env.VITE_API_HTTP_TIMEOUT) || 5000 // eg. 5000
 
-    this.baseURL = `${apiProtocol}://${apiHostname}:${apiPort}${apiPrefix}/`;
-    this.newTokenURL = `${this.baseURL}auth/`;
-    this.refreshTokenURL = `${this.baseURL}auth/refresh`;
+    this.baseURL = `${apiProtocol}://${apiHostname}:${apiPort}${apiPrefix}/`
+    this.newTokenURL = `${this.baseURL}auth/`
+    this.refreshTokenURL = `${this.baseURL}auth/refresh`
+    this.refreshTokenTimerTimeout = null
 
-    this.axiosClient = axios.create({ timeout: apiHTTPTimeout });
+    this.axiosClient = axios.create({
+      baseURL: this.baseURL,
+      timeout: apiHTTPTimeout,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
 
-    this.axiosClient.interceptors.request.use(
-      undefined,
-      AuthService.onRequestError
-    );
-    this.axiosClient.interceptors.response.use(
-      undefined,
-      AuthService.onResponseError
-    );
+    this.axiosClient.interceptors.request.use(undefined, AuthAPI.onRequestError)
+    this.axiosClient.interceptors.response.use(undefined, AuthAPI.onResponseError)
   }
 
+  /**
+   * Handles errors that occur during the request for authentication.
+   * @param error - The AxiosError object representing the error.
+   * @throws The error message.
+   */
   private static onRequestError(error: AxiosError) {
-    console.error("Error in request for auth", error);
-    throw error.message;
+    const authStore = useAuthStore()
+    authStore.errorMessage = error.message
+    console.error('Error in request for auth', error)
+    throw error.message
   }
 
+  /**
+   * Handles the error response from an API request.
+   * If the response status is 401, sets the error message in the auth store.
+   * Otherwise, logs the error and throws it.
+   * @param error - The AxiosError object representing the error response.
+   */
   private static onResponseError(error: AxiosError) {
-    if (error.message.startsWith("timeout of ")) {
-      throw "Server Timeout";
-    }
+    const authStore = useAuthStore()
     if (error.response) {
-      // Request made and server responded
-      if (error.response.status === 422) {
-        const usernameError: string =
-          (error.response.data as { errors: { json: { username: string[] } } })?.errors?.json?.username?.[0];
-        if (usernameError) {
-          throw "Username: " + usernameError;
-        }
-        const passwordError: string =
-          (error.response.data as { errors: { json: { password: string[] } } })?.errors?.json?.password?.[0];
-        if (passwordError) {
-          throw "Password: " + passwordError;
-        }
+      if (error.response.status === 401) {
+        authStore.errorMessage = 'Invalid username or password'
+        return
       }
-      throw (error.response.data as { message: string })?.message;
-    } else if (error.request) {
-      throw error.message;
-    } // The request was made but no response was received
-    // Something happened in setting up the request that triggered an Error
-    throw error;
-  }
-
-  /**
-   * Check if the access token is valid or expired
-   * @returns: boolean - If the access token is valid or not
-   */
-  public static checkAccessTokenValidity(): boolean {
-    const accessExpires = localStorage.getItem("accessExpires");
-    const accessToken = localStorage.getItem("accessToken");
-
-    if (accessExpires !== null && accessToken !== null) {
-      const accessExpiresDate = Date.parse(accessExpires);
-      const nowDate = Date.now();
-      if (accessExpiresDate <= nowDate) {
-        return false;
-      }
-      return true;
+      authStore.errorMessage = error.message
+      console.error('Error in response for auth', error)
+      throw error
     }
-    return false;
+    authStore.errorMessage = error.message
   }
 
   /**
-   * Check if the refresh token is valid or expired
-   * @returns: boolean - If the refresh token is valid or not
+   * Logs in a user with the provided username and password.
+   * If the access token is valid, no login attempt is made.
+   * If the refresh token is valid, the access token is refreshed instead of logging in.
+   * @param {string} username - The username of the user.
+   * @param {string} password - The password of the user.
+   * @returns {Promise<boolean>} - A promise that resolves when the login process is complete.
    */
-  public static checkRefreshTokenValidity(): boolean {
-    const refreshExpires = localStorage.getItem("refreshExpires");
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    if (refreshExpires !== null && refreshToken !== null) {
-      const accessExpiresDate = Date.parse(refreshToken);
-      const nowDate = Date.now();
-      if (accessExpiresDate >= nowDate) {
-        return false;
-      }
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Get the access token if it is stored in localStorage
-   * @returns: string - The access token or null
-   */
-  public static getAccessToken(): string | null {
-    const accessToken = localStorage.getItem("accessToken");
-
-    if (accessToken === null) {
-      return null;
-    }
-    return accessToken;
-  }
-
-  /**
-   * Get the refresh token if it is stored in localStorage
-   * @returns: string - The refresh token or null
-   */
-  private static getRefreshToken(): string | null {
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    if (refreshToken === null) {
-      return null;
-    }
-    return refreshToken;
-  }
-
-  /**
-   * Get access and refresh tokens from the server.
-   * Store the result in localStorage.
-   */
-  public async fetchNewTokens(
-    username: string,
-    password: string
-  ): Promise<boolean> {
+  async login(username: string, password: string): Promise<boolean> {
     const content = {
       username,
-      password,
-    };
-    const url = this.newTokenURL;
-    const config = {
-      headers: {
-        "content-type": "application/json",
-      },
-    };
-    const response = await this.axiosClient.post(url, content, config);
-    localStorage.setItem("refreshToken", response.data.refresh_token);
-    localStorage.setItem("refreshExpires", response.data.refresh_expires);
-    localStorage.setItem("accessToken", response.data.access_token);
-    localStorage.setItem("accessExpires", response.data.access_expires);
-    return true;
-  }
+      password
+    }
+    const authStore = useAuthStore()
 
-  public static removeTokens(): void {
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("refreshExpires");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("accessExpires");
+    // if the access token is valid, do not attempt to login again
+    if (authStore.isAccessTokenValid()) {
+      return true
+    }
+    // if the refresh token is valid, refresh the access token instead of logging in
+    if (authStore.isRefreshTokenValid()) {
+      return await this.refresh()
+    }
+    // otherwise, attempt to log in
+    authStore.isLoading = true
+    await this.axiosClient
+      .post(this.newTokenURL, content)
+      .then((response: AxiosResponse) => {
+        if (response && response.status === 200) {
+          response.data = camelizeKeys(response.data)
+          authStore.accessToken = response.data.accessToken
+          authStore.accessTokenExpiry = response.data.accessExpires
+          authStore.refreshToken = response.data.refreshToken
+          authStore.refreshTokenExpiry = response.data.refreshExpires
+          this.startRefreshTokenTimer()
+          return true
+        }
+      })
+      .finally(() => {
+        authStore.isLoading = false
+      })
+    return false
   }
 
   /**
-   * Gets a new access token from the server using the refresh token.
+   * Refreshes the access token by sending a request to the server using the refresh token.
+   * If the refresh token is expired, the user is logged out and an error message is set.
+   * @returns {Promise<boolean>} A promise that resolves when the access token is successfully refreshed.
    */
-  public async fetchNewAccessToken(): Promise<void> {
-    const url = this.refreshTokenURL;
+  async refresh(): Promise<boolean> {
+    const authStore = useAuthStore()
     const config = {
       headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${AuthService.getRefreshToken()}`,
-      },
-    };
-    if (!AuthService.checkRefreshTokenValidity()) {
-      throw new Error(
-        "Refresh token has expired. You will need to log in again."
-      );
+        'content-type': 'application/json',
+        Authorization: `Bearer ${authStore.refreshToken}`
+      }
     }
-    const response = await this.axiosClient.post(url, {}, config);
-    localStorage.setItem("accessToken", response.data.access_token);
-    localStorage.setItem("accessExpires", response.data.access_expires);
+    if (!authStore.isRefreshTokenValid()) {
+      authStore.logout('Refresh token expired. Please log in again.')
+      return false
+    }
+    // if the access token is valid, do not attempt to refresh it again
+    if (authStore.isAccessTokenValid()) {
+      this.startRefreshTokenTimer()
+      return true
+    }
+    authStore.isLoading = true
+    await this.axiosClient
+      .post(this.refreshTokenURL, {}, config)
+      .then((response: AxiosResponse) => {
+        if (response && response.status === 200) {
+          response.data = camelizeKeys(response.data)
+          authStore.accessToken = response.data.accessToken
+          authStore.accessTokenExpiry = response.data.accessExpires
+          return true
+        }
+      })
+      .finally(() => {
+        authStore.isLoading = false
+        this.startRefreshTokenTimer()
+      })
+    return false
+  }
+
+  /**
+   * Starts the refresh token timer.
+   * This timer is responsible for refreshing the access token before it expires.
+   * If the access token is already expired, the refresh token timer is set to 1 minute.
+   */
+  private startRefreshTokenTimer() {
+    const authStore = useAuthStore()
+    const accessExpiresDate: number = Date.parse(authStore.accessTokenExpiry)
+    const nowDate = Date.now()
+    // Refresh the access token 15 seconds before it expires
+    let timeToRefresh = accessExpiresDate - nowDate - 15000
+
+    // If the time to refresh is less than or equal to 0,
+    // set a timeout of 1 minute to check again
+    if (timeToRefresh <= 0) {
+      timeToRefresh = 60000
+    }
+
+    // Cancel the refresh token timer if it is already set
+    if (this.refreshTokenTimerTimeout) {
+      clearTimeout(this.refreshTokenTimerTimeout)
+      this.refreshTokenTimerTimeout = null
+    }
+    this.refreshTokenTimerTimeout = window.setTimeout(() => {
+      this.refresh()
+    }, timeToRefresh)
   }
 }
-
-export default new AuthService();
