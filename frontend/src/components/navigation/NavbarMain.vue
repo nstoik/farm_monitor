@@ -2,9 +2,7 @@
   <div id="nav">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
-        <router-link to="/" class="navbar-brand" exact-active-class=""
-          >Farm Monitor</router-link
-        >
+        <router-link to="/" class="navbar-brand" exact-active-class="">Farm Monitor</router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -27,9 +25,6 @@
             <li class="nav-item">
               <router-link to="/about" class="nav-link">About</router-link>
             </li>
-            <li>
-              <navbar-s-w-status-vue></navbar-s-w-status-vue>
-            </li>
           </ul>
         </div>
       </div>
@@ -37,9 +32,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <style>
 #nav {
