@@ -9,16 +9,20 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import { useAuthStore } from './stores/auth.store'
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
 
-app.mount('#app')
 
-// call the refresh method to refresh the access token.
-// This will also start the process of refreshing the access token when it expires.
-// import { AuthAPI } from '@/api/auth.api'
-// const authAPI = new AuthAPI()
-// authAPI.refresh()
+// attempt to auto refresh the access token before startup
+try {
+    const authStore = useAuthStore()
+    await authStore.refresh()
+} catch (error) {
+    console.error('Error refreshing access token', error)
+}
+
+app.mount('#app')

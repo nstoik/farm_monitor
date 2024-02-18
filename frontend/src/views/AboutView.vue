@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { AuthAPI } from '@/api/auth.api'
 import { useAuthStore } from '@/stores/auth.store'
 
 const authStore = useAuthStore()
-const authAPI = new AuthAPI()
 
 const handleLogin = (username: string, password: string) => {
-  authAPI.login(username, password)
+  authStore.login(username, password)
 }
 const handleLogout = () => {
   authStore.logout()
