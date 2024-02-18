@@ -91,7 +91,7 @@ def admin_user(tables):
 def auth_headers(admin_user, flaskclient, tables):
     """Log in the admin user and get an access_token."""
     data = {"username": admin_user.username, "password": "admin"}
-    url = url_for("auth.AuthLogin")
+    url = url_for("auth.JWTLogin")
     rep = flaskclient.post(
         url,
         json=data,

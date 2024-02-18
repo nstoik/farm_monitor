@@ -1,12 +1,9 @@
 """Views for Auth API."""
 
-from datetime import datetime, timezone
-
 from flask.views import MethodView
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
-    decode_token,
     get_jwt_identity,
     jwt_required,
 )
@@ -18,7 +15,7 @@ from sqlalchemy import select
 from fm_api.extensions import jwt
 from fm_api.settings import get_config
 
-from .schemas import JWTSchema, LoginArgsSchema
+from .schemas import JWTResponseSchema, LoginArgsSchema
 
 config = get_config()
 
@@ -30,13 +27,13 @@ blueprint = Blueprint(
 )
 
 
-@blueprint.route("/")
-class AuthLogin(MethodView):
-    """MethodView for AuthLogin schema."""
+@blueprint.route("/jwt/")
+class JWTLogin(MethodView):
+    """MethodView for JWTLogin schema."""
 
     @staticmethod
     @blueprint.arguments(LoginArgsSchema)
-    @blueprint.response(200, JWTSchema)
+    @blueprint.response(200, JWTResponseSchema)
     def post(login_args):
         """Login and return JWT Auth."""
 
@@ -54,32 +51,20 @@ class AuthLogin(MethodView):
         access_token = create_access_token(identity=user, fresh=True)
         refresh_token = create_refresh_token(identity=user)
 
-        local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
-
-        access_decoded = decode_token(access_token)
-        access_expires = datetime.fromtimestamp(
-            access_decoded["exp"], local_timezone
-        ).isoformat()
-        refresh_decoded = decode_token(refresh_token)
-        refresh_expires = datetime.fromtimestamp(
-            refresh_decoded["exp"], local_timezone
-        ).isoformat()
         return {
             "access_token": access_token,
-            "access_expires": access_expires,
             "refresh_token": refresh_token,
-            "refresh_expires": refresh_expires,
         }
 
 
-@blueprint.route("/refresh")
-class AuthRefresh(MethodView):
-    """MethodView for AuthRefresh schema."""
+@blueprint.route("/jwt/refresh")
+class JWTRefresh(MethodView):
+    """MethodView for JWTRefresh schema."""
 
     decorators = [jwt_required(refresh=True)]
 
     @staticmethod
-    @blueprint.response(200, JWTSchema)
+    @blueprint.response(200, JWTResponseSchema)
     def post():
         """Return a new access token using the refresh token."""
 
@@ -91,14 +76,8 @@ class AuthRefresh(MethodView):
 
         access_token = create_access_token(identity=current_user)
 
-        local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
-        access_decoded = decode_token(access_token)
-        access_expires = datetime.fromtimestamp(
-            access_decoded["exp"], local_timezone
-        ).isoformat()
         return {
             "access_token": access_token,
-            "access_expires": access_expires,
         }
 
 
