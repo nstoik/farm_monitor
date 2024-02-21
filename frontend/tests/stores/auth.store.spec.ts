@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 
-import { APIFetch } from '@/api/fetch_new'
+import { APIFetch } from '@/api/fetch'
 import { useAuthStore } from '../../src/stores/auth.store'
 import { mockAuthLoginSuccessResponse, mockAuthRefreshSuccessResponse } from './auth.store.mockdata'
 
-vi.mock('@/api/fetch_new', () => {
+vi.mock('@/api/fetch', () => {
   const APIFetch = vi.fn()
   APIFetch.prototype.post = vi.fn()
   APIFetch.prototype.get = vi.fn()

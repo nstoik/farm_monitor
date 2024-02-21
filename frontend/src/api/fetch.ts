@@ -1,183 +1,217 @@
 import axios, {
   type AxiosError,
-  type AxiosInstance,
   type AxiosRequestConfig,
   type AxiosResponse,
-} from "axios";
-import { camelizeKeys, decamelizeKeys } from "humps";
+  type InternalAxiosRequestConfig
+} from 'axios'
+import { snakeCase, camelCase } from 'change-case'
 
-import { AuthService } from "./auth.api";
-import type { PaginationHeader } from "@/interfaces/fetch.interface";
+import { useAuthStore } from '@/stores/auth.store'
 
-export default abstract class Request {
-  protected baseURL: string;
-  protected resourceLocation: string;
-  private isRefreshing: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private failedRequests: Array<{ resolve: any; reject: any }>;
-  protected client: AxiosInstance;
-  private authService: AuthService;
+/**
+ * Represents a pagination header returned by the API.
+ */
+export type PaginationHeader = {
+  total: number
+  totalPages: number
+  firstPage: number
+  lastPage: number
+  page: number
+}
 
+export class APIFetch {
+  private baseURL: string
+  private axiosConfig: AxiosRequestConfig
+
+  /**
+   * Constructs a new instance of the APIFetch class.
+   * @constructor
+   */
   constructor() {
-    const apiHostname: string = import.meta.env.VITE_API_HOSTNAME; // eg. api.localhost
-    const apiPort: string = import.meta.env.VITE_API_PORT; // eg. 80
-    const apiPrefix: string = import.meta.env.VITE_API_PREFIX; // eg. /api
-    const apiProtocol: string = import.meta.env.VITE_API_PROTOCOL || "http"; // eg. http
-    const apiHTTPTimeout: number =
-      Number(import.meta.env.VITE_API_HTTP_TIMEOUT) || 5000; // eg. 5000
+    const apiHostname: string = import.meta.env.VITE_API_HOSTNAME // eg. api.localhost
+    const apiPort: string = import.meta.env.VITE_API_PORT // eg. 80
+    const apiPrefix: string = import.meta.env.VITE_API_PREFIX // eg. /api
+    const apiProtocol: string = import.meta.env.VITE_API_PROTOCOL || 'http' // eg. http
+    const apiHTTPTimeout: number = Number(import.meta.env.VITE_API_HTTP_TIMEOUT) || 5000 // eg. 5000
 
-    this.baseURL = `${apiProtocol}://${apiHostname}:${apiPort}${apiPrefix}/`;
-    this.isRefreshing = false;
-    this.failedRequests = [];
-    this.authService = new AuthService();
-    this.client = axios.create({ timeout: apiHTTPTimeout });
-    this.resourceLocation = this.baseURL;
-
-    this.client.interceptors.request.use(
-      Request.onRequest,
-      Request.onRequestError
-    );
-    this.client.interceptors.response.use(
-      Request.onResponse,
-      this.onResponseError.bind(this)
-    );
-
-    // Convert responses and requests between camelCase and snake_case
-    this.client.interceptors.response.use(Request.convertToCamelCase);
-    this.client.interceptors.request.use(Request.convertToSnakeCase);
-  }
-
-  /**
-   * A public function to get a resource type from the
-   * server.
-   * @param url: the url to the resource. eg: `${this.resourceLocation}/paginate`
-   * @param params: optional. the parameters to send to the server.
-   *
-   * @returns An array of two items. The first item is an array
-   * of the returned resources. The second is a pagination header
-   * object detailing the current status of the return.
-   */
-  public getPaginate<T>(
-    url: string,
-    page = 1,
-    pageSize = 10
-  ): Promise<[Array<T>, PaginationHeader]> {
-    const params = { page: page, page_size: pageSize };
-    return this.client
-      .get<Array<T>>(url, { params: params })
-      .then((response) => {
-        const paginationHeader: PaginationHeader = JSON.parse(
-          response.headers["x-pagination"]
-        );
-        camelizeKeys(paginationHeader);
-        return [response.data, paginationHeader];
-      });
-  }
-
-  /**
-   * Convert incoming api responses to camelCase.
-   *
-   * @param response the incoming AxiosResponse
-   * @returns the updated AxiosResponse
-   */
-  private static convertToCamelCase(response: AxiosResponse): AxiosResponse {
-    if (
-      response.data &&
-      response.headers["content-type"] === "application/json"
-    ) {
-      response.data = camelizeKeys(response.data);
+    this.baseURL = `${apiProtocol}://${apiHostname}:${apiPort}${apiPrefix}/`
+    this.axiosConfig = {
+      baseURL: this.baseURL,
+      timeout: apiHTTPTimeout,
+      headers: {
+        'Content-Type': 'application/json'
+      }
     }
-    return response;
+    axios.interceptors.request.use(APIFetch.onRequest, APIFetch.onRequestError)
+    axios.interceptors.response.use(APIFetch.onResponse, APIFetch.onResponseError)
   }
 
   /**
-   * Convert outgoing api requests to snake_case
-   * @param config the outgoing AxiosRequestConfig
-   * @returns the updated AxiosRequestConfig
+   * Retrieves data from the specified endpointURL.
+   *
+   * @template T - The type of data to be retrieved.
+   * @param {string} endpointURL - The endpointURL endpoint to fetch the data from.
+   * @param {'Access' | 'Refresh'} [tokenType] - The type of token to be used for authentication.
+   * @returns {Promise<AxiosResponse<T>>} - A promise that resolves to the Axios response.
    */
-  private static convertToSnakeCase(
-    config: AxiosRequestConfig
-  ): AxiosRequestConfig {
-    const newConfig = { ...config };
+  public async get<T>(
+    endpointURL: string,
+    tokenType?: 'Access' | 'Refresh'
+  ): Promise<AxiosResponse<T>> {
+    if (tokenType) {
+      this.authHeaderHelper(tokenType)
+    }
+    return axios.get<T>(endpointURL, this.axiosConfig)
+  }
 
-    if (newConfig.headers) {
-      if (newConfig.headers["Content-Type"] === "multipart/form-data") {
-        return newConfig;
+  /**
+   * Retrieves paginated data from the specified endpointURL.
+   *
+   * @template T - The type of data to be retrieved.
+   * @param {string} endpointURL - The endpointURL endpoint to fetch the data from.
+   * @param {number} [page=1] - The page number to retrieve (default: 1).
+   * @param {number} [pageSize=10] - The number of items per page (default: 10).
+   * @param {'Access' | 'Refresh'} [tokenType] - The type of token to be used for authentication.
+   * @returns {Promise<[AxiosResponse<T[]>, PaginationHeader]>} - A promise that resolves to an array containing the Axios response and the pagination header.
+   */
+  public async getPaginate<T>(
+    endpointURL: string,
+    page: number = 1,
+    pageSize: number = 10,
+    tokenType?: 'Access' | 'Refresh'
+  ): Promise<[AxiosResponse<T[]>, PaginationHeader]> {
+    if (tokenType) {
+      this.authHeaderHelper(tokenType)
+    }
+    // add params to the axiosConfig
+    this.axiosConfig.params = { page, page_size: pageSize }
+    return axios.get<Array<T>>(endpointURL, this.axiosConfig).then((response) => {
+      const paginationHeader: PaginationHeader = JSON.parse(response.headers['X-Pagination'])
+      return [response, paginationHeader]
+    })
+  }
+
+  /**
+   * Sends a POST request to the specified endpointURL with the provided data.
+   *
+   * @template T - The type of the response data.
+   * @param {string} endpointURL - The endpointURL endpoint to send the request to.
+   * @param {any} data - The data to send with the request.
+   * @param {'Access' | 'Refresh'} [tokenType] - The type of token to include in the request header.
+   * @returns {Promise<AxiosResponse<T>>} - A promise that resolves to the response data.
+   */
+  public async post<T>(
+    endpointURL: string,
+    data: any,
+    tokenType?: 'Access' | 'Refresh'
+  ): Promise<AxiosResponse<T>> {
+    if (tokenType) {
+      this.authHeaderHelper(tokenType)
+    }
+    return axios.post<T>(endpointURL, data, this.axiosConfig)
+  }
+
+  /**
+   * Sets the Authorization header in the axios configuration object based on the token type.
+   * @param {'Access' | 'Refresh'} [tokenType] - The type of token ('Access' or 'Refresh').
+   * @returns {void}
+   */
+  private authHeaderHelper(tokenType: 'Access' | 'Refresh'): void {
+    const authStore = useAuthStore()
+    let token = ''
+
+    if (tokenType === 'Refresh') {
+      token = authStore.refreshToken
+    }
+    if (tokenType === 'Access') {
+      token = authStore.accessToken
+    }
+
+    if (this.axiosConfig.headers) {
+      this.axiosConfig.headers['Authorization'] = `Bearer ${token}`
+    } else {
+      this.axiosConfig.headers = {
+        Authorization: `Bearer ${token}`
+      }
+    }
+    return
+  }
+  /**
+   * Modifies the Axios request configuration before sending the request.
+   * Converts outgoing API requests to snake_case.
+   * @param config - The Axios request configuration.
+   * @returns The modified Axios request configuration.
+   */
+  private static onRequest(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
+    // Convert outgoing api requests to snake_case
+    if (config.headers) {
+      if (config.headers['Content-Type'] === 'multipart/form-data') {
+        return config
       }
     }
     if (config.params) {
-      newConfig.params = decamelizeKeys(config.params);
+      config.params = Object.keys(config.params).reduce((acc: { [key: string]: any }, key) => {
+        const snakeCaseKey = snakeCase(key)
+        acc[snakeCaseKey] = config.params[key]
+        return acc
+      }, {})
     }
     if (config.data) {
-      newConfig.data = decamelizeKeys(config.data);
+      config.data = Object.keys(config.data).reduce((acc: { [key: string]: any }, key) => {
+        const snakeCaseKey = snakeCase(key)
+        acc[snakeCaseKey] = config.data[key]
+        return acc
+      }, {})
     }
-    return newConfig;
-  }
-
-  private static onRequest(config: AxiosRequestConfig): AxiosRequestConfig {
-    // At this point, no authorization is being used, so we can skip this step.
-    // November 12, 2021.
-    //
-    // // Add the authorization token to every request
-    // const token = `Bearer ${AuthService.getAccessToken()}`;
-    // config.headers["Content-Type"] = "application/json";
-    // config.headers.Authorization = token;
-    return config;
-  }
-
-  private static onRequestError(error: AxiosError): Promise<AxiosError> {
-    console.error(`[request error] [${JSON.stringify(error)}]`);
-    return Promise.reject(error);
-  }
-
-  private static onResponse(response: AxiosResponse): AxiosResponse {
-    return response;
-  }
-
-  private async onResponseError(error: AxiosError): Promise<AxiosError> {
-    const responseStatus = error.response?.status;
-    const responseMessage = error.response?.data.msg;
-    if (responseStatus === 401 && responseMessage === "Token has expired") {
-      return this.handleUnauthorized(error);
-    } else if (error.message.startsWith("timeout of ")) {
-      throw "Server Timeout";
-    }
-    console.error(`[unknown response error] [${JSON.stringify(error)}]`);
-
-    return Promise.reject(error);
-  }
-
-  private async handleUnauthorized(error: AxiosError): Promise<AxiosError> {
-    if (this.isRefreshing) {
-      try {
-        // the request failed and the token is being refreshed. Wait for the token to be refreshed.
-        await new Promise<void>((resolve, reject) => {
-          this.failedRequests.push({ resolve, reject });
-        });
-        // Now try the same request again after the token has been refreshed.
-        return this.client.request(error.config);
-      } catch (anotherError) {
-        console.warn(
-          `Error while waiting for token being refreshed: ${anotherError}`
-        );
-        return Promise.reject(anotherError);
-      }
-    }
-    this.isRefreshing = true;
-    await this.authService.fetchNewAccessToken();
-    this.isRefreshing = false;
-    this.proccesQueue();
-    return this.client.request(error.config);
+    return config
   }
 
   /**
-   * Called once the token has been refreshed.
-   * Resolve all promises that were queued so those requests can be tried again.
+   * Handles the error that occurs during a request.
+   * @param error - The AxiosError object representing the error.
+   * @throws The original error object.
    */
-  private proccesQueue() {
-    this.failedRequests.forEach((promise) => {
-      promise.resolve();
-    });
-    this.failedRequests = [];
+  private static onRequestError(error: AxiosError) {
+    const authStore = useAuthStore()
+    console.error('Error in request', error)
+    authStore.errorMessage = error.message
+    throw error
+  }
+
+  /**
+   * Converts the incoming API response to camelCase.
+   * @param response - The AxiosResponse object representing the API response.
+   * @returns The modified AxiosResponse object with camelCased data.
+   */
+  private static onResponse(response: AxiosResponse): AxiosResponse {
+    // Convert incoming api responses to camelCase.
+    if (response && response.data && response.headers['content-type'] === 'application/json') {
+      response.data = Object.keys(response.data).reduce((acc: { [key: string]: any }, key) => {
+        const camelCaseKey = camelCase(key)
+        acc[camelCaseKey] = response.data[key]
+        return acc
+      }, {})
+    }
+    return response
+  }
+
+  /**
+   * Handles the error response from an API request.
+   * If the response status is 401 or 403, it logs out the user and displays an error message.
+   * Otherwise, it logs the error and throws it.
+   * @param error - The AxiosError object representing the error response.
+   */
+  private static onResponseError(error: AxiosError) {
+    const authStore = useAuthStore()
+    if (error.response) {
+      // Handle 401 and 403 errors
+      if ([401, 403].includes(error.response.status)) {
+        authStore.logout('Invalid username or password')
+        return
+      }
+    }
+    console.error('Error in response', error)
+    authStore.errorMessage = error.message
+    throw error
   }
 }

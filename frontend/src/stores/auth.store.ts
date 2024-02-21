@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
-import { APIFetch } from '@/api/fetch_new'
+import { APIFetch } from '@/api/fetch'
 
 export const useAuthStore = defineStore('auth', () => {
   const refreshToken = useStorage('refreshToken', '')
