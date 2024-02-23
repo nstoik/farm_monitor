@@ -47,35 +47,35 @@ export class APIFetch {
   }
 
   /**
-   * Retrieves data from the specified endpointURL.
+   * Retrieves data from the specified endpoint.
    *
    * @template T - The type of data to be retrieved.
-   * @param {string} endpointURL - The endpointURL endpoint to fetch the data from.
+   * @param {string} endpoint - The endpoint to fetch the data from.
    * @param {'Access' | 'Refresh'} [tokenType] - The type of token to be used for authentication.
    * @returns {Promise<AxiosResponse<T>>} - A promise that resolves to the Axios response.
    */
   public async get<T>(
-    endpointURL: string,
+    endpoint: string,
     tokenType?: 'Access' | 'Refresh'
   ): Promise<AxiosResponse<T>> {
     if (tokenType) {
       this.authHeaderHelper(tokenType)
     }
-    return axios.get<T>(endpointURL, this.axiosConfig)
+    return axios.get<T>(endpoint, this.axiosConfig)
   }
 
   /**
-   * Retrieves paginated data from the specified endpointURL.
+   * Retrieves paginated data from the specified endpoint.
    *
    * @template T - The type of data to be retrieved.
-   * @param {string} endpointURL - The endpointURL endpoint to fetch the data from.
+   * @param {string} endpoint - The endpoint to fetch the data from.
    * @param {number} [page=1] - The page number to retrieve (default: 1).
    * @param {number} [pageSize=10] - The number of items per page (default: 10).
    * @param {'Access' | 'Refresh'} [tokenType] - The type of token to be used for authentication.
    * @returns {Promise<[AxiosResponse<T[]>, PaginationHeader]>} - A promise that resolves to an array containing the Axios response and the pagination header.
    */
   public async getPaginate<T>(
-    endpointURL: string,
+    endpoint: string,
     page: number = 1,
     pageSize: number = 10,
     tokenType?: 'Access' | 'Refresh'
@@ -85,30 +85,30 @@ export class APIFetch {
     }
     // add params to the axiosConfig
     this.axiosConfig.params = { page, page_size: pageSize }
-    return axios.get<Array<T>>(endpointURL, this.axiosConfig).then((response) => {
+    return axios.get<Array<T>>(endpoint, this.axiosConfig).then((response) => {
       const paginationHeader: PaginationHeader = JSON.parse(response.headers['X-Pagination'])
       return [response, paginationHeader]
     })
   }
 
   /**
-   * Sends a POST request to the specified endpointURL with the provided data.
+   * Sends a POST request to the specified endpoint with the provided data.
    *
    * @template T - The type of the response data.
-   * @param {string} endpointURL - The endpointURL endpoint to send the request to.
+   * @param {string} endpoint - The endpoint to send the request to.
    * @param {any} data - The data to send with the request.
    * @param {'Access' | 'Refresh'} [tokenType] - The type of token to include in the request header.
    * @returns {Promise<AxiosResponse<T>>} - A promise that resolves to the response data.
    */
   public async post<T>(
-    endpointURL: string,
+    endpoint: string,
     data: any,
     tokenType?: 'Access' | 'Refresh'
   ): Promise<AxiosResponse<T>> {
     if (tokenType) {
       this.authHeaderHelper(tokenType)
     }
-    return axios.post<T>(endpointURL, data, this.axiosConfig)
+    return axios.post<T>(endpoint, data, this.axiosConfig)
   }
 
   /**

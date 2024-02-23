@@ -39,46 +39,46 @@ describe('APIFetch', () => {
   })
 
   describe('get', () => {
-    it('should make a GET request with the correct endpointURL and headers', async () => {
-      const endpointURL = 'users'
+    it('should make a GET request with the correct endpoint and headers', async () => {
+      const endpoint = 'users'
       const response = { data: 'test' }
       // @ts-ignore: No method 'mockResolvedValueOnce' on type
       axios.get.mockResolvedValueOnce(response)
-      const result = await apiFetch.get(endpointURL)
-      expect(axios.get).toHaveBeenCalledWith(endpointURL, apiFetch['axiosConfig'])
+      const result = await apiFetch.get(endpoint)
+      expect(axios.get).toHaveBeenCalledWith(endpoint, apiFetch['axiosConfig'])
       expect(result).toEqual(response)
     })
 
     it('should include the access token in the headers if tokenType is "Access"', async () => {
-      const endpointURL = 'users'
+      const endpoint = 'users'
       const response = { data: 'test' }
       // @ts-ignore: No method 'mockResolvedValueOnce' on type
       axios.get.mockResolvedValueOnce(response)
-      const result = await apiFetch.get(endpointURL, 'Access')
+      const result = await apiFetch.get(endpoint, 'Access')
 
       expect(apiFetch['axiosConfig'].headers).toEqual({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${mockAuthLogin.accessToken}`
       })
-      expect(axios.get).toHaveBeenCalledWith(endpointURL, apiFetch['axiosConfig'])
+      expect(axios.get).toHaveBeenCalledWith(endpoint, apiFetch['axiosConfig'])
       expect(result).toEqual(response)
     })
 
     it('should include the refresh token in the headers if tokenType is "Refresh"', async () => {
       // login to get the access token
-      const endpointURL = 'users'
+      const endpoint = 'users'
       const response = { data: 'test' }
       authStore.accessToken = mockAuthLogin.accessToken
       authStore.refreshToken = mockAuthLogin.refreshToken
       // @ts-ignore: No method 'mockResolvedValueOnce' on type
       axios.get.mockResolvedValueOnce(response)
-      const result = await apiFetch.get(endpointURL, 'Refresh')
+      const result = await apiFetch.get(endpoint, 'Refresh')
 
       expect(apiFetch['axiosConfig'].headers).toEqual({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${mockAuthLogin.refreshToken}`
       })
-      expect(axios.get).toHaveBeenCalledWith(endpointURL, apiFetch['axiosConfig'])
+      expect(axios.get).toHaveBeenCalledWith(endpoint, apiFetch['axiosConfig'])
       expect(result).toEqual(response)
     })
   })
@@ -98,13 +98,13 @@ describe('APIFetch', () => {
       headers: { 'X-Pagination': JSON.stringify(paginationHeaderResponse) }
     }
 
-    it('should make a GET request with the correct endpointURL, page, pageSize, and headers', async () => {
-      const endpointURL = 'users'
+    it('should make a GET request with the correct endpoint, page, pageSize, and headers', async () => {
+      const endpoint = 'users'
       // @ts-ignore: No method 'mockResolvedValueOnce' on type
       axios.get.mockResolvedValueOnce(response)
-      const result = await apiFetch.getPaginate(endpointURL, page, pageSize)
+      const result = await apiFetch.getPaginate(endpoint, page, pageSize)
 
-      expect(axios.get).toHaveBeenCalledWith(endpointURL, {
+      expect(axios.get).toHaveBeenCalledWith(endpoint, {
         ...apiFetch['axiosConfig'],
         params: { page: page, page_size: pageSize }
       })
@@ -112,16 +112,16 @@ describe('APIFetch', () => {
     })
 
     it('should include the access token in the headers if tokenType is "Access"', async () => {
-      const endpointURL = 'users'
+      const endpoint = 'users'
       // @ts-ignore: No method 'mockResolvedValueOnce' on type
       axios.get.mockResolvedValueOnce(response)
-      const result = await apiFetch.getPaginate(endpointURL, page, pageSize, 'Access')
+      const result = await apiFetch.getPaginate(endpoint, page, pageSize, 'Access')
 
       expect(apiFetch['axiosConfig'].headers).toEqual({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${mockAuthLogin.accessToken}`
       })
-      expect(axios.get).toHaveBeenCalledWith(endpointURL, {
+      expect(axios.get).toHaveBeenCalledWith(endpoint, {
         ...apiFetch['axiosConfig'],
         params: { page: page, page_size: pageSize }
       })
@@ -130,50 +130,50 @@ describe('APIFetch', () => {
   })
 
   describe('post', () => {
-    it('should make a POST request with the correct endpointURL, data, and headers', async () => {
-      const endpointURL = 'users'
+    it('should make a POST request with the correct endpoint, data, and headers', async () => {
+      const endpoint = 'users'
       const data = { name: 'John Doe' }
       const response = { data: 'test' }
       // @ts-ignore: No method 'mockResolvedValueOnce' on type
       axios.post.mockResolvedValueOnce(response)
 
-      const result = await apiFetch.post(endpointURL, data)
+      const result = await apiFetch.post(endpoint, data)
 
-      expect(axios.post).toHaveBeenCalledWith(endpointURL, data, apiFetch['axiosConfig'])
+      expect(axios.post).toHaveBeenCalledWith(endpoint, data, apiFetch['axiosConfig'])
       expect(result).toEqual(response)
     })
 
     it('should include the access token in the headers if tokenType is "Access"', async () => {
-      const endpointURL = 'users'
+      const endpoint = 'users'
       const data = { name: 'John Doe' }
       const response = { data: 'test' }
       // @ts-ignore: No method 'mockResolvedValueOnce' on type
       axios.post.mockResolvedValueOnce(response)
 
-      const result = await apiFetch.post(endpointURL, data, 'Access')
+      const result = await apiFetch.post(endpoint, data, 'Access')
 
       expect(apiFetch['axiosConfig'].headers).toEqual({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${mockAuthLogin.accessToken}`
       })
-      expect(axios.post).toHaveBeenCalledWith(endpointURL, data, apiFetch['axiosConfig'])
+      expect(axios.post).toHaveBeenCalledWith(endpoint, data, apiFetch['axiosConfig'])
       expect(result).toEqual(response)
     })
 
     it('should include the refresh token in the headers if tokenType is "Refresh"', async () => {
-      const endpointURL = 'users'
+      const endpoint = 'users'
       const data = { name: 'John Doe' }
       const response = { data: 'test' }
       // @ts-ignore: No method 'mockResolvedValueOnce' on type
       axios.post.mockResolvedValueOnce(response)
 
-      const result = await apiFetch.post(endpointURL, data, 'Refresh')
+      const result = await apiFetch.post(endpoint, data, 'Refresh')
 
       expect(apiFetch['axiosConfig'].headers).toEqual({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${mockAuthLogin.refreshToken}`
       })
-      expect(axios.post).toHaveBeenCalledWith(endpointURL, data, apiFetch['axiosConfig'])
+      expect(axios.post).toHaveBeenCalledWith(endpoint, data, apiFetch['axiosConfig'])
       expect(result).toEqual(response)
     })
   })
