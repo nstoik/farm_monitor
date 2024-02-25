@@ -157,11 +157,12 @@ export class APIFetch {
       }, {})
     }
     if (config.data) {
-      config.data = Object.keys(config.data).reduce((acc: { [key: string]: any }, key) => {
-        const snakeCaseKey = snakeCase(key)
-        acc[snakeCaseKey] = config.data[key]
-        return acc
-      }, {})
+      // if config.data is an array, convert each object in the array to snake_case
+      if (Array.isArray(config.data)) {
+        config.data = config.data.map((item) => APIFetch.convertToSnakeCase(item))
+      } else {
+        config.data = APIFetch.convertToSnakeCase(config.data)
+      }
     }
     return config
   }
@@ -186,11 +187,11 @@ export class APIFetch {
   private static onResponse(response: AxiosResponse): AxiosResponse {
     // Convert incoming api responses to camelCase.
     if (response && response.data && response.headers['content-type'] === 'application/json') {
-      response.data = Object.keys(response.data).reduce((acc: { [key: string]: any }, key) => {
-        const camelCaseKey = camelCase(key)
-        acc[camelCaseKey] = response.data[key]
-        return acc
-      }, {})
+      if (Array.isArray(response.data)) {
+        response.data = response.data.map((item) => APIFetch.convertToCamelCase(item))
+      } else {
+        response.data = APIFetch.convertToCamelCase(response.data)
+      }
     }
     return response
   }
@@ -213,5 +214,31 @@ export class APIFetch {
     console.error('Error in response', error)
     authStore.errorMessage = error.message
     throw error
+  }
+
+  /**
+   * Converts an object to snake_case.
+   * @param obj - The object to convert.
+   * @returns The converted object with snake_cased keys.
+   */
+  private static convertToSnakeCase(obj: { [key: string]: any }): { [key: string]: any } {
+    return Object.keys(obj).reduce((acc: { [key: string]: any }, key) => {
+      const snakeCaseKey = snakeCase(key)
+      acc[snakeCaseKey] = obj[key]
+      return acc
+    }, {})
+  }
+
+  /**
+   * Converts the keys of an object to camel case.
+   * @param obj - The object to convert.
+   * @returns The object with camel case keys.
+   */
+  private static convertToCamelCase(obj: { [key: string]: any }): { [key: string]: any } {
+    return Object.keys(obj).reduce((acc: { [key: string]: any }, key) => {
+      const camelCaseKey = camelCase(key)
+      acc[camelCaseKey] = obj[key]
+      return acc
+    }, {})
   }
 }
