@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
+
 import { APIFetch } from '@/api/fetch'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -12,7 +13,6 @@ export const useAuthStore = defineStore('auth', () => {
   const refreshTokenTimeout = ref(0)
   // The buffer to expire the tokens early to account for any network latency
   const expireBuffer = 30000
-
 
   /**
    * Logs in the user with the provided username and password.
@@ -62,7 +62,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function refresh() {
     if (isRefreshTokenValid()) {
       const apiFetch = new APIFetch()
-      apiFetch.post('auth/jwt/refresh', {}, 'Refresh').then((response) => {
+      return apiFetch.post('auth/jwt/refresh', {}, 'Refresh').then((response) => {
         if (response && response.status === 200) {
           accessToken.value = response.data.accessToken
           startRefreshTokenTimer()
@@ -92,7 +92,6 @@ export const useAuthStore = defineStore('auth', () => {
     clearTimeout(refreshTokenTimeout.value)
   }
 
-
   /**
    * Checks if the access token is valid.
    * @returns {boolean} True if the access token is valid, false otherwise.
@@ -111,7 +110,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
     return true
   }
-
 
   /**
    * Checks if the refresh token is valid. If the refresh token is expired, it logs out the user.
@@ -141,6 +139,6 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     login,
     refreshToken,
-    refresh,
+    refresh
   }
 })
