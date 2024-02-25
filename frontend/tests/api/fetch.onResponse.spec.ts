@@ -76,6 +76,32 @@ describe('Axios Interceptor onResponse', () => {
     const result = APIFetch.onResponse(response)
     expect(result).toEqual(response)
   })
+  it('should convert x-pagination header to camelCase', () => {
+    const response = {
+      headers: {
+        'content-type': 'application/json',
+        'x-pagination': JSON.stringify({
+          total: 100,
+          total_pages: 10,
+          first_page: 1,
+          last_page: 10,
+          page: 1
+        })
+      }
+    }
+    // @ts-ignore
+    const result = APIFetch.onResponse(response)
+    console.log('result.headers', result.headers)
+    expect(result.headers['X-Pagination']).toEqual(
+      JSON.stringify({
+        total: 100,
+        totalPages: 10,
+        firstPage: 1,
+        lastPage: 10,
+        page: 1
+      })
+    )
+  })
   describe('onResponseError', () => {
     it('should log out the user and display an error message if the response status is 401', () => {
       const error = {

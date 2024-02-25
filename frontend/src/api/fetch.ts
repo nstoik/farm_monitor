@@ -150,11 +150,11 @@ export class APIFetch {
       }
     }
     if (config.params) {
-      config.params = Object.keys(config.params).reduce((acc: { [key: string]: any }, key) => {
-        const snakeCaseKey = snakeCase(key)
-        acc[snakeCaseKey] = config.params[key]
-        return acc
-      }, {})
+      if (Array.isArray(config.params)) {
+        config.params = config.params.map((item) => APIFetch.convertToSnakeCase(item))
+      } else {
+        config.params = APIFetch.convertToSnakeCase(config.params)
+      }
     }
     if (config.data) {
       // if config.data is an array, convert each object in the array to snake_case
@@ -185,7 +185,15 @@ export class APIFetch {
    * @returns The modified AxiosResponse object with camelCased data.
    */
   private static onResponse(response: AxiosResponse): AxiosResponse {
-    // Convert incoming api responses to camelCase.
+    if (response.headers['x-pagination']) {
+      const tempHeader = JSON.parse(response.headers['x-pagination'])
+      const newHeader = {} as PaginationHeader
+      for (const key in tempHeader) {
+        newHeader[camelCase(key) as keyof PaginationHeader] = tempHeader[key]
+      }
+      delete response.headers['x-pagination']
+      response.headers['X-Pagination'] = JSON.stringify(newHeader)
+    }
     if (response && response.data && response.headers['content-type'] === 'application/json') {
       if (Array.isArray(response.data)) {
         response.data = response.data.map((item) => APIFetch.convertToCamelCase(item))
