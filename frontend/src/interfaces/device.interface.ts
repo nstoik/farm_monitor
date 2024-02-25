@@ -16,6 +16,7 @@ export type Device = {
 }
 
 export type DeviceUpdate = {
+  id: number
   deviceTemp: number
   diskFree: number
   diskTotal: number

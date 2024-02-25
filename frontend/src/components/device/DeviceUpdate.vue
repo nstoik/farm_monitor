@@ -23,7 +23,7 @@
 import { onMounted, ref } from 'vue'
 import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 
-import { DeviceRequest } from '@/api/device.api'
+import { useDeviceUpdateStore } from '@/stores/device-update.store'
 import { type DeviceUpdate } from '@/interfaces/device.interface'
 
 const props = defineProps({
@@ -34,14 +34,14 @@ const props = defineProps({
 })
 
 const startingPage = 1
-const pageSize = 4
+const pageSize = 10
 
-const deviceAPI = new DeviceRequest()
+const deviceUpdateStore = useDeviceUpdateStore()
 const deviceUpdates = ref<Array<DeviceUpdate>>([])
 
 onMounted(() => {
-  deviceAPI.getDeviceUpdates(props.deviceID, startingPage, pageSize).then((response) => {
-    deviceUpdates.value = response[0]
+  deviceUpdateStore.fetchDeviceUpdatePagination(props.deviceID, startingPage, pageSize).then(() => {
+    deviceUpdates.value = deviceUpdateStore.getLatestDeviceUpdates(props.deviceID)
   })
 })
 </script>
