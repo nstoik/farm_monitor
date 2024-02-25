@@ -25,7 +25,7 @@
 import { onMounted, ref } from 'vue'
 import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 
-import { GrainbinRequest } from '@/api/grainbin.api'
+import { useGrainbinUpdateStore } from '@/stores/grainbin-update.store'
 import { type GrainbinUpdate } from '@/interfaces/grainbin.interface'
 
 const props = defineProps({
@@ -35,12 +35,13 @@ const props = defineProps({
   }
 })
 
-const grainbinAPI = new GrainbinRequest()
-const grainbinUpdates = ref<Array<GrainbinUpdate>>([])
+const grainbinUpdateStore = useGrainbinUpdateStore()
+
+let grainbinUpdates = ref(Array<GrainbinUpdate>())
 
 onMounted(() => {
-  grainbinAPI.getGrainbinLatestUpdates(props.grainbinID).then((response) => {
-    grainbinUpdates.value = response
+  grainbinUpdateStore.fetchLatestGrainbinUpdates(props.grainbinID).then(() => {
+    grainbinUpdates.value = grainbinUpdateStore.getLatestGrainbinUpdates(props.grainbinID)
   })
 })
 </script>
