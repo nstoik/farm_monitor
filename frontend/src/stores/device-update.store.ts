@@ -10,13 +10,17 @@ export const useDeviceUpdateStore = defineStore('deviceUpdate', () => {
   const deviceUpdates = ref<Map<DeviceUpdate['id'], DeviceUpdate>>(new Map())
   const isLoading = ref(false)
 
+  /**
+   * Fetches the latest device update for a given ID.
+   * @param id - The ID of the device.
+   * @returns A Promise that resolves to the fetched device update being stored.
+   */
   async function fetchLatestDeviceUpdate(id: number) {
     isLoading.value = true
     const apiFetch = new APIFetch()
     return apiFetch
       .get<DeviceUpdate>(`${endpoint}${id}/updates/latest`)
       .then((response) => {
-        //convert any dates from string to Date objects
         const deviceUpdate = response.data
         deviceUpdate.timestamp = new Date(deviceUpdate.timestamp + 'Z')
         deviceUpdates.value.set(deviceUpdate.id, deviceUpdate)
@@ -26,6 +30,14 @@ export const useDeviceUpdateStore = defineStore('deviceUpdate', () => {
       })
   }
 
+  /**
+   * Fetches device updates with pagination.
+   *
+   * @param id - The ID of the device.
+   * @param page - The page number to fetch (default: 1).
+   * @param pageSize - The number of items per page (default: 10).
+   * @returns A Promise that resolves to the pagination header response.
+   */
   async function fetchDeviceUpdatePagination(id: number, page = 1, pageSize = 10) {
     isLoading.value = true
     const apiFetch = new APIFetch()
@@ -33,7 +45,6 @@ export const useDeviceUpdateStore = defineStore('deviceUpdate', () => {
     return apiFetch
       .getPaginate<DeviceUpdate>(`${endpoint}${id}/updates`, page, pageSize)
       .then(([response, paginationHeaderResponse]) => {
-        //convert any dates from string to Date objects
         for (const key in response.data) {
           const deviceUpdate = response.data[key]
           deviceUpdate.timestamp = new Date(deviceUpdate.timestamp + 'Z')
@@ -46,6 +57,11 @@ export const useDeviceUpdateStore = defineStore('deviceUpdate', () => {
       })
   }
 
+  /**
+   * Retrieves the latest device updates for a given device.
+   * @param device - The device number.
+   * @returns An array of device updates.
+   */
   function getLatestDeviceUpdates(device: number) {
     const updates = Array.from(deviceUpdates.value.values()).filter(
       (update) => update.device === device

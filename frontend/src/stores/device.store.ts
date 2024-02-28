@@ -10,6 +10,10 @@ export const useDeviceStore = defineStore('device', () => {
   const devices = ref<Map<Device['id'], Device>>(new Map())
   const isLoading = ref(false)
 
+  /**
+   * Retrieves the list of devices from the API.
+   * @returns A promise that resolves to the list of devices.
+   */
   async function getDevices() {
     isLoading.value = true
     const apiFetch = new APIFetch()
@@ -27,6 +31,7 @@ export const useDeviceStore = defineStore('device', () => {
         isLoading.value = false
       })
   }
+
   return {
     devices,
     getDevices,

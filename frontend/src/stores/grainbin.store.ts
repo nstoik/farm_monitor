@@ -20,8 +20,6 @@ export const useGrainbinStore = defineStore('grainbin', () => {
     return apiFetch
       .get<Array<Grainbin>>(endpoint)
       .then((response) => {
-        //convert any dates from string to Date objects
-        // Add the timezone offset to the date to make it local time
         for (const key in response.data) {
           const grainbin = response.data[key]
           grainbin.lastUpdated = new Date(grainbin.lastUpdated + 'Z')
@@ -55,12 +53,8 @@ export const useGrainbinStore = defineStore('grainbin', () => {
     return apiFetch
       .get<Grainbin>(`${endpoint}${id}`)
       .then((response) => {
-        // Create a grainbin object from the response data
         const grainbin = response.data
-        //convert any dates from string to Date objects
-        // Add the timezone offset to the date to make it local time.
         grainbin.lastUpdated = new Date(grainbin.lastUpdated + 'Z')
-        // Add or update the grainbin to the grainbins array
         grainbins.value.set(grainbin.id, grainbin)
       })
       .finally(() => {
