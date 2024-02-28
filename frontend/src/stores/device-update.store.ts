@@ -21,9 +21,11 @@ export const useDeviceUpdateStore = defineStore('deviceUpdate', () => {
     return apiFetch
       .get<DeviceUpdate>(`${endpoint}${id}/updates/latest`)
       .then((response) => {
-        const deviceUpdate = response.data
-        deviceUpdate.timestamp = new Date(deviceUpdate.timestamp + 'Z')
-        deviceUpdates.value.set(deviceUpdate.id, deviceUpdate)
+        if (response.data) {
+          const deviceUpdate = response.data
+          deviceUpdate.timestamp = new Date(deviceUpdate.timestamp + 'Z')
+          deviceUpdates.value.set(deviceUpdate.id, deviceUpdate)
+        }
       })
       .finally(() => {
         isLoading.value = false
