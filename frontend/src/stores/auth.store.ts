@@ -31,8 +31,9 @@ export const useAuthStore = defineStore('auth', () => {
       .post('auth/jwt/', { username: username, password: password })
       .then((response) => {
         if (response && response.status === 200) {
-          accessToken.value = response.data.accessToken
-          refreshToken.value = response.data.refreshToken
+          const data = response.data as { accessToken: string; refreshToken: string }
+          accessToken.value = data.accessToken
+          refreshToken.value = data.refreshToken
           startRefreshTokenTimer()
         }
       })
@@ -64,7 +65,7 @@ export const useAuthStore = defineStore('auth', () => {
       const apiFetch = new APIFetch()
       return apiFetch.post('auth/jwt/refresh', {}, 'Refresh').then((response) => {
         if (response && response.status === 200) {
-          accessToken.value = response.data.accessToken
+          accessToken.value = (response.data as { accessToken: string }).accessToken
           startRefreshTokenTimer()
         }
       })
