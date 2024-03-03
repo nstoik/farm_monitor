@@ -23,7 +23,8 @@
 				"esbenp.prettier-vscode",
 				"vue.volar",
 				"Vue.vscode-typescript-vue-plugin",
-				"dbaeumer.vscode-eslint"
+				"dbaeumer.vscode-eslint",
+				"vitest.explorer"
 			],
 			"postCreateCommand": "git config --global core.autocrlf true && git config --global user.email 'nelsonstoik@gmail.com' && git config --global user.name 'Nelson'",
 			"settings": {}
