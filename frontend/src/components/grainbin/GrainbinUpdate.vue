@@ -9,6 +9,9 @@
       </tr>
     </thead>
     <tbody>
+      <tr v-if="grainbinUpdates.length === 0">
+        <td colspan="4">No updates</td>
+      </tr>
       <tr v-for="update in grainbinUpdates" :key="update.id">
         <td>
           {{ formatDistanceToNow(update.timestamp, { addSuffix: true }) }}
@@ -39,9 +42,8 @@ const grainbinUpdateStore = useGrainbinUpdateStore()
 
 let grainbinUpdates = ref(Array<GrainbinUpdate>())
 
-onMounted(() => {
-  grainbinUpdateStore.fetchLatestGrainbinUpdates(props.grainbinID).then(() => {
-    grainbinUpdates.value = grainbinUpdateStore.getLatestGrainbinUpdates(props.grainbinID)
-  })
+onMounted(async () => {
+  await grainbinUpdateStore.fetchLatestGrainbinUpdates(props.grainbinID)
+  grainbinUpdates.value = await grainbinUpdateStore.getLatestGrainbinUpdates(props.grainbinID)
 })
 </script>

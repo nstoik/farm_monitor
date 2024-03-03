@@ -8,6 +8,9 @@
       </tr>
     </thead>
     <tbody>
+      <tr v-if="deviceUpdates.length === 0">
+        <td colspan="3">No updates</td>
+      </tr>
       <tr v-for="update in deviceUpdates" :key="update.updateIndex">
         <td>
           {{ formatDistanceToNow(update.timestamp, { addSuffix: true }) }}
@@ -39,9 +42,8 @@ const pageSize = 10
 const deviceUpdateStore = useDeviceUpdateStore()
 const deviceUpdates = ref<Array<DeviceUpdate>>([])
 
-onMounted(() => {
-  deviceUpdateStore.fetchDeviceUpdatePagination(props.deviceID, startingPage, pageSize).then(() => {
-    deviceUpdates.value = deviceUpdateStore.getLatestDeviceUpdates(props.deviceID)
-  })
+onMounted(async () => {
+  await deviceUpdateStore.fetchDeviceUpdatePagination(props.deviceID, startingPage, pageSize)
+  deviceUpdates.value = await deviceUpdateStore.getLatestDeviceUpdates(props.deviceID)
 })
 </script>
