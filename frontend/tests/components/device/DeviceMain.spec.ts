@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 
-import GrainbinMain from '@/components/grainbin/GrainbinMain.vue'
+import DeviceMain from '@/components/device/DeviceMain.vue'
 
 /**
  * Factory function to create a wrapper for the GrainbinMain component.
@@ -11,7 +11,7 @@ import GrainbinMain from '@/components/grainbin/GrainbinMain.vue'
  * @returns A mounted wrapper for the GrainbinMain component.
  */
 function wrapperFactory(shallow = false, initialState = {}) {
-  return mount(GrainbinMain, {
+  return mount(DeviceMain, {
     shallow: shallow,
     global: {
       plugins: [
@@ -24,19 +24,19 @@ function wrapperFactory(shallow = false, initialState = {}) {
   })
 }
 
-describe('GrainbinMain', () => {
+describe('DeviceMain', () => {
   it('renders properly', () => {
     const wrapper = wrapperFactory()
-    expect(wrapper.text()).toContain('No grainbins found')
+    expect(wrapper.text()).toContain('No devices found')
   })
 
-  it('renders grainbins', () => {
+  it('renders devices', () => {
     const initialState = {
-      grainbin: {
-        grainbins: new Map([[1, { id: 1, name: 'Grainbin 1', lastUpdated: new Date() }]])
+      device: {
+        devices: new Map([[1, { id: 1, name: 'Device 1', lastUpdated: new Date() }]])
       }
     }
     const wrapper = wrapperFactory(true, initialState)
-    expect(wrapper.html()).toContain('grainbinid="1"')
+    expect(wrapper.html()).toContain('deviceid="1"')
   })
 })
