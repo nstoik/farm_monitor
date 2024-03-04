@@ -37,14 +37,42 @@ npm run dev
 npm run build
 ```
 
+### Preview the Production Build
+
+```sh
+npm run preview
+```
+
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
 npm run test:unit
 ```
 
+### Build Only the Production Build
+
+```sh
+npm run build-only
+```
+
+### Type-check
+
+```sh
+npm run type-check
+```
+
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
 npm run lint
+```
+
+### Format with [Prettier](https://prettier.io/)
+
+```sh
+npm run format
+```
+Or in CI:
+```sh
+npm run format:ci
 ```
