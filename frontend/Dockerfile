@@ -1,4 +1,4 @@
-FROM node:16 AS build-stage
+FROM node:lts AS build-stage
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -6,13 +6,11 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ARG WORKING_DIR=/workspaces/frontend
 
-ARG VUE_APP_API_HOSTNAME
-ARG VUE_APP_API_PREFIX=/api
-ARG VUE_APP_API_PORT=80
-ARG VUE_APP_API_PROTOCOL=http
-ARG VUE_APP_PUBLIC_PATH=/
-
-RUN npm install -g @vue/cli
+ARG VITE_API_HOSTNAME
+ARG VITE_API_PREFIX=/api
+ARG VITE_API_PORT=80
+ARG VITE_API_PROTOCOL=http
+ARG VITE_PUBLIC_PATH=/
 
 WORKDIR $WORKING_DIR
 

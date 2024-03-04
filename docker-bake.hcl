@@ -7,19 +7,19 @@ variable "TRAEFIK_DOMAIN" {
 variable "MULTI_STAGE_TARGET" {
     default = "prod-stage"
 }
-variable "VUE_APP_API_HOSTNAME" {
+variable "VITE_API_HOSTNAME" {
     default = "${TRAEFIK_DOMAIN}"
 }
-variable "VUE_APP_API_PREFIX" {
+variable "VITE_API_PREFIX" {
     default = "/api"
 }
-variable "VUE_APP_API_PORT" {
+variable "VITE_API_PORT" {
     default = "443"
 }
-variable "VUE_APP_API_PROTOCOL" {
+variable "VITE_API_PROTOCOL" {
     default = "https"
 }
-variable "VUE_APP_PUBLIC_PATH" {
+variable "VITE_PUBLIC_PATH" {
     default = "/frontend/"
 }
 
@@ -45,11 +45,11 @@ target "fm_frontend" {
     context = "frontend"
     tags = ["nstoik/fm_frontend:${TAG}", "nstoik/fm_frontend:${TAG}-${TRAEFIK_DOMAIN}"]
     args = {
-        VUE_APP_API_HOSTNAME = "${VUE_APP_API_HOSTNAME}",
-        VUE_APP_API_PREFIX = "${VUE_APP_API_PREFIX}",
-        VUE_APP_API_PORT = "${VUE_APP_API_PORT}",
-        VUE_APP_API_PROTOCOL = "${VUE_APP_API_PROTOCOL}",
-        VUE_APP_PUBLIC_PATH = "${VUE_APP_PUBLIC_PATH}"
+        VITE_API_HOSTNAME = "${VITE_API_HOSTNAME}",
+        VITE_API_PREFIX = "${VITE_API_PREFIX}",
+        VITE_API_PORT = "${VITE_API_PORT}",
+        VITE_API_PROTOCOL = "${VITE_API_PROTOCOL}",
+        VITE_PUBLIC_PATH = "${VITE_PUBLIC_PATH}"
     }
 }
 

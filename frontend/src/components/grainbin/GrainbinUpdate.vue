@@ -9,6 +9,9 @@
       </tr>
     </thead>
     <tbody>
+      <tr v-if="grainbinUpdates.length === 0">
+        <td colspan="4">No updates</td>
+      </tr>
       <tr v-for="update in grainbinUpdates" :key="update.id">
         <td>
           {{ formatDistanceToNow(update.timestamp, { addSuffix: true }) }}
@@ -22,25 +25,25 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, onMounted, ref } from "vue";
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { onMounted, ref } from 'vue'
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 
-import { GrainbinRequest } from "@/api/grainbin.api";
-import { GrainbinUpdate } from "@/interfaces/grainbin.interface";
+import { useGrainbinUpdateStore } from '@/stores/grainbin-update.store'
+import { type GrainbinUpdate } from '@/interfaces/grainbin.interface'
 
 const props = defineProps({
   grainbinID: {
     type: Number,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const grainbinAPI = new GrainbinRequest();
-const grainbinUpdates = ref<Array<GrainbinUpdate>>([]);
+const grainbinUpdateStore = useGrainbinUpdateStore()
 
-onMounted(() => {
-  grainbinAPI.getGrainbinLatestUpdates(props.grainbinID).then((response) => {
-    grainbinUpdates.value = response;
-  });
-});
+let grainbinUpdates = ref(Array<GrainbinUpdate>())
+
+onMounted(async () => {
+  await grainbinUpdateStore.fetchLatestGrainbinUpdates(props.grainbinID)
+  grainbinUpdates.value = await grainbinUpdateStore.getLatestGrainbinUpdates(props.grainbinID)
+})
 </script>

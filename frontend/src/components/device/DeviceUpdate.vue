@@ -8,6 +8,9 @@
       </tr>
     </thead>
     <tbody>
+      <tr v-if="deviceUpdates.length === 0">
+        <td colspan="3">No updates</td>
+      </tr>
       <tr v-for="update in deviceUpdates" :key="update.updateIndex">
         <td>
           {{ formatDistanceToNow(update.timestamp, { addSuffix: true }) }}
@@ -20,30 +23,27 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, onMounted, ref } from "vue";
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { onMounted, ref } from 'vue'
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 
-import { DeviceRequest } from "@/api/device.api";
-import { DeviceUpdate } from "@/interfaces/device.interface";
+import { useDeviceUpdateStore } from '@/stores/device-update.store'
+import { type DeviceUpdate } from '@/interfaces/device.interface'
 
 const props = defineProps({
   deviceID: {
     type: Number,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const startingPage = 1;
-const pageSize = 4;
+const startingPage = 1
+const pageSize = 10
 
-const deviceAPI = new DeviceRequest();
-const deviceUpdates = ref<Array<DeviceUpdate>>([]);
+const deviceUpdateStore = useDeviceUpdateStore()
+const deviceUpdates = ref<Array<DeviceUpdate>>([])
 
-onMounted(() => {
-  deviceAPI
-    .getDeviceUpdates(props.deviceID, startingPage, pageSize)
-    .then((response) => {
-      deviceUpdates.value = response[0];
-    });
-});
+onMounted(async () => {
+  await deviceUpdateStore.fetchDeviceUpdatePagination(props.deviceID, startingPage, pageSize)
+  deviceUpdates.value = await deviceUpdateStore.getLatestDeviceUpdates(props.deviceID)
+})
 </script>

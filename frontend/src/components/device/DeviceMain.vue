@@ -1,10 +1,10 @@
 <template>
   <h2>Devices</h2>
-  <div v-if="devices.length == 0" class="row">
+  <div v-if="deviceStore.devices.size == 0" class="row">
     <h3>No devices found</h3>
   </div>
   <div
-    v-for="device in devices"
+    v-for="device in deviceStore.devices.values()"
     :key="device.id"
     class="row align-items-start g-3"
   >
@@ -18,19 +18,15 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from 'vue'
 
-import { DeviceRequest } from "@/api/device.api";
-import { Device } from "@/interfaces/device.interface";
-import DeviceCard from "@/components/device/DeviceCard.vue";
-import DeviceUpdate from "@/components/device/DeviceUpdate.vue";
+import DeviceCard from '@/components/device/DeviceCard.vue'
+import DeviceUpdate from '@/components/device/DeviceUpdate.vue'
+import { useDeviceStore } from '@/stores/device.store'
 
-const deviceAPI = new DeviceRequest();
-const devices = ref<Array<Device>>([]);
+const deviceStore = useDeviceStore()
 
 onMounted(() => {
-  deviceAPI.getDevices().then((response) => {
-    devices.value = response;
-  });
-});
+  deviceStore.getDevices()
+})
 </script>
