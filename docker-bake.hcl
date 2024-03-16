@@ -7,9 +7,6 @@ variable "TRAEFIK_DOMAIN" {
 variable "MULTI_STAGE_TARGET" {
     default = "prod-stage"
 }
-variable "VITE_API_HOSTNAME" {
-    default = "${TRAEFIK_DOMAIN}"
-}
 variable "VITE_API_PREFIX" {
     default = "/api"
 }
@@ -40,19 +37,6 @@ target "fm_server" {
     target = "${MULTI_STAGE_TARGET}"
 }
 
-target "fm_frontend" {
-    inherits = ["default"]
-    context = "frontend"
-    tags = ["nstoik/fm_frontend:${TAG}", "nstoik/fm_frontend:${TAG}-${TRAEFIK_DOMAIN}"]
-    args = {
-        VITE_API_HOSTNAME = "${VITE_API_HOSTNAME}",
-        VITE_API_PREFIX = "${VITE_API_PREFIX}",
-        VITE_API_PORT = "${VITE_API_PORT}",
-        VITE_API_PROTOCOL = "${VITE_API_PROTOCOL}",
-        VITE_PUBLIC_PATH = "${VITE_PUBLIC_PATH}"
-    }
-}
-
 target "fm_api" {
     inherits = ["default"]
     context = "api"
@@ -64,4 +48,21 @@ target "fm_flower" {
     inherits = ["default"]
     context = "flower"
     tags = ["nstoik/fm_flower:${TAG}"]
+}
+
+target "fm_frontend" {
+    inherits = ["default"]
+    context = "frontend"
+    matrix = {
+        domain = split(",", "${TRAEFIK_DOMAIN}")
+    }
+    name = "frontend-${domain}"
+    tags = ["nstoik/fm_frontend:${TAG}", "nstoik/fm_frontend:${TAG}-${domain}"]
+    args = {
+        VITE_API_HOSTNAME = "${domain}",
+        VITE_API_PREFIX = "${VITE_API_PREFIX}",
+        VITE_API_PORT = "${VITE_API_PORT}",
+        VITE_API_PROTOCOL = "${VITE_API_PROTOCOL}",
+        VITE_PUBLIC_PATH = "${VITE_PUBLIC_PATH}"
+    }
 }
