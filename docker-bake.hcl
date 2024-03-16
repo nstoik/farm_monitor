@@ -1,7 +1,7 @@
 variable "TAG" {
     default = "dev"
 }
-variable "TRAEFIK_DOMAIN" {
+variable "TRAEFIK_DOMAINS" {
     default = "localhost"
 }
 variable "MULTI_STAGE_TARGET" {
@@ -54,7 +54,7 @@ target "fm_frontend" {
     inherits = ["default"]
     context = "frontend"
     matrix = {
-        domain = split(",", "${TRAEFIK_DOMAIN}")
+        domain = split(",", "${TRAEFIK_DOMAINS}")
     }
     name = "frontend-${domain}"
     tags = ["nstoik/fm_frontend:${TAG}", "nstoik/fm_frontend:${TAG}-${domain}"]
