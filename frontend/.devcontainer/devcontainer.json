@@ -22,7 +22,6 @@
 				"github.copilot",
 				"esbenp.prettier-vscode",
 				"vue.volar",
-				"Vue.vscode-typescript-vue-plugin",
 				"dbaeumer.vscode-eslint",
 				"vitest.explorer"
 			],
