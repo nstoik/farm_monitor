@@ -9,6 +9,7 @@ ARG USERNAME=fm
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ARG WORKING_DIR=/workspaces/api
+ARG DATABASE_DIR=/workspaces/database
 
 RUN pip install -U pip && pip install pipenv && \
     # create new user
@@ -20,7 +21,8 @@ RUN pip install -U pip && pip install pipenv && \
     # chmod 0440 /etc/sudoers.d/$USERNAME && \
     # make working directory and change owner
     mkdir -p $WORKING_DIR/ && \
-    chown $USER_UID:$USER_GID $WORKING_DIR/ && \
+    mkdir -p $DATABASE_DIR/ && \
+    chown $USER_UID:$USER_GID $WORKING_DIR/ $DATABASE_DIR/ && \
     # create directory for logs and change owner
     mkdir /logs/ && \
     chown $USER_UID:$USER_GID /logs/
@@ -30,6 +32,8 @@ USER $USER_UID:$USER_GID
 
 # Copy the Pipfile and Pipfile.lock to the working directory
 COPY --chown=${USER_UID}:${USER_GID} api/Pipfile* api/setup.py $WORKING_DIR/
+# Copy the database subfolder
+COPY --chown=${USER_UID}:${USER_GID} database/. $DATABASE_DIR/
 
 WORKDIR $WORKING_DIR
 RUN pipenv install --deploy --ignore-pipfile
