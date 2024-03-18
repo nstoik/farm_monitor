@@ -59,7 +59,7 @@ target "fm_frontend" {
     matrix = {
         domain = split(",", "${TRAEFIK_DOMAINS}")
     }
-    name = "frontend-${domain}"
+    name = replace("frontend-${domain}", ".", "-")
     tags = ["nstoik/fm_frontend:${TAG}", "nstoik/fm_frontend:${TAG}-${domain}"]
     args = {
         VITE_API_HOSTNAME = "${domain}",
