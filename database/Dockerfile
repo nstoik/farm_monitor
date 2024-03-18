@@ -24,8 +24,8 @@ RUN pip install -U pip && pip install pipenv && \
 
 # Change to the newly created user
 USER $USER_UID:$USER_GID
-COPY --chown=${USER_UID}:${USER_GID} . $WORKING_DIR/
-COPY --chown=${USER_UID}:${USER_GID} Pipfile* setup.py $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} database/. $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} database/Pipfile* database/setup.py $WORKING_DIR/
 WORKDIR $WORKING_DIR
 
 # Production deploy steps below

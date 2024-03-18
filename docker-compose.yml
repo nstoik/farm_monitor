@@ -5,8 +5,8 @@ services:
         image: nstoik/fm_server:${FM_SERVER_TAG}
         container_name: fm_server
         build:
-           context: ./server
-           dockerfile: Dockerfile
+           context: .
+           dockerfile: server/Dockerfile
         environment:
             # Specify which application to run in the start.sh script
             - FM_SERVER_RUN=true
@@ -36,8 +36,8 @@ services:
         image: nstoik/fm_api:${FM_API_TAG}
         container_name: fm_api
         build:
-            context: ./api
-            dockerfile: Dockerfile
+            context: .
+            dockerfile: api/Dockerfile
         environment:
             - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
             - FM_API_PORT=${FM_API_PORT}
@@ -62,8 +62,8 @@ services:
         image: nstoik/fm_frontend:${FM_FRONTEND_TAG}
         container_name: fm_frontend
         build:
-            context: ./frontend
-            dockerfile: Dockerfile
+            context: .
+            dockerfile: frontend/Dockerfile
             args:
                 VITE_API_HOSTNAME: ${VITE_API_HOSTNAME}
                 VITE_API_PREFIX: ${VITE_API_PREFIX}
@@ -104,7 +104,6 @@ services:
         depends_on:
             - frontend
             - api
-            - database_management
             - server
         labels:
             - custom.label=farm_monitor
@@ -147,8 +146,8 @@ services:
         image: nstoik/fm_flower:${FM_FLOWER_TAG}
         container_name: fm_flower
         build:
-           context: ./flower
-           dockerfile: Dockerfile
+           context: .
+           dockerfile: flower/Dockerfile
         command: ["celery", "flower", "--url_prefix=flower"] 
         volumes:
             - "flower_data:/data"

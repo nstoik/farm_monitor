@@ -27,7 +27,9 @@ RUN pip install -U pip && pip install pipenv && \
 
 # Change to the newly created user
 USER $USER_UID:$USER_GID
-COPY --chown=${USER_UID}:${USER_GID} Pipfile* setup.py $WORKING_DIR/
+
+# Copy the Pipfile and Pipfile.lock to the working directory
+COPY --chown=${USER_UID}:${USER_GID} api/Pipfile* api/setup.py $WORKING_DIR/
 
 WORKDIR $WORKING_DIR
 RUN pipenv install --deploy --ignore-pipfile
@@ -37,7 +39,7 @@ FROM build-stage as dev-stage
 
 ARG FM_API_PORT
 
-COPY --chown=${USER_UID}:${USER_GID} . $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} api/. $WORKING_DIR/
 RUN pipenv run pip install -e .
 
 # Switch back to dialog for any ad-hoc use of apt-get
@@ -81,7 +83,7 @@ RUN pip install -U pip && pip install pipenv && \
 
 # Change to the newly created user
 USER $USER_UID:$USER_GID
-COPY --chown=${USER_UID}:${USER_GID} . $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} api/. $WORKING_DIR/
 # here we copy the venv from the dev stage to the prod stage
 COPY --from=build-stage /home/${USERNAME}/.local/share /home/${USERNAME}/.local/share
 

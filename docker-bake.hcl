@@ -25,34 +25,37 @@ group "default" {
 }
 
 target "default" {
-    dockerfile = "Dockerfile"
     platforms = ["linux/amd64", "linux/arm64", "linux/arm/v7"]
     pull = true
 }
 
 target "fm_server" {
     inherits = ["default"]
-    context = "server"
+    context = "."
+    dockerfile = "server/Dockerfile"
     tags = ["nstoik/fm_server:${TAG}"]
     target = "${MULTI_STAGE_TARGET}"
 }
 
 target "fm_api" {
     inherits = ["default"]
-    context = "api"
+    context = "."
+    dockerfile = "api/Dockerfile"
     tags = ["nstoik/fm_api:${TAG}"]
     target = "${MULTI_STAGE_TARGET}"
 }
 
 target "fm_flower" {
     inherits = ["default"]
-    context = "flower"
+    context = "."
+    dockerfile = "flower/Dockerfile"
     tags = ["nstoik/fm_flower:${TAG}"]
 }
 
 target "fm_frontend" {
     inherits = ["default"]
-    context = "frontend"
+    context = "."
+    dockerfile = "frontend/Dockerfile"
     matrix = {
         domain = split(",", "${TRAEFIK_DOMAINS}")
     }

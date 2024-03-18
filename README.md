@@ -91,9 +91,9 @@ docker build {PATH} --file {PATH}/Dockerfile --no-cache --pull --build-arg {ENV 
 ```
 An example command for building the fm_frontend container version 1.0.0-rc is:
 ```bash
-docker build frontend --file frontend/Dockerfile --no-cache --pull --build-arg VITE_API_HOSTNAME=localhost --build-arg VITE_PUBLIC_PATH=/frontend/ --tag nstoik/fm_frontend:1.0.0-rc
+docker build . --file frontend/Dockerfile --no-cache --pull --build-arg VITE_API_HOSTNAME=localhost --build-arg VITE_PUBLIC_PATH=/frontend/ --tag nstoik/fm_frontend:1.0.0-rc
 ```
-- {PATH} is the submodule path
+- {PATH} is the context of the build
 - --build-arg is optional and can pass in environment variables to docker build. It can be repeated for multiple variables.
     - {ENV NAME} is the name of the environment variable
     - {ENV VALUE} is the value of the environment variable

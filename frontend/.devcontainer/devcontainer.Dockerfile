@@ -28,11 +28,11 @@ USER $USER_UID:$USER_GID
 
 WORKDIR ${WORKING_DIR}
 
-COPY --chown=${USER_UID}:${USER_GID} package*.json ./
+COPY --chown=${USER_UID}:${USER_GID} frontend/package*.json ./
 
 # RUN npm install --include=dev
 
-COPY --chown=${USER_UID}:${USER_GID} ./ $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} frontend/./ $WORKING_DIR/
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=

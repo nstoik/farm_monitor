@@ -14,11 +14,11 @@ ARG VITE_PUBLIC_PATH=/
 
 WORKDIR $WORKING_DIR
 
-COPY package*.json ./
+COPY frontend/package*.json ./
 
 RUN npm install
 
-COPY ./ $WORKING_DIR/
+COPY frontend/. $WORKING_DIR/
 
 RUN npm run build
 

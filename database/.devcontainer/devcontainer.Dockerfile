@@ -48,8 +48,8 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 
 # Change to the newly created user
 USER $USER_UID:$USER_GID
-COPY --chown=${USER_UID}:${USER_GID} . $WORKING_DIR/
-COPY --chown=${USER_UID}:${USER_GID} Pipfile* setup.py $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} database/. $WORKING_DIR/
+COPY --chown=${USER_UID}:${USER_GID} database/Pipfile* database/setup.py $WORKING_DIR/
 WORKDIR $WORKING_DIR
 
 # Set up the dev environment (this is run manually inside the container instead for dev)

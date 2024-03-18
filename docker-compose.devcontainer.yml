@@ -4,8 +4,8 @@ services:
     server:
         image: nstoik/fm_server:devcontainer
         build:
-            context: ./server
-            dockerfile: .devcontainer/devcontainer.Dockerfile
+            context: .
+            dockerfile: server/.devcontainer/devcontainer.Dockerfile
         volumes:
             # this is for vs code file editing inside the container
             - .:/workspaces:cached
@@ -18,8 +18,8 @@ services:
         image: nstoik/fm_database:devcontainer
         container_name: fm_database_management
         build:
-            context: ./database
-            dockerfile: .devcontainer/devcontainer.Dockerfile
+            context: .
+            dockerfile: database/.devcontainer/devcontainer.Dockerfile
             target: dev-stage
         environment:
             - FM_DATABASE_CONFIG=${FM_DATABASE_CONFIG}
@@ -41,8 +41,8 @@ services:
     api:
         image: nstoik/fm_api:devcontainer
         build:
-            context: ./api
-            dockerfile: .devcontainer/devcontainer.Dockerfile
+            context: .
+            dockerfile: api/.devcontainer/devcontainer.Dockerfile
         volumes:
             # this is for vs code file editing inside the container
             - .:/workspaces:cached
@@ -54,8 +54,8 @@ services:
     frontend:
         image: nstoik/fm_frontend:devcontainer
         build:
-            context: ./frontend
-            dockerfile: .devcontainer/devcontainer.Dockerfile
+            context: .
+            dockerfile: frontend/.devcontainer/devcontainer.Dockerfile
         volumes:
             # Update this to wherever you want VS Code to mount the folder of your project
             - .:/workspaces:cached
