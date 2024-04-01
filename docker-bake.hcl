@@ -1,4 +1,4 @@
-variable "TAG" {
+variable "TAGS" {
     default = "dev"
 }
 variable "TRAEFIK_DOMAINS" {
@@ -33,21 +33,21 @@ target "default" {
 target "fm_server" {
     inherits = ["default"]
     dockerfile = "server/Dockerfile"
-    tags = ["nstoik/fm_server:${TAG}"]
+    tags = [for tag in split(",", "${TAGS}"): "nstoik/fm_server:${tag}"]
     target = "${MULTI_STAGE_TARGET}"
 }
 
 target "fm_api" {
     inherits = ["default"]
     dockerfile = "api/Dockerfile"
-    tags = ["nstoik/fm_api:${TAG}"]
+    tags = [for tag in split(",", "${TAGS}"): "nstoik/fm_api:${tag}"]
     target = "${MULTI_STAGE_TARGET}"
 }
 
 target "fm_flower" {
     inherits = ["default"]
     dockerfile = "flower/Dockerfile"
-    tags = ["nstoik/fm_flower:${TAG}"]
+    tags = [for tag in split(",", "${TAGS}"): "nstoik/fm_flower:${tag}"]
 }
 
 target "fm_frontend" {
@@ -57,7 +57,10 @@ target "fm_frontend" {
         domain = split(",", "${TRAEFIK_DOMAINS}")
     }
     name = replace("frontend-${domain}", ".", "-")
-    tags = ["nstoik/fm_frontend:${TAG}", "nstoik/fm_frontend:${TAG}-${domain}"]
+    tags = concat(
+        [for tag in split(",", "${TAGS}"): "nstoik/fm_frontend:${tag}"],
+        [for tag in split(",", "${TAGS}"): "nstoik/fm_frontend:${tag}-${domain}"]
+    )
     args = {
         VITE_API_HOSTNAME = "${domain}",
         VITE_API_PREFIX = "${VITE_API_PREFIX}",

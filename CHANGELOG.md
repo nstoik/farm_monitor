@@ -20,7 +20,7 @@ Here we write upgrading notes for.
 ## Unreleased - [v0.3.4](https://github.com/nstoik/farm_device/releases/tag/v0.3.4) - 2024-mm-dd
  
 ### Update Instructions
-- Update the `TAG` variable in the `.env` file to `v0.3.4`. 
+- Update the `FM_TAG` variable in the `.env` file to `v0.3.4`. 
 
 Then execute the following to pull and run the containers:
 ```bash
@@ -31,6 +31,7 @@ Then execute the following to pull and run the containers:
 
 ### Added
 - `CHANGELOG.md` file to track changes to the project and added documentation on how to release new versions.
+- Docker buildx bake file can accept a comma separated list of tags to apply to containers.
 
 ### Changed
 - Removed typescript vue plugin from the frontend sub repo.
@@ -41,7 +42,7 @@ Then execute the following to pull and run the containers:
 ## [v0.3.3](https://github.com/nstoik/farm_monitor/releases/tag/v0.3.3) - 2024-03-24
 
 ### Update Instructions
-- Update the `TAG` variable in the `.env` file to `v0.3.3`. 
+- Update the `FM_TAG` variable in the `.env` file to `v0.3.3`. 
 - Update the `VUE_APP_*` environment variables in the `.env` file to `VITE_*`.
 
 Then execute the following to pull and run the containers:
