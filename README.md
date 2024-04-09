@@ -140,19 +140,19 @@ To list the available builders run:
 docker buildx ls
 ```
 
-Bake all the containers. In the example below, the TAG variable is set to the tag you want to build.
+Bake all the containers. In the example below, the TAGS variable is set to the tag (or comma seperated string of multiple tags) you want to build.
 ```bash
-TAG=0.1 docker buildx bake --builder fm_buildx --file docker-bake.hcl --push
+TAGS=0.1 docker buildx bake --builder fm_buildx --file docker-bake.hcl --push
 ```
 
 To build the frontend container with a specific Traefik domain of `fm1.farmmonitor.ca`, execute the following command:
 ```bash
-TAG=0.1 TRAEFIK_DOMAINS=fm1.farmmonitor.ca docker buildx bake --builder fm_buildx --file docker-bake.hcl fm_frontend --push
+TAGS=0.1 TRAEFIK_DOMAINS=fm1.farmmonitor.ca docker buildx bake --builder fm_buildx --file docker-bake.hcl fm_frontend --push
 ```
 **Note** Overwrite variables defined in the `docker-bake.hcl` file by specifying them as arguments to the command. Any required `ARG` in the docker files need to be specified in the `docker-bake.hcl` file.
 
 The list of available variables are:
-- TAG: The tag of the docker image to build. Defaults to "dev"
+- TAGS: The tag of the docker image to build. Defaults to "dev". Can be a comma separated list of tags to apply multiple tags eg. "dev,latest"
 - MULTI_STAGE_TARGET: The target to build. Defaults to "prod-stage"
 - TRAEFIK_DOMAINS: The domain name of the traefik service. Defaults to "localhost". Can be a comma separated list of domains to build multiple containers with different domains specified.
 - VITE_API_PREFIX: defaults to "/api"
